@@ -23,11 +23,17 @@ npm install --save ngx-repository class-validator class-transformer
 app.module.ts
 ```ts 
 import { NgxRepositoryModules } from 'ngx-repository';
+import { UsersGridComponent } from './users-grid.component';
 
 @NgModule({
   imports: [
     ...
     NgxRepositoryModules,
+    ...
+  ],
+  declarations: [
+    ...
+    UsersGridComponent,
     ...
   ],
   ...
@@ -56,7 +62,7 @@ export class UserModel implements IModel {
 users-grid.component.ts
 ```ts
 import { Component, OnInit } from '@angular/core';
-import { DynamicRepository } from 'ngx-repository';
+import { DynamicRepository, Repository } from 'ngx-repository';
 import { UserModel } from './user-model';
 
 @Component({
@@ -70,7 +76,8 @@ import { UserModel } from './user-model';
   `
 })
 export class UsersGridComponent implements OnInit {
-  private mockedItems: [
+  public repository: Repository<UserModel>;
+  private mockedItems = [
     {
         'username': 'user1',
         'password': 'password1',
@@ -88,7 +95,7 @@ export class UsersGridComponent implements OnInit {
         'password': 'password4',
         'id': 4,
     }
-  ]
+  ];
   constructor(
     public dynamicRepository: DynamicRepository
   ) {
@@ -102,6 +109,14 @@ export class UsersGridComponent implements OnInit {
         }
     });
   }
+}
+```
+
+app.component.ts
+```html
+...
+<users-grid></users-grid>
+...
 ```
 
 ## License

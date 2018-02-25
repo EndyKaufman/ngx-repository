@@ -12,7 +12,7 @@
           </span>
         </mat-menu>
       </span>
-      <a [routerLink]="['home']" mat-button [class.active]="router.isActive('/home')">
+      <a [routerLink]="['home']" mat-button [class.active]="router?.isActive('/home')">
         {{title}}
       </a>
       <span *ngFor="let item of leftChildrenRoutes" fxShow fxHide.lt-sm>
@@ -40,7 +40,7 @@
   </mat-toolbar>
 </div>
 <ng-template let-item="item" #buttonItem>
-  <a *ngIf="!item.redirectTo" [routerLink]="[item.name]" mat-button [class.active]="router.isActive(item.url)">
+  <a *ngIf="!item.redirectTo" [routerLink]="[item.name]" mat-button [class.active]="router?.isActive(item.url)">
     <ng-container *ngTemplateOutlet="menuItemContent;context:{item:item}">
     </ng-container>
   </a>
@@ -50,7 +50,7 @@
   </a>
 </ng-template>
 <ng-template let-item="item" #menuItem>
-  <a *ngIf="!item.redirectTo" [routerLink]="[item.name]" mat-menu-item [class.active]="router.isActive(item.url)">
+  <a *ngIf="!item.redirectTo" [routerLink]="[item.name]" mat-menu-item [class.active]="router?.isActive(item.url)">
     <ng-container *ngTemplateOutlet="menuItemContent;context:{item:item}">
     </ng-container>
   </a>
