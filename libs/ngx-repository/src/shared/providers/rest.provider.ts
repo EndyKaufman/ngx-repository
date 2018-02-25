@@ -178,7 +178,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 );
                 if (!request) {
                     request = (options === undefined || options.globalEventIsActive === true ? this.httpClient : this.fakeHttpClient).
-                        post(
+                        post<any>(
                             requestUrl,
                             object,
                             requestOptions
