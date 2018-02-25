@@ -1,0 +1,10 @@
+import { Component, OnInit } from '@angular/core';
+import { USERS_MOCKS } from '../../shared/mocks/users.mock';
+
+@Component({
+  selector: 'rest-nested-data-page',
+  templateUrl: './rest-nested-data-page.component.html'
+})
+export class RestNestedDataPageComponent {
+
+}

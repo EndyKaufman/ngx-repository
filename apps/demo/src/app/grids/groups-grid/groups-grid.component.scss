@@ -1,0 +1,28 @@
+.groups-grid{
+    display: flex;
+    flex-direction: column;
+    max-height: 300px;
+    min-width: 300px;
+
+    .filter-header {
+      .mat-form-field {
+        width: 100%;
+      }
+    }
+
+    .mat-table {
+      overflow: auto;
+      max-height: 300px;
+
+      .mat-header-row {
+        background-color: #fff;
+        z-index: 700;
+        position: sticky;
+        top: 0;
+      }
+
+      .mat-column-select {
+        overflow: visible;
+      }
+    }
+}

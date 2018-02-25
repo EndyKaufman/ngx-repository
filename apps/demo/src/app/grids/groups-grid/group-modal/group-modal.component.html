@@ -1,0 +1,26 @@
+<div class="group-modal">
+  <form [formGroup]="form" novalidate>
+    <h1 mat-dialog-title>{{title}}</h1>
+    <div mat-dialog-content [ngClass]="{'create-modal': data && !data.id, 'edit-modal': data && data.id, 'delete-modal': !data}">
+      <p *ngIf="message">{{message}}</p>
+      <div *ngIf="data">
+        <mat-form-field class="full-width">
+          <input matInput formControlName="name" [placeholder]="strings.name">
+          <mat-error *ngIf="(form?.customValidateErrors | async)?.name?.length">
+            {{(form?.customValidateErrors | async).name[0]}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <input matInput formControlName="title" [placeholder]="strings.title">
+          <mat-error *ngIf="(form?.customValidateErrors | async)?.title?.length">
+            {{(form.customValidateErrors | async).title[0]}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div mat-dialog-actions>
+      <button mat-button (click)="onNoClick()">{{noTitle}}</button>
+      <button mat-button (click)="onYesClick()" [disabled]="data && !form.valid" cdkFocusInitial>{{yesTitle}}</button>
+    </div>
+  </form>
+</div>

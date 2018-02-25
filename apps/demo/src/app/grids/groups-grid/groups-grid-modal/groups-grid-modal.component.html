@@ -1,0 +1,10 @@
+<div class="groups-grid-modal">
+  <h1 mat-dialog-title>{{title}}</h1>
+  <div mat-dialog-content class="select-modal">
+    <groups-grid [mockedItems]="mockedItems" #groupsGrid></groups-grid>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">{{noTitle}}</button>
+    <button mat-button (click)="onYesClick()" [disabled]="groupsGrid.selection.selected.length===0" cdkFocusInitial>{{yesTitle}}</button>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+<div class="rest-nested-data-page" fxLayout.gt-md="row" fxLayout.lt-md="column" fxLayoutAlign="space-evenly stretch">
+  <div fxFlex.lt-sm="100" class="margin-15">
+    <users-with-groups-grid></users-with-groups-grid>
+  </div>
+  <div fxFlex.gt-sm="50" fxFlex.lt-sm="100" class="margin-15">
+    <users-with-groups-grid></users-with-groups-grid>
+  </div>
+</div>

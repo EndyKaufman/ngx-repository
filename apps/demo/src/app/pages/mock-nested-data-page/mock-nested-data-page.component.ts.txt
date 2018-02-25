@@ -1,0 +1,14 @@
+import { Component, OnInit } from '@angular/core';
+import { USERS_MOCKS } from '../../shared/mocks/users.mock';
+
+@Component({
+  selector: 'mock-nested-data-page',
+  templateUrl: './mock-nested-data-page.component.html'
+})
+export class MockNestedDataPageComponent {
+
+  mockedItems = USERS_WITH_GROUPS_MOCKS;
+  // todo: used only as sample, you must remove it on you project
+  exampleGroupMockedItems = GROUPS_MOCKS;
+
+}
