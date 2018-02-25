@@ -16,6 +16,7 @@ npm install --save ngx-repository class-validator class-transformer
 ## Links
 
 [Demo](https://endykaufman.github.io/ngx-repository) - Demo application with ngx-repository.
+
 [Stackblitz](https://stackblitz.com/edit/ngx-repository) - Simply sample of usage on https://stackblitz.com
 
 ## Usage

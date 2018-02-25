@@ -12,7 +12,7 @@
           </span>
         </mat-menu>
       </span>
-      <a [routerLink]="['home']" mat-button [class.active]="router?.isActive('/home')">
+      <a [routerLink]="['home']" mat-button>
         {{title}}
       </a>
       <span *ngFor="let item of leftChildrenRoutes" fxShow fxHide.lt-sm>
