@@ -34,7 +34,7 @@ export const AppRoutes: Routes = [
     },
     {
         path: 'github',
-        redirectTo: 'http://ya.ru',
+        redirectTo: 'https://github.com/EndyKaufman/ngx-repository',
         data: {
             name: 'github',
             title: 'github',

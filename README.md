@@ -5,7 +5,7 @@
 [![npm version](https://badge.fury.io/js/ngx-repository.svg)](https://badge.fury.io/js/ngx-repository)
 
 
-Custom repository service for Angular5+, for easy work with the REST backend, with replace of the REST backend to the MOCK backend with save and use all CRUD operations
+Custom repository service for Angular5+, for easy work with the REST backend, with switch on fly from REST backend to the MOCK backend with save and use all CRUD operations
 
 ## Installation
 
