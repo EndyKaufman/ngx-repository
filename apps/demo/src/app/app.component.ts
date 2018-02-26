@@ -8,7 +8,6 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  title = 'app';
   routes = AppRoutes;
   constructor(
     iconRegistry: MatIconRegistry,
