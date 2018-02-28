@@ -39,7 +39,8 @@ this.repository.useRest({
         requestLoadAllSearchQuery: 
             (currentUrl, filter, action) =>
                 (filter && filter.searchText) ?
-                    ((currentUrl.indexOf('?') === -1 ? '?' : '&') + `q=${filter.searchText}`) : '';
+                    ((currentUrl.indexOf('?') === -1 ? '?' : '&') + `q=${filter.searchText}`) : ''
+    }
 });
 
 # Switch page
@@ -94,13 +95,13 @@ this.repository.useRest({
     pluralName: 'users',
     paginationMeta: {
         perPage: 5
-    }
-    actionOptions:{
-        // Entities from response 
+    },
+    actionOptions: {
+        // Total count from response 
         responseLoadAllTotalCount:
             (data, action) =>
                 return data.meta.totalResults,
-        // Total count from response 
+        // Entities from response 
         responseData: 
             (data, action) =>
                 switch(action) { 
@@ -133,6 +134,7 @@ this.repository.useRest({
                         break; 
                     } 
                 }
+    }
 });
 # Request
 ## GET http://site15.ru/api/users?page=3&limit=5
