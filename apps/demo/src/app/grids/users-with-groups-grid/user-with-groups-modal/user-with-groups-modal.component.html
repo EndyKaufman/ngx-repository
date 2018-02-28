@@ -34,7 +34,7 @@
         <div class="padding-left-15" fxFlex.gt-sm="50" fxFlex.lt-sm="100">
           <strong>Groups</strong>
           <user-with-groups-groups-grid [mockedItems]="exampleUseNestedGroupsFromRest?undefined:data.groups" [exampleGroupMockedItems]="exampleGroupMockedItems"
-            [(user)]="item" #groupsGrid></user-with-groups-groups-grid>
+            [exampleUseNestedGroupsFromRest]="exampleUseNestedGroupsFromRest" [(user)]="item" #groupsGrid></user-with-groups-groups-grid>
         </div>
       </div>
     </div>

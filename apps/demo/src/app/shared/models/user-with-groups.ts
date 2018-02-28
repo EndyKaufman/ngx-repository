@@ -14,7 +14,7 @@ export class UserWithGroups implements IModel {
         isSuperuser: 'Administrator',
         isStaff: 'Staff',
         isActive: 'User',
-        asString: 'Full name',
+        fullName: 'Full name',
         firstName: 'First name',
         lastName: 'Last name',
         email: 'Email',
@@ -31,6 +31,7 @@ export class UserWithGroups implements IModel {
     static fields = ['id', 'username', 'password', 'isSuperuser',
         'isStaff', 'isActive', 'firstName', 'lastName', 'email',
         'lastLogin', 'dateJoined', 'dateOfBirth', 'groups'];
+    // need for deep update if local change in any place
     static nested = {
         groups: Group
     };
@@ -63,7 +64,7 @@ export class UserWithGroups implements IModel {
     @Type(serializeModel(Group))
     groups: Group[] = [];
 
-    get rolesAsString() {
+    rolesToString() {
         const roles: string[] = [];
         if (this.isSuperuser) {
             roles.push('Admin');
@@ -76,10 +77,10 @@ export class UserWithGroups implements IModel {
         }
         return roles.reverse().join(', ');
     }
-    get groupsAsString() {
-        return this.groups ? this.groups.map(group => group.asString) : '';
+    groupsToString() {
+        return this.groups ? this.groups.map(group => group.toString()) : '';
     }
-    get asString() {
+    toString() {
         const arr: string[] = [];
         if (this.firstName) {
             arr.push(this.firstName);
