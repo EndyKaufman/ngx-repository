@@ -112,9 +112,9 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                         requestOptions
                     );
                 }
-                request.pipe(map(requestData =>
-                    this.providerActionHandlers.getRequestData(
-                        requestData,
+                request.pipe(map(responseData =>
+                    this.providerActionHandlers.getResponseData(
+                        responseData,
                         optionsList,
                         ProviderActionEnum.Action
                     )
@@ -184,9 +184,9 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                             requestOptions
                         );
                 }
-                request.pipe(map(requestData =>
-                    this.providerActionHandlers.getRequestData(
-                        requestData,
+                request.pipe(map(responseData =>
+                    this.providerActionHandlers.getResponseData(
+                        responseData,
                         optionsList,
                         isCreate ? ProviderActionEnum.Create : ProviderActionEnum.Append
                     )
@@ -287,9 +287,9 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                         );
                     }
                 }
-                request.pipe(map(requestData =>
-                    this.providerActionHandlers.getRequestData(
-                        requestData,
+                request.pipe(map(responseData =>
+                    this.providerActionHandlers.getResponseData(
+                        responseData,
                         optionsList,
                         isUpdate ? ProviderActionEnum.Update : ProviderActionEnum.Patch
                     )
@@ -362,9 +362,9 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                         requestOptions
                     );
             }
-            request.pipe(map(requestData =>
-                this.providerActionHandlers.getRequestData(
-                    requestData,
+            request.pipe(map(responseData =>
+                this.providerActionHandlers.getResponseData(
+                    responseData,
                     optionsList,
                     ProviderActionEnum.Load
                 )
@@ -418,9 +418,9 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                         requestOptions
                     );
             }
-            request.pipe(map(requestData =>
-                this.providerActionHandlers.getRequestData(
-                    requestData,
+            request.pipe(map(responseData =>
+                this.providerActionHandlers.getResponseData(
+                    responseData,
                     optionsList,
                     ProviderActionEnum.Delete
                 )
@@ -499,17 +499,17 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                         requestOptions
                     );
             }
-            request.pipe(map(requestData => {
-                const requestLoadAllTotalCount = this.providerActionHandlers.getRequestLoadAllTotalCount(
-                    requestData,
+            request.pipe(map(responseData => {
+                const responseLoadAllTotalCount = this.providerActionHandlers.getResponseLoadAllTotalCount(
+                    responseData,
                     optionsList,
                     ProviderActionEnum.LoadAll
                 );
                 this.calcPaginationMeta({
-                    totalResults: isNaN(requestLoadAllTotalCount) ? 10000 : requestLoadAllTotalCount
+                    totalResults: isNaN(responseLoadAllTotalCount) ? 10000 : responseLoadAllTotalCount
                 });
-                return this.providerActionHandlers.getRequestData(
-                    requestData,
+                return this.providerActionHandlers.getResponseData(
+                    responseData,
                     optionsList,
                     ProviderActionEnum.LoadAll
                 );
