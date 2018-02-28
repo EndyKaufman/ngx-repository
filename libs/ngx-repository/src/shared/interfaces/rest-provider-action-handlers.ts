@@ -24,7 +24,7 @@ export interface IRestProviderActionHandlers {
         optionsList: IRestProviderOptions<any>[],
         action: ProviderActionEnum
     ): Observable<any>;
-    getRequestData(
+    getResponseData(
         data: any,
         optionsList: IRestProviderOptions<any>[],
         action: ProviderActionEnum
@@ -39,7 +39,7 @@ export interface IRestProviderActionHandlers {
         optionsList: IRestProviderOptions<any>[],
         action: ProviderActionEnum
     );
-    getRequestLoadAllTotalCount(
+    getResponseLoadAllTotalCount(
         data: any,
         optionsList: IRestProviderOptions<any>[],
         action: ProviderActionEnum

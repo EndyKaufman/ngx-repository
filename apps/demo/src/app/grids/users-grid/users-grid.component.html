@@ -32,7 +32,7 @@
 
     <ng-container matColumnDef="roles">
       <mat-header-cell *matHeaderCellDef> {{strings.roles}} </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.rolesAsString}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.rolesToString()}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="action">

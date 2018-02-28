@@ -4,6 +4,7 @@ import { MockDataPageRoutes } from './pages/mock-data-page/mock-data-page.routes
 import { RestDataPageRoutes } from './pages/rest-data-page/rest-data-page.routes';
 import { MockNestedDataPageRoutes } from './pages/mock-nested-data-page/mock-nested-data-page.routes';
 import { RestNestedDataPageRoutes } from './pages/rest-nested-data-page/rest-nested-data-page.routes';
+import { CustomizationPageRoutes } from './pages/customization-page/customization-page.routes';
 
 export const AppRoutes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -31,6 +32,11 @@ export const AppRoutes: Routes = [
         path: 'rest-nested-data',
         loadChildren: './pages/rest-nested-data-page/rest-nested-data-page.module#RestNestedDataPageModule',
         data: RestNestedDataPageRoutes[0].data
+    },
+    {
+        path: 'customization',
+        loadChildren: './pages/customization-page/customization-page.module#CustomizationPageModule',
+        data: CustomizationPageRoutes[0].data
     },
     {
         path: 'github',

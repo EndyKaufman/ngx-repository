@@ -13,7 +13,7 @@ export class User implements IModel {
         isSuperuser: 'Administrator',
         isStaff: 'Staff',
         isActive: 'User',
-        asString: 'Full name',
+        fullName: 'Full name',
         firstName: 'First name',
         lastName: 'Last name',
         email: 'Email',
@@ -54,7 +54,7 @@ export class User implements IModel {
     @Transform(transformDateToString, { toPlainOnly: true })
     dateOfBirth: string;
 
-    get rolesAsString() {
+    rolesToString() {
         const roles: string[] = [];
         if (this.isSuperuser) {
             roles.push('Admin');
@@ -67,7 +67,7 @@ export class User implements IModel {
         }
         return roles.reverse().join(', ');
     }
-    get asString() {
+    toString() {
         const arr: string[] = [];
         if (this.firstName) {
             arr.push(this.firstName);

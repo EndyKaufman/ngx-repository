@@ -32,12 +32,12 @@
 
     <ng-container matColumnDef="roles">
       <mat-header-cell *matHeaderCellDef> {{strings.roles}} </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.rolesAsString}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.rolesToString()}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="groups">
       <mat-header-cell *matHeaderCellDef> {{strings.groups}} </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.groupsAsString}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.groupsToString()}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="action">

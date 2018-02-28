@@ -46,48 +46,48 @@ export class RestProviderActionHandlers implements IRestProviderActionHandlers {
         }
         return undefined;
     }
-    getRequestData(
+    getResponseData(
         data: any,
         optionsList: IRestProviderOptions<any>[],
         action: ProviderActionEnum
     ) {
-        let requestData;
+        let responseData;
         optionsList.forEach(eachOptions => {
             if (eachOptions !== undefined && eachOptions.actionOptions !== undefined &&
-                eachOptions.actionOptions.requestData !== undefined) {
-                requestData = eachOptions.actionOptions.requestData(data);
-                return requestData;
+                eachOptions.actionOptions.responseData !== undefined) {
+                responseData = eachOptions.actionOptions.responseData(data, action);
+                return responseData;
             }
         });
-        if (requestData !== undefined) {
-            return requestData;
+        if (responseData !== undefined) {
+            return responseData;
         }
         return data.body;
     }
-    getRequestLoadAllTotalCount(
+    getResponseLoadAllTotalCount(
         data: any,
         optionsList: IRestProviderOptions<any>[],
         action: ProviderActionEnum
     ) {
-        let requestLoadAllTotalCount;
+        let responseLoadAllTotalCount;
         optionsList.forEach(eachOptions => {
             if (eachOptions !== undefined &&
-                eachOptions.actionOptions !== undefined && eachOptions.actionOptions.requestLoadAllTotalCount !== undefined) {
-                requestLoadAllTotalCount = eachOptions.actionOptions.requestLoadAllTotalCount(data);
-                return requestLoadAllTotalCount;
+                eachOptions.actionOptions !== undefined && eachOptions.actionOptions.responseLoadAllTotalCount !== undefined) {
+                responseLoadAllTotalCount = eachOptions.actionOptions.responseLoadAllTotalCount(data, action);
+                return responseLoadAllTotalCount;
             }
         });
-        if (requestLoadAllTotalCount !== undefined) {
-            return requestLoadAllTotalCount;
+        if (responseLoadAllTotalCount !== undefined) {
+            return responseLoadAllTotalCount;
         }
-        requestLoadAllTotalCount = NaN;
+        responseLoadAllTotalCount = NaN;
         const keys: string[] = data.headers.keys();
         keys.forEach(key => {
             if (key.toLowerCase() === 'x-total-count') {
-                requestLoadAllTotalCount = +data.headers.get(key);
+                responseLoadAllTotalCount = +data.headers.get(key);
             }
         });
-        return requestLoadAllTotalCount;
+        return responseLoadAllTotalCount;
     }
     getRequestLoadAllPaginationQuery(
         currentUrl: string,
@@ -99,7 +99,7 @@ export class RestProviderActionHandlers implements IRestProviderActionHandlers {
         optionsList.forEach(eachOptions => {
             if (eachOptions !== undefined && eachOptions.actionOptions !== undefined &&
                 eachOptions.actionOptions.requestLoadAllPaginationQuery !== undefined) {
-                loadAllPaginationQuery = eachOptions.actionOptions.requestLoadAllPaginationQuery(currentUrl);
+                loadAllPaginationQuery = eachOptions.actionOptions.requestLoadAllPaginationQuery(currentUrl, action);
                 return loadAllPaginationQuery;
             }
         });
@@ -119,7 +119,7 @@ export class RestProviderActionHandlers implements IRestProviderActionHandlers {
         optionsList.forEach(eachOptions => {
             if (eachOptions !== undefined && eachOptions.actionOptions !== undefined &&
                 eachOptions.actionOptions.requestLoadAllSearchQuery !== undefined) {
-                loadAllSearchQuery = eachOptions.actionOptions.requestLoadAllSearchQuery(currentUrl, filter);
+                loadAllSearchQuery = eachOptions.actionOptions.requestLoadAllSearchQuery(currentUrl, filter, action);
                 return loadAllSearchQuery;
             }
         });
@@ -140,7 +140,7 @@ export class RestProviderActionHandlers implements IRestProviderActionHandlers {
         optionsList.forEach(eachOptions => {
             if (eachOptions !== undefined && eachOptions.actionOptions !== undefined &&
                 eachOptions.actionOptions.requestUrl !== undefined) {
-                requestUrl = eachOptions.actionOptions.requestUrl(key, data);
+                requestUrl = eachOptions.actionOptions.requestUrl(key, data, action);
                 return requestUrl;
             }
         });
@@ -226,6 +226,17 @@ export class RestProviderActionHandlers implements IRestProviderActionHandlers {
         optionsList: IRestProviderOptions<any>[],
         action: ProviderActionEnum
     ): 'create' | 'append' {
+        let requestCreateType;
+        optionsList.forEach(eachOptions => {
+            if (eachOptions !== undefined && eachOptions.actionOptions !== undefined &&
+                eachOptions.actionOptions.requestCreateType !== undefined) {
+                    requestCreateType = eachOptions.actionOptions.requestCreateType(action);
+                return requestCreateType;
+            }
+        });
+        if (requestCreateType !== undefined) {
+            return requestCreateType;
+        }
         return 'create';
     }
 }

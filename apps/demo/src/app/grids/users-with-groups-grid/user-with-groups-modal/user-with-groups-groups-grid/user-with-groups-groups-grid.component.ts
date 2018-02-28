@@ -16,6 +16,7 @@ import { Observable } from 'rxjs/Observable';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { of } from 'rxjs/observable/of';
 import { fromPromise } from 'rxjs/observable/fromPromise';
+import { MessageBoxService } from '../../../../others/message-box/message-box.service';
 
 @Component({
   selector: 'user-with-groups-groups-grid',
@@ -35,6 +36,8 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
   // todo: used only as sample, you must remove it on you project
   @Input()
   exampleGroupMockedItems?: Group[];
+  @Input()
+  exampleUseNestedGroupsFromRest?: boolean;
 
   @Input()
   mockedItems?: Group[];
@@ -52,7 +55,8 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
   constructor(
     public dialog: MatDialog,
     public changeDetectorRef: ChangeDetectorRef,
-    public dynamicRepository: DynamicRepository
+    public dynamicRepository: DynamicRepository,
+    private _messageBoxService: MessageBoxService
   ) {
     this.destroyed$ = new Subject<boolean>();
     this.repository = this.dynamicRepository.fork<Group>(Group);
@@ -66,7 +70,8 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
         paginationMeta: {
           curPage: 1,
           perPage: 10000
-        }
+        },
+        autoload: !!this.user.id
       });
     }
 
@@ -112,6 +117,10 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
     });
   }
   showAppendModal(): void {
+    if (this.exampleUseNestedGroupsFromRest && this.user.id === undefined) {
+      this._messageBoxService.errorSync('Before add group you must save current user!');
+      return;
+    }
     const dialogRef = this.dialog.open(GroupsGridModalComponent, {
       width: '600px',
       data: {}

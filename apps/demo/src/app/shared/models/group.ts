@@ -25,7 +25,7 @@ export class Group implements IModel {
     @IsNotEmpty()
     title: string;
 
-    get asString() {
+    toString() {
         return this.title;
     }
 
