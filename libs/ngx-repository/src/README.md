@@ -20,7 +20,7 @@ npm install --save ngx-repository class-validator class-transformer
 ## Usage
 
 app.module.ts
-```ts 
+```js 
 import { NgxRepositoryModules } from 'ngx-repository';
 import { UsersGridComponent } from './users-grid.component';
 
@@ -41,7 +41,7 @@ export class AppModule {}
 ```
 
 user-model.ts
-```ts 
+```js 
 import { IModel } from 'ngx-repository';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import { plainToClassFromExist } from 'class-transformer';
@@ -59,7 +59,7 @@ export class UserModel implements IModel {
 ```
 
 users-grid.component.ts
-```ts
+```js
 import { Component, OnInit } from '@angular/core';
 import { DynamicRepository, Repository } from 'ngx-repository';
 import { UserModel } from './user-model';
