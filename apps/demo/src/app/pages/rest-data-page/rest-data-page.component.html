@@ -66,10 +66,10 @@
         <button mat-raised-button color="primary" (click)="usersGrid1?.showModal()">
           <mat-icon>add</mat-icon> Add
         </button>
-        <button mat-raised-button (click)="usersGrid1?.showModal(usersGrid1?.repository?.provider.items.get(0))">
+        <button mat-raised-button (click)="usersGrid1?.showModal(usersGrid1?.repository?.provider.items$.getValue().get(0))">
           <mat-icon>edit</mat-icon> Edit
         </button>
-        <button mat-raised-button (click)="usersGrid1?.showRemoveModal(usersGrid1?.repository?.provider.items.get(0))">
+        <button mat-raised-button (click)="usersGrid1?.showRemoveModal(usersGrid1?.repository?.provider.items$.getValue().get(0))">
           <mat-icon>close</mat-icon> Delete
         </button>
       </div>

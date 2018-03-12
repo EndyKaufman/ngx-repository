@@ -18,7 +18,7 @@ this.repository.setOptions({paginationMeta: {curPage: 3}});
 ## GET http://site15.ru/api/users?page=3&limit=5
 
 # Run search
-this.repository.provider.loadAll({ searchText: 'test });
+this.repository.provider.loadAll({ searchText: 'test' }).pipe(take(1)).subscribe();
 # Request
 ## GET http://site15.ru/api/users?page=3&limit=5&search=test
 ```
@@ -49,7 +49,7 @@ this.repository.setOptions({paginationMeta: {curPage: 3}});
 ## GET http://site15.ru/api/users?cur_page=3&per_page=5
 
 # Run search
-this.repository.provider.loadAll({ searchText: 'test });
+this.repository.provider.loadAll({ searchText: 'test' }).pipe(take(1)).subscribe();
 # Request
 ## GET http://site15.ru/api/users?cur_page=3&per_page=5&q=test
 ```

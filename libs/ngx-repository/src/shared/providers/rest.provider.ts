@@ -9,7 +9,7 @@ import { ValidatorError } from '../exceptions/validator.error';
 import { List } from 'immutable';
 import { IModel } from '../interfaces/model';
 import { IRestProviderActionOptions } from '../interfaces/rest-provider-action-options';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
 import { IHttpClient } from '../interfaces/http-client';
 import { IRestProviderActionHandlers } from '../interfaces/rest-provider-action-handlers';
@@ -72,7 +72,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         this.calcPaginationMetaByOptions(options);
 
         if (this.autoload !== false) {
-            this.loadAll(this.filter, this.loadAllOptions);
+            this.loadAll(this.filter, this.loadAllOptions).pipe(take(1)).subscribe();
         }
     }
     action<TProviderActionOptions extends IRestProviderActionOptions>(
@@ -456,7 +456,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         });
     }
     reloadAll() {
-        this.loadAll(this.filter, this.loadAllOptions);
+        this.loadAll(this.filter, this.loadAllOptions).pipe(take(1)).subscribe();
     }
     loadAll<TProviderActionOptions extends IRestProviderActionOptions>(
         filter?: any,
