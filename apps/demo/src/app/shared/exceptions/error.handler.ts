@@ -1,5 +1,4 @@
 import { ErrorHandler, Injector, Injectable, NgZone } from '@angular/core';
-import { ProviderError, ValidatorError } from 'ngx-repository';
 import { MessageBoxService } from '../../others/message-box/message-box.service';
 import { take } from 'rxjs/operators';
 @Injectable()

@@ -1,5 +1,5 @@
-import { plainToClass, Transform, Type, plainToClassFromExist } from 'class-transformer';
-import { IsNotEmpty, IsEmail, ValidateNested, IsOptional } from 'class-validator';
+import { Transform, plainToClassFromExist } from 'class-transformer';
+import { IsNotEmpty, IsEmail, IsOptional } from 'class-validator';
 import { transformStringToDate, transformDateToString } from '../utils/custom-transforms';
 import { IModel } from 'ngx-repository';
 

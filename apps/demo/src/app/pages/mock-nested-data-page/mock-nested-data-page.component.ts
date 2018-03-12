@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { Component } from '@angular/core';
 import { USERS_WITH_GROUPS_MOCKS } from '../../shared/mocks/users-with-groups.mock';
 import { GROUPS_MOCKS } from '../../shared/mocks/groups.mock';
 

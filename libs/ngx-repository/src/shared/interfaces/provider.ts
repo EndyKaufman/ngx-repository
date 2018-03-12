@@ -3,7 +3,6 @@ import { IPaginationMeta } from './pagination-meta';
 import { ProviderActionEnum } from '../enums/provider-action.enum';
 import { IProviderOptions } from './provider-options';
 import { Subject } from 'rxjs/Subject';
-import { IModel } from './model';
 import { List } from 'immutable';
 import { IProviderActionOptions } from './provider-action-options';
 import { IProviderActionActionModel } from './provider-action-action-model';
@@ -11,8 +10,7 @@ import { Observable } from 'rxjs/Observable';
 
 export interface IProvider<TModel> {
     name: string;
-    items: List<TModel>;
-    items$: Subject<TModel[]>;
+    items$: BehaviorSubject<List<TModel>>;
     action$: Subject<IProviderActionActionModel>;
     create$: Subject<TModel>;
     append$: Subject<TModel>;

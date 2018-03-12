@@ -1,20 +1,15 @@
 import { Component, OnDestroy, OnInit, ChangeDetectorRef, Input, EventEmitter, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent, MatDialog } from '@angular/material';
-import { Repository, PaginationMeta, DynamicRepository } from 'ngx-repository';
+import { Repository, DynamicRepository } from 'ngx-repository';
 import { Subject } from 'rxjs/Subject';
-import { takeUntil, debounceTime, distinctUntilChanged, map, switchMap, concat, catchError, take } from 'rxjs/operators';
-import { RestProvider } from 'ngx-repository';
-import { plainToClass } from 'class-transformer';
-import { FormControl } from '@angular/forms';
+import { takeUntil, map, take } from 'rxjs/operators';
 import { GroupModalComponent } from '../../../groups-grid/group-modal/group-modal.component';
 import { Group } from '../../../../shared/models/group';
 import { environment } from '../../../../../environments/environment';
 import { GroupsGridModalComponent } from '../../../groups-grid/groups-grid-modal/groups-grid-modal.component';
 import { UserWithGroups } from '../../../../shared/models/user-with-groups';
-import { Observable } from 'rxjs/Observable';
 import { forkJoin } from 'rxjs/observable/forkJoin';
-import { of } from 'rxjs/observable/of';
 import { MessageBoxService } from '../../../../others/message-box/message-box.service';
 
 @Component({
@@ -85,7 +80,7 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
     }
 
     this.repository.provider.items$.
-      pipe(takeUntil(this.destroyed$)).
+      pipe(takeUntil(this.destroyed$), map(items => items.toArray())).
       subscribe(items => {
         this.dataSource.data = items;
       });

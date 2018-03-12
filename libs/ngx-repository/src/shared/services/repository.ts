@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { OnDestroy } from '@angular/core';
 import { MockProvider } from '../providers/mock.provider';
 import { RestProvider } from '../providers/rest.provider';
 import { Provider } from '../providers/provider';
@@ -6,8 +6,6 @@ import { Injector } from '@angular/core';
 import { IModel } from '../interfaces/model';
 import { IMockProviderOptions } from '../interfaces/mock-provider-options';
 import { IRestProviderOptions } from '../interfaces/rest-provider-options';
-import { PaginationMeta } from '../models/pagination-meta';
-import { IPaginationMeta } from '../interfaces/pagination-meta';
 import { IProviderOptions } from '../interfaces/provider-options';
 import { IProvider } from '../interfaces/provider';
 import { Subject } from 'rxjs/Subject';
@@ -125,7 +123,7 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
             this.subscribeToProvider(this.mockProvider);
         }
     }
-    useRest<TMockProviderOptions extends IRestProviderOptions<IModel>>(options?: IRestProviderOptions<TModel>) {
+    useRest<TMockProviderOptions extends IRestProviderOptions<IModel>>(options?: IRestProviderOptions<TModel>) {  // tslint:disable-line
         this._restProviderIsActive = true;
         this._mockProviderIsActive = false;
         if (this.restProvider === undefined && options !== undefined) {

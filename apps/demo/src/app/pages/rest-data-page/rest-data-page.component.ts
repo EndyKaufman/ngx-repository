@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'rest-data-page',

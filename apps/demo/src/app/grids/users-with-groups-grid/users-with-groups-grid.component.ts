@@ -3,10 +3,9 @@ import { UserWithGroupsModalComponent } from './user-with-groups-modal/user-with
 import { MatTableDataSource } from '@angular/material/table';
 import { UserWithGroups } from '../../shared/models/user-with-groups';
 import { PageEvent, MatDialog } from '@angular/material';
-import { Repository, PaginationMeta, DynamicRepository } from 'ngx-repository';
+import { Repository, DynamicRepository } from 'ngx-repository';
 import { Subject } from 'rxjs/Subject';
 import { takeUntil, debounceTime, distinctUntilChanged, map, switchMap, take } from 'rxjs/operators';
-import { RestProvider } from 'ngx-repository';
 import { environment } from '../../../environments/environment';
 import { plainToClass } from 'class-transformer';
 import { FormControl } from '@angular/forms';
@@ -88,7 +87,7 @@ export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
     }
 
     this.repository.provider.items$.
-      pipe(takeUntil(this.destroyed$)).
+      pipe(takeUntil(this.destroyed$), map(items => items.toArray())).
       subscribe(items => {
         this.dataSource.data = items;
       });
@@ -96,7 +95,6 @@ export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
     this.repository.paginationMeta$.
       pipe(takeUntil(this.destroyed$)).
       subscribe(paginationMeta => {
-        const prevPageEvent = this.pageEvent;
         this.pageEvent = plainToClass(PageEvent, paginationMeta ? {
           pageIndex: paginationMeta.curPage - 1,
           pageSize: paginationMeta.perPage,

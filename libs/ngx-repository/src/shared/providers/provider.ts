@@ -1,5 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Injector } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { plainToClassFromExist, classToPlainFromExist } from 'class-transformer';
@@ -13,7 +12,6 @@ import { List } from 'immutable';
 import { IProviderActionOptions } from '../interfaces/provider-action-options';
 import { IProviderActionActionModel } from '../interfaces/provider-action-action-model';
 import { IFactoryModel } from '../interfaces/factory-model';
-import { map } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
 import { delay } from 'rxjs/operators';
 export class Provider<TModel extends IModel = any> implements IProvider<TModel> {
@@ -23,7 +21,7 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
     delay = 0;
     name: string;
 
-    items$ = new Subject<TModel[]>();
+    items$ = new BehaviorSubject<List<TModel>>(List([]));
 
     action$ = new Subject<IProviderActionActionModel>();
     create$ = new Subject<TModel>();
@@ -43,8 +41,6 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
 
     paginationMeta$ = new BehaviorSubject<IPaginationMeta>(new PaginationMeta());
 
-    items: List<TModel> = List([]);
-
     protected loadAllOptions?: IProviderActionOptions;
     protected destroy$: Subject<boolean> = new Subject();
 
@@ -63,37 +59,44 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
                 filter(key => data instanceof this.factoryModel.nested[key]).length > 0;
     }
     updateNestedFactoryModel(data: any) {
-        Object.keys(this.factoryModel.nested).forEach(key => {
-            this.items.map(item => {
-                if (item[key]) {
-                    if (Array.isArray(item[key])) {
-                        item[key].forEach((eachItem, index) => {
-                            if (eachItem.id === data.id) {
-                                item[key][index] = data;
-                            }
-                        });
-                    } else {
-                        item[key] = data;
+        Object.keys(this.factoryModel.nested).forEach(key =>
+            this.items$.next(
+                this.items$.getValue().map(item => {
+                    if (item[key]) {
+                        if (Array.isArray(item[key])) {
+                            item[key].forEach((eachItem, index) => {
+                                if (eachItem.id === data.id) {
+                                    item[key][index] = data;
+                                }
+                            });
+                        } else {
+                            item[key] = data;
+                        }
+                        this.update(item.id, item, { globalEventIsActive: false });
                     }
-                    this.update(item.id, item, { globalEventIsActive: false });
-                }
-            });
-        });
+                    return item;
+                }).toList()
+            )
+        );
     }
     deleteNestedFactoryModel(data: any) {
-        Object.keys(this.factoryModel.nested).forEach(key => {
-            this.items.map(item => {
-                if (item[key]) {
-                    if (Array.isArray(item[key])) {
-                        item[key] = item[key].filter((eachItem, index) => eachItem.id !== data.id);
-                    } else {
-                        item[key] = undefined;
+        Object.keys(this.factoryModel.nested).forEach(key =>
+            this.items$.next(
+                this.items$.getValue().map(item => {
+                    if (item[key]) {
+                        if (Array.isArray(item[key])) {
+                            item[key] = item[key].filter(eachItem => eachItem.id !== data.id);
+                        } else {
+                            item[key] = undefined;
+                        }
+                        this.update(item.id, item, { globalEventIsActive: false });
                     }
-                    this.update(item.id, item, { globalEventIsActive: false });
-                }
-            });
-        });
+                    return item;
+                }).toList()
+            )
+        );
     }
+    // tslint
     plainToClass(data: any, action: ProviderActionEnum) {
         let model: TModel;
         if (!(data instanceof this.factoryModel)) {

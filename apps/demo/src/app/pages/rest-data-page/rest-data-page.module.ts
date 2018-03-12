@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RestDataPageComponent } from './rest-data-page.component';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { UsersGridModule } from '../../grids/users-grid/users-grid.module';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';

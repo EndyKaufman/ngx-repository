@@ -1,7 +1,6 @@
 import { IProviderActionOptions } from './provider-action-options';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { IRestProviderOptions } from './rest-provider-options';
 import { ProviderActionEnum } from '../enums/provider-action.enum';
 
 export interface IRestProviderActionOptions extends IProviderActionOptions {

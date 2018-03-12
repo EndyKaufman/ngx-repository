@@ -1,7 +1,6 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injector } from '@angular/core';
 import { Provider } from './provider';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Subject } from 'rxjs/Subject';
+import { HttpClient } from '@angular/common/http';
 import { ProviderActionEnum } from '../enums/provider-action.enum';
 import { IProviderOptions } from '../interfaces/provider-options';
 import { IRestProviderOptions } from '../interfaces/rest-provider-options';
@@ -14,7 +13,6 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
 import { IHttpClient } from '../interfaces/http-client';
 import { IRestProviderActionHandlers } from '../interfaces/rest-provider-action-handlers';
-import { IProviderActionOptions } from '../interfaces/provider-action-options';
 import { RestProviderActionHandlers } from './rest-provider-action-handlers';
 import { FakeHttpClient } from '../utils/fake-http-client';
 import { IFactoryModel } from '../interfaces/factory-model';
@@ -197,10 +195,10 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                         let createdModel: TModel;
                         if (isCreate === true) {
                             createdModel = this.plainToClass(createdItem, ProviderActionEnum.Create);
-                            this.items = this.items.unshift(createdModel);
+                            this.items$.next(this.items$.getValue().unshift(createdModel));
                         } else {
                             createdModel = this.plainToClass(createdItem, ProviderActionEnum.Append);
-                            this.items = this.items.push(createdModel);
+                            this.items$.next(this.items$.getValue().push(createdModel));
                         }
                         const paginationMeta = this.paginationMeta$.getValue();
                         this.calcPaginationMeta({ totalResults: paginationMeta.totalResults + 1 });
@@ -303,9 +301,9 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                             updatedItem,
                             isUpdate ? ProviderActionEnum.Update : ProviderActionEnum.Patch
                         );
-                        const index = this.items.findIndex(eachModel => eachModel.id === key);
+                        const index = this.items$.getValue().findIndex(eachModel => eachModel.id === key);
                         if (index !== -1) {
-                            this.items = this.items.set(index, updatedModel);
+                            this.items$.next(this.items$.getValue().set(index, updatedModel));
                             this.reconfigItems();
                         }
                         if (options === undefined || options.globalEventIsActive !== false) {
@@ -376,9 +374,9 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
             )).subscribe(
                 (loadedItem: any) => {
                     const loadedModel = this.plainToClass(loadedItem, ProviderActionEnum.Load);
-                    const index = this.items.findIndex(eachModel => eachModel.id === key);
+                    const index = this.items$.getValue().findIndex(eachModel => eachModel.id === key);
                     if (index !== -1) {
-                        this.items = this.items.set(index, loadedModel);
+                        this.items$.next(this.items$.getValue().set(index, loadedModel));
                     }
                     if (options === undefined || options.globalEventIsActive !== false) {
                         this.load$.next(loadedModel);
@@ -432,16 +430,16 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 )
             )).subscribe(
                 (deleted: any) => {
-                    const index = this.items.findIndex(eachModel => eachModel.id === key);
-                    const deletedModel = this.items.get(index);
+                    const index = this.items$.getValue().findIndex(eachModel => eachModel.id === key);
+                    const deletedModel = this.items$.getValue().get(index);
                     if (index !== -1) {
-                        this.items = this.items.delete(index);
+                        this.items$.next(this.items$.getValue().delete(index));
                         const paginationMeta = this.paginationMeta$.getValue();
                         const newPaginationMeta = this.calcPaginationMeta({
                             totalResults: paginationMeta.totalResults === 0 ? 0 : paginationMeta.totalResults - 1
                         });
                         this.reconfigItems();
-                        if (this.items.size === 0 || paginationMeta.totalPages !== newPaginationMeta.totalPages) {
+                        if (this.items$.getValue().size === 0 || paginationMeta.totalPages !== newPaginationMeta.totalPages) {
                             this.reloadAll();
                         }
                     }
@@ -525,7 +523,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 const loadedModels = loadedItems === undefined ? [] : loadedItems.map(loadedItem =>
                     this.plainToClass(loadedItem, ProviderActionEnum.LoadAll)
                 );
-                this.items = List(loadedModels);
+                this.items$.next(List(loadedModels));
                 this.reconfigItems();
                 if (options === undefined || options.globalEventIsActive !== false) {
                     this.loadAll$.next(loadedModels);
@@ -543,7 +541,6 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         if (paginationMeta.perPage === undefined) {
             throw new ProviderError('Not set perPage count');
         }
-        this.items = List(this.items.take(paginationMeta.perPage).toArray());
-        this.items$.next(this.items.toArray());
+        this.items$.next(List(this.items$.getValue().take(paginationMeta.perPage)));
     }
 }

@@ -1,8 +1,6 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { ProviderActionEnum } from '../enums/provider-action.enum';
-import { HttpHeaders, HttpParams, HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { PaginationMeta } from '../models/pagination-meta';
+import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { IPaginationMeta } from '../interfaces/pagination-meta';
 import { IRestProviderActionHandlers } from '../interfaces/rest-provider-action-handlers';
 import { IRestProviderOptions } from '../interfaces/rest-provider-options';

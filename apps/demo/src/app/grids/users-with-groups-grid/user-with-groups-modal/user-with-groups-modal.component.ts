@@ -2,8 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter, Inject, ChangeDetectorR
 import { DynamicFormGroup, DynamicFormBuilder } from 'ngx-dynamic-form-builder';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { UserWithGroups } from '../../../shared/models/user-with-groups';
-import { IModel } from 'ngx-repository';
-import { GROUPS_MOCKS } from '../../../shared/mocks/groups.mock';
 import { Group } from '../../../shared/models/group';
 import { UserWithGroupsGroupsGridComponent } from './user-with-groups-groups-grid/user-with-groups-groups-grid.component';
 

@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { USERS_MOCKS } from '../../shared/mocks/users.mock';
-import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'mock-data-page',
