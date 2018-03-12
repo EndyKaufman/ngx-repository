@@ -7,6 +7,7 @@ import { IModel } from './model';
 import { List } from 'immutable';
 import { IProviderActionOptions } from './provider-action-options';
 import { IProviderActionActionModel } from './provider-action-action-model';
+import { Observable } from 'rxjs/Observable';
 
 export interface IProvider<TModel> {
     name: string;
@@ -37,41 +38,41 @@ export interface IProvider<TModel> {
         key: string,
         data?: any,
         options?: TProviderActionOptions
-    ): Promise<any>;
+    ): Observable<any>;
     save<TProviderActionOptions= IProviderActionOptions>(
         model: TModel,
         options?: TProviderActionOptions
-    ): Promise<TModel>;
+    ): Observable<TModel>;
     create<TProviderActionOptions= IProviderActionOptions>(
         model: TModel,
         options?: TProviderActionOptions
-    ): Promise<TModel>;
+    ): Observable<TModel>;
     append<TProviderActionOptions= IProviderActionOptions>(
         model: TModel,
         options?: TProviderActionOptions
-    ): Promise<TModel>;
+    ): Observable<TModel>;
     patch<TProviderActionOptions= IProviderActionOptions>(
         key: number | string,
         model: TModel,
         options?: TProviderActionOptions
-    ): Promise<TModel>;
+    ): Observable<TModel>;
     update<TProviderActionOptions= IProviderActionOptions>(
         key: number | string,
         model: TModel,
         options?: TProviderActionOptions
-    ): Promise<TModel>;
+    ): Observable<TModel>;
     delete<TProviderActionOptions= IProviderActionOptions>(
         key: number | string,
         options?: TProviderActionOptions
-    ): Promise<TModel>;
+    ): Observable<TModel>;
     load<TProviderActionOptions= IProviderActionOptions>(
         key: number | string,
         options?: TProviderActionOptions
-    ): Promise<TModel>;
+    ): Observable<TModel>;
     loadAll<TProviderActionOptions= IProviderActionOptions>(
         filter?: any,
         options?: TProviderActionOptions
-    ): Promise<TModel[]>;
+    ): Observable<TModel[]>;
     calcPaginationMetaByOptions(options: IProviderOptions<TModel>): IPaginationMeta;
     calcPaginationMeta(newPaginationMeta: IPaginationMeta): IPaginationMeta;
     setOptions(options: IProviderOptions<TModel>);

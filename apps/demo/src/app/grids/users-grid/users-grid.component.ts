@@ -5,14 +5,14 @@ import { User } from '../../shared/models/user';
 import { PageEvent, MatDialog } from '@angular/material';
 import { Repository, PaginationMeta, DynamicRepository } from 'ngx-repository';
 import { Subject } from 'rxjs/Subject';
-import { takeUntil, debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+import { takeUntil, debounceTime, distinctUntilChanged, map, switchMap, take } from 'rxjs/operators';
 import { RestProvider } from 'ngx-repository';
 import { environment } from '../../../environments/environment';
 import { plainToClass } from 'class-transformer';
 import { FormControl } from '@angular/forms';
-import { fromPromise } from 'rxjs/observable/fromPromise';
 import { ViewContainerRef } from '@angular/core';
 import { MessageBoxService } from '../../others/message-box/message-box.service';
+import { of } from 'rxjs/observable/of';
 
 @Component({
   selector: 'users-grid',
@@ -124,16 +124,13 @@ export class UsersGridComponent implements OnInit, OnDestroy {
     });
     dialogRef.componentInstance.title = (item.id && !isNaN(+item.id) ? this.strings.updateTitle : this.strings.createTitle).
       replace('{data.id}', item.id ? item.id.toString() : '');
-    dialogRef.componentInstance.yes.subscribe(async (modal: UserModalComponent) => {
-      if (modal.data !== undefined) {
-        try {
-          const modalItem = await this.repository.provider.save(modal.data);
-        } catch (error) {
-          throw error;
+    dialogRef.componentInstance.yes.subscribe((modal: UserModalComponent) =>
+      this.repository.provider.save(modal.data).pipe(take(1)).subscribe(modalItem => {
+        if (modal.data !== undefined) {
+          dialogRef.close();
         }
-        dialogRef.close();
-      }
-    });
+      })
+    );
   }
   showRemoveModal(item: User): void {
     const dialogRef = this.dialog.open(UserModalComponent, {
@@ -144,47 +141,44 @@ export class UsersGridComponent implements OnInit, OnDestroy {
       replace('{data.id}', item.id.toString());
     dialogRef.componentInstance.message = this.strings.deleteMessage.
       replace('{data.id}', item.id.toString());
-    dialogRef.componentInstance.yes.subscribe(async (modal: UserModalComponent) => {
-      try {
-        const modalItem = await this.repository.provider.delete(item.id);
-      } catch (error) {
-        throw error;
+    dialogRef.componentInstance.yes.subscribe((modal: UserModalComponent) =>
+      this.repository.provider.delete(item.id).pipe(take(1)).subscribe(modalItem =>
+        dialogRef.close()
+      )
+    );
+  }
+  customAction() {
+    this.customActionRequest = { question: 'How are you?' };
+    const actionRequestOptions = this.mockedItems ? {
+      request: (url: string, body: any) => {
+        const data = { headers: {}, body: { answer: 'All is well!' } };
+        return of(data);
       }
-      dialogRef.close();
+    } : undefined;
+    const firstUser = this.repository.provider.items.get(0);
+    this.repository.provider.action(
+      firstUser.id + '/custom-action',
+      this.customActionRequest,
+      actionRequestOptions
+    ).pipe(take(1)).subscribe(result => {
+      this.customActionResponse = result;
+      this.messageBoxService.info(result.answer).pipe(take(1)).subscribe();
     });
   }
-  async customAction() {
-    try {
-      this.customActionRequest = { question: 'How are you?' };
-      const firstUser = this.repository.provider.items.get(0);
-      const result = await this.repository.provider.action(firstUser.id + '/custom-action', this.customActionRequest,
-        this.mockedItems ? {
-          request: (url: string, body: any) => {
-            const data = { headers: {}, body: { answer: 'All is well!' } };
-            return fromPromise(Promise.resolve(data));
-          }
-        } : undefined);
-      this.customActionResponse = result;
-      this.messageBoxService.info(result.answer);
-    } catch (error) {
-      this.customActionResponse = error.message;
-      throw error;
-    }
-  }
-  async errorAction() {
-    try {
-      this.errorActionRequest = { question: 'How are you?' };
-      const result = await this.repository.provider.action('error-action', this.errorActionRequest,
-        this.mockedItems ? {
-          request: (url: string, body: any) => {
-            const data = { headers: {}, body: { answer: 'All is well!' } };
-            return fromPromise(Promise.reject(new Error('Big problem')));
-          }
-        } : undefined);
-      this.errorActionResponse = result;
-    } catch (error) {
-      this.errorActionResponse = error.message;
-      throw error;
-    }
+  errorAction() {
+    this.errorActionRequest = { question: 'How are you?' };
+    const actionRequestOptions = this.mockedItems ? {
+      request: (url: string, body: any) => {
+        const data = { headers: {}, body: { answer: 'All is well!' } };
+        throw new Error('Big problem');
+      }
+    } : undefined;
+    this.repository.provider.action(
+      'error-action',
+      this.errorActionRequest,
+      actionRequestOptions
+    ).pipe(take(1)).subscribe(result =>
+      this.errorActionResponse = result
+    );
   }
 }

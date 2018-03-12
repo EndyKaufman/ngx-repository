@@ -82,7 +82,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         data?: any,
         options?: TProviderActionOptions
     ) {
-        return new Promise<TModel>((resolve, reject) => {
+        return new Observable<any>(observer => {
             this.actionIsActive$.next(true);
             validate(data, { validationError: { target: false } }).then(errors => {
                 if (errors.length > 0 && options.globalEventIsActive !== false) {
@@ -128,7 +128,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                         });
                     }
                     this.actionIsActive$.next(false);
-                    resolve(actionData);
+                    observer.next(actionData);
                 },
                     (error: any) => {
                         throw error;
@@ -141,7 +141,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         model: TModel,
         options?: TProviderActionOptions
     ) {
-        return new Promise<TModel>((resolve, reject) => {
+        return new Observable<TModel>(observer => {
             model = this.plainToClass(model, ProviderActionEnum.Create);
             this.createIsActive$.next(true);
             validate(model, { validationError: { target: false } }).then(errors => {
@@ -194,7 +194,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                     )
                 )).subscribe(
                     (createdItem: any) => {
-                        let createdModel;
+                        let createdModel: TModel;
                         if (isCreate === true) {
                             createdModel = this.plainToClass(createdItem, ProviderActionEnum.Create);
                             this.items = this.items.unshift(createdModel);
@@ -209,7 +209,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                             (isCreate ? this.create$ : this.append$).next(createdModel);
                         }
                         this.createIsActive$.next(false);
-                        resolve(createdModel);
+                        observer.next(createdModel);
                     },
                     (error: any) => {
                         throw error;
@@ -224,7 +224,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         isUpdate: boolean,
         options?: TProviderActionOptions
     ) {
-        return new Promise<TModel>((resolve, reject) => {
+        return new Observable<TModel>(observer => {
             model = this.plainToClass(model, ProviderActionEnum.Update);
             this.updateIsActive$.next(true);
             validate(model, { validationError: { target: false } }).then(errors => {
@@ -312,7 +312,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                             (isUpdate ? this.update$ : this.patch$).next(updatedModel);
                         }
                         this.updateIsActive$.next(false);
-                        resolve(updatedModel);
+                        observer.next(updatedModel);
                     },
                     (error: any) => {
                         throw error;
@@ -339,7 +339,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         key: number | string,
         options?: TProviderActionOptions
     ) {
-        return new Promise<TModel>((resolve, reject) => {
+        return new Observable<TModel>(observer => {
             const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
             this.loadIsActive$.next(true);
             const requestUrl = this.providerActionHandlers.getRequestUrl(
@@ -384,7 +384,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                         this.load$.next(loadedModel);
                     }
                     this.loadIsActive$.next(false);
-                    resolve(loadedModel);
+                    observer.next(loadedModel);
                 },
                 (error: any) => {
                     throw error;
@@ -396,7 +396,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         key: number | string,
         options?: TProviderActionOptions
     ) {
-        return new Promise<TModel>((resolve, reject) => {
+        return new Observable<TModel>(observer => {
             const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
             this.deleteIsActive$.next(true);
             const requestUrl = this.providerActionHandlers.getRequestUrl(
@@ -449,7 +449,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                         this.delete$.next(deletedModel);
                     }
                     this.deleteIsActive$.next(false);
-                    resolve(deletedModel);
+                    observer.next(deletedModel);
                 },
                 (error: any) => {
                     throw error;
@@ -466,7 +466,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
     ) {
         this.filter = filter;
         this.loadAllOptions = options;
-        return new Promise<TModel[]>((resolve, reject) => {
+        return new Observable<TModel[]>(observer => {
             const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
             this.loadAllIsActive$.next(true);
             let requestUrl = this.providerActionHandlers.getRequestUrl(
@@ -521,23 +521,20 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                     optionsList,
                     ProviderActionEnum.LoadAll
                 );
-            })).subscribe(
-                (loadedItems: any[]) => {
-                    const loadedModels = loadedItems === undefined ? [] : loadedItems.map(loadedItem =>
-                        this.plainToClass(loadedItem, ProviderActionEnum.LoadAll)
-                    );
-                    this.items = List(loadedModels);
-                    this.reconfigItems();
-                    if (options === undefined || options.globalEventIsActive !== false) {
-                        this.loadAll$.next(loadedModels);
-                    }
-                    this.loadAllIsActive$.next(false);
-                    resolve(loadedModels);
-                },
-                (error: any) => {
-                    throw error;
+            })).subscribe((loadedItems: any[]) => {
+                const loadedModels = loadedItems === undefined ? [] : loadedItems.map(loadedItem =>
+                    this.plainToClass(loadedItem, ProviderActionEnum.LoadAll)
+                );
+                this.items = List(loadedModels);
+                this.reconfigItems();
+                if (options === undefined || options.globalEventIsActive !== false) {
+                    this.loadAll$.next(loadedModels);
                 }
-            );
+                this.loadAllIsActive$.next(false);
+                observer.next(loadedModels);
+            }, (error: any) => {
+                throw error;
+            });
         });
     }
     reconfigItems() {

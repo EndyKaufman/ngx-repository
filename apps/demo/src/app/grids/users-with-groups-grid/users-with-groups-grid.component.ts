@@ -5,7 +5,7 @@ import { UserWithGroups } from '../../shared/models/user-with-groups';
 import { PageEvent, MatDialog } from '@angular/material';
 import { Repository, PaginationMeta, DynamicRepository } from 'ngx-repository';
 import { Subject } from 'rxjs/Subject';
-import { takeUntil, debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+import { takeUntil, debounceTime, distinctUntilChanged, map, switchMap, take } from 'rxjs/operators';
 import { RestProvider } from 'ngx-repository';
 import { environment } from '../../../environments/environment';
 import { plainToClass } from 'class-transformer';
@@ -120,16 +120,13 @@ export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
       replace('{data.id}', item.id ? item.id.toString() : '');
     dialogRef.componentInstance.exampleGroupMockedItems = this.exampleGroupMockedItems;
     dialogRef.componentInstance.exampleUseNestedGroupsFromRest = this.exampleUseNestedGroupsFromRest;
-    dialogRef.componentInstance.yes.subscribe(async (modal: UserWithGroupsModalComponent) => {
-      if (modal.data !== undefined) {
-        try {
-          const modalItem = await this.repository.provider.save(modal.data);
-        } catch (error) {
-          throw error;
+    dialogRef.componentInstance.yes.subscribe((modal: UserWithGroupsModalComponent) =>
+      this.repository.provider.save(modal.data).pipe(take(1)).subscribe(modalItem => {
+        if (modal.data !== undefined) {
+          dialogRef.close();
         }
-        dialogRef.close();
-      }
-    });
+      })
+    );
   }
   showRemoveModal(item: UserWithGroups): void {
     const dialogRef = this.dialog.open(UserWithGroupsModalComponent, {
@@ -142,13 +139,10 @@ export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
       replace('{data.id}', item.id.toString());
     dialogRef.componentInstance.exampleGroupMockedItems = this.exampleGroupMockedItems;
     dialogRef.componentInstance.exampleUseNestedGroupsFromRest = this.exampleUseNestedGroupsFromRest;
-    dialogRef.componentInstance.yes.subscribe(async (modal: UserWithGroupsModalComponent) => {
-      try {
-        const modalItem = await this.repository.provider.delete(item.id);
-      } catch (error) {
-        throw error;
-      }
-      dialogRef.close();
-    });
+    dialogRef.componentInstance.yes.subscribe((modal: UserWithGroupsModalComponent) =>
+      this.repository.provider.delete(item.id).pipe(take(1)).subscribe(modalItem =>
+        dialogRef.close()
+      )
+    );
   }
 }

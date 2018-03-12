@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { List } from 'immutable';
-import { fromPromise } from 'rxjs/observable/fromPromise';
 import * as parseImported from 'url-parse'; const parse = parseImported;
 import { IHttpClient } from '../interfaces/http-client';
 @Injectable()
@@ -90,7 +89,7 @@ export class FakeHttpClient implements IHttpClient {
         responseType?: 'json';
         withCredentials?: boolean;
     }): Observable<any> {
-        return fromPromise(new Promise((resolve, reject) => {
+        return new Observable(observer => {
             const urlData = this.parseUrl(url);
             const data: any = {};
             let newBody: any;
@@ -124,8 +123,8 @@ export class FakeHttpClient implements IHttpClient {
                 });
             }
             data.body = newBody;
-            resolve(data);
-        }));
+            observer.next(data);
+        });
     }
 
     post<T = any>(url: string, body: any, options?: {
@@ -140,14 +139,14 @@ export class FakeHttpClient implements IHttpClient {
         responseType?: 'json';
         withCredentials?: boolean;
     }): Observable<any> {
-        return fromPromise(new Promise((resolve, reject) => {
+        return new Observable(observer => {
             if (!body[this.idField]) {
                 body[this.idField] = this.genId();
             }
             this.mockedItems = this.mockedItems.unshift(body);
             const data = { headers: new HttpHeaders(), body: body };
-            resolve(data);
-        }));
+            observer.next(data);
+        });
     }
 
     put<T = any>(url: string, body: any, options?: {
@@ -162,7 +161,7 @@ export class FakeHttpClient implements IHttpClient {
         responseType?: 'json';
         withCredentials?: boolean;
     }): Observable<any> {
-        return fromPromise(new Promise((resolve, reject) => {
+        return new Observable(observer => {
             const urlData = this.parseUrl(url);
             const foundedIndex = this.mockedItems.findIndex((item: any) =>
                 +item[this.idField] === +urlData.key || item[this.idField] as string === urlData.key as string
@@ -171,8 +170,8 @@ export class FakeHttpClient implements IHttpClient {
                 this.mockedItems = this.mockedItems.set(foundedIndex, body);
             }
             const data = { headers: new HttpHeaders(), body: body };
-            resolve(data);
-        }));
+            observer.next(data);
+        });
     }
 
     delete<T = any>(url: string, options?: {
@@ -187,7 +186,7 @@ export class FakeHttpClient implements IHttpClient {
         responseType?: 'json';
         withCredentials?: boolean;
     }): Observable<any> {
-        return fromPromise(new Promise((resolve, reject) => {
+        return new Observable(observer => {
             const urlData = this.parseUrl(url);
             const foundedIndex = this.mockedItems.findIndex((item: any) =>
                 +item[this.idField] === +urlData.key || item[this.idField] as string === urlData.key as string
@@ -196,8 +195,8 @@ export class FakeHttpClient implements IHttpClient {
                 this.mockedItems = this.mockedItems.delete(foundedIndex);
             }
             const data = { headers: new HttpHeaders(), body: true };
-            resolve(data);
-        }));
+            observer.next(data);
+        });
     }
 
     patch<T = any>(url: string, body: any, options?: {
@@ -212,7 +211,7 @@ export class FakeHttpClient implements IHttpClient {
         responseType?: 'json';
         withCredentials?: boolean;
     }): Observable<any> {
-        return fromPromise(new Promise((resolve, reject) => {
+        return new Observable(observer => {
             const urlData = this.parseUrl(url);
             const foundedIndex = this.mockedItems.findIndex((item: any) =>
                 +item[this.idField] === +urlData.key || item[this.idField] as string === urlData.key as string
@@ -227,7 +226,7 @@ export class FakeHttpClient implements IHttpClient {
                 this.mockedItems = this.mockedItems.set(foundedIndex, newBody);
             }
             const data = { headers: new HttpHeaders(), body: body };
-            resolve(data);
-        }));
+            observer.next(data);
+        });
     }
 }

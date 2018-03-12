@@ -14,7 +14,8 @@ import { IProviderActionOptions } from '../interfaces/provider-action-options';
 import { IProviderActionActionModel } from '../interfaces/provider-action-action-model';
 import { IFactoryModel } from '../interfaces/factory-model';
 import { map } from 'rxjs/operators';
-
+import { of } from 'rxjs/observable/of';
+import { delay } from 'rxjs/operators';
 export class Provider<TModel extends IModel = any> implements IProvider<TModel> {
 
     filter?: any;
@@ -110,9 +111,7 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
         data?: any,
         options?: TProviderActionOptions
     ) {
-        return new Promise<any>((resolve, reject) =>
-            setTimeout(() => resolve(data), this.delay)
-        );
+        return of(data).pipe(delay(this.delay));
     }
     save<TProviderActionOptions extends IProviderActionOptions>(
         model: TModel,
@@ -127,62 +126,48 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
         model: TModel,
         options?: TProviderActionOptions
     ) {
-        return new Promise<any>((resolve, reject) =>
-            setTimeout(() => resolve(model), this.delay)
-        );
+        return of(model).pipe<TModel>(delay(this.delay));
     }
     append<TProviderActionOptions extends IProviderActionOptions>(
         model: TModel,
         options?: TProviderActionOptions
     ) {
-        return new Promise<any>((resolve, reject) =>
-            setTimeout(() => resolve(model), this.delay)
-        );
+        return of(model).pipe<TModel>(delay(this.delay));
     }
     update<TProviderActionOptions extends IProviderActionOptions>(
         key: number | string,
         model: TModel,
         options?: TProviderActionOptions
     ) {
-        return new Promise<any>((resolve, reject) =>
-            setTimeout(() => resolve(model), this.delay)
-        );
+        return of(model).pipe<TModel>(delay(this.delay));
     }
     patch<TProviderActionOptions extends IProviderActionOptions>(
         key: number | string,
         model: TModel,
         options?: TProviderActionOptions
     ) {
-        return new Promise<any>((resolve, reject) =>
-            setTimeout(() => resolve(model), this.delay)
-        );
+        return of(model).pipe<TModel>(delay(this.delay));
     }
     delete<TProviderActionOptions extends IProviderActionOptions>(
         key: number | string,
         options?: TProviderActionOptions
     ) {
-        return new Promise<any>((resolve, reject) => {
-            const newModel = this.plainToClass({ id: key }, ProviderActionEnum.Delete);
-            setTimeout(() => resolve(newModel), this.delay);
-        });
+        const newModel = this.plainToClass({ id: key }, ProviderActionEnum.Delete);
+        return of(newModel).pipe<TModel>(delay(this.delay));
     }
     load<TProviderActionOptions extends IProviderActionOptions>(
         key: number | string,
         options?: TProviderActionOptions
     ) {
-        return new Promise<any>((resolve, reject) => {
-            const newModel = this.plainToClass({ id: key }, ProviderActionEnum.Delete);
-            setTimeout(() => resolve(newModel), this.delay);
-        });
+        const newModel = this.plainToClass({ id: key }, ProviderActionEnum.Delete);
+        return of(newModel).pipe<TModel>(delay(this.delay));
     }
     loadAll<TProviderActionOptions extends IProviderActionOptions>(
         filter?: any,
         options?: TProviderActionOptions
     ) {
-        return new Promise<any>((resolve, reject) => {
-            const newModels = [this.plainToClass({}, ProviderActionEnum.Delete)];
-            setTimeout(() => resolve(newModels), this.delay);
-        });
+        const newModels = [this.plainToClass({}, ProviderActionEnum.Delete)];
+        return of(newModels).pipe<TModel[]>(delay(this.delay));
     }
     calcPaginationMetaByOptions(options: IProviderOptions<TModel>): IPaginationMeta {
         const paginationMeta = this.paginationMeta$.getValue();

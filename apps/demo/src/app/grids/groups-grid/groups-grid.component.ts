@@ -5,7 +5,7 @@ import { Group } from '../../shared/models/group';
 import { PageEvent, MatDialog } from '@angular/material';
 import { Repository, PaginationMeta, DynamicRepository } from 'ngx-repository';
 import { Subject } from 'rxjs/Subject';
-import { takeUntil, debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+import { takeUntil, debounceTime, distinctUntilChanged, map, switchMap, take } from 'rxjs/operators';
 import { RestProvider } from 'ngx-repository';
 import { environment } from '../../../environments/environment';
 import { plainToClass } from 'class-transformer';
@@ -123,16 +123,13 @@ export class GroupsGridComponent implements OnInit, OnDestroy {
     });
     dialogRef.componentInstance.title = (item.id && !isNaN(+item.id) ? this.strings.updateTitle : this.strings.createTitle).
       replace('{data.id}', item.id ? item.id.toString() : '');
-    dialogRef.componentInstance.yes.subscribe(async (modal: GroupModalComponent) => {
-      if (modal.data !== undefined) {
-        try {
-          const modalItem = await this.repository.provider.save(modal.data);
-        } catch (error) {
-          throw error;
+    dialogRef.componentInstance.yes.subscribe((modal: GroupModalComponent) =>
+      this.repository.provider.save(modal.data).pipe(take(1)).subscribe(modalItem => {
+        if (modal.data !== undefined) {
+          dialogRef.close();
         }
-        dialogRef.close();
-      }
-    });
+      })
+    );
   }
   showRemoveModal(item: Group): void {
     const dialogRef = this.dialog.open(GroupModalComponent, {
@@ -143,13 +140,10 @@ export class GroupsGridComponent implements OnInit, OnDestroy {
       replace('{data.id}', item.id.toString());
     dialogRef.componentInstance.message = this.strings.deleteMessage.
       replace('{data.id}', item.id.toString());
-    dialogRef.componentInstance.yes.subscribe(async (modal: GroupModalComponent) => {
-      try {
-        const modalItem = await this.repository.provider.delete(item.id);
-      } catch (error) {
-        throw error;
-      }
-      dialogRef.close();
-    });
+    dialogRef.componentInstance.yes.subscribe((modal: GroupModalComponent) =>
+      this.repository.provider.delete(item.id).pipe(take(1)).subscribe(modalItem =>
+        dialogRef.close()
+      )
+    );
   }
 }

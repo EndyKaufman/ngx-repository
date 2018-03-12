@@ -37,7 +37,7 @@
     "libs:build": "node ./node_modules/@rucken/cli/bin/rucken build --lib --verbose",
     "libs:link": "node ./node_modules/@rucken/cli/bin/rucken link --lib",
     "libs:link-npm": "node ./node_modules/@rucken/cli/bin/rucken link-npm --lib",
-    "app:serve-dev": "node ./node_modules/@angular/cli/bin/ng serve --app=demo --preserve-symlinks --aot=false",
+    "app:serve-dev": "node ./node_modules/@angular/cli/bin/ng serve --app=demo --preserve-symlinks --aot",
     "app:serve-prod": "node ./node_modules/@angular/cli/bin/ng serve --app=demo --preserve-symlinks --aot --env=prod",
     "app:build-prod": "node ./node_modules/@angular/cli/bin/ng build --app=demo --preserve-symlinks --prod --build-optimizer --no-sourcemap",
     "app:build-full_prod": "npm-run-all clear prepare libs:build libs:link app:build-prod",
