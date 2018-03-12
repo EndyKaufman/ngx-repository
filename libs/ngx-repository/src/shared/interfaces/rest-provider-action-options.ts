@@ -7,7 +7,7 @@ import { ProviderActionEnum } from '../enums/provider-action.enum';
 export interface IRestProviderActionOptions extends IProviderActionOptions {
     request?: Observable<any>;
     requestUrl?: (key: number | string, data: any, action: ProviderActionEnum) => string;
-    requestOptions?: {
+    requestOptions?: (key: number | string, data: any, action: ProviderActionEnum) => {
         headers?: HttpHeaders | {
             [header: string]: string | string[];
         };

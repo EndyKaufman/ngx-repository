@@ -95,6 +95,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                     ProviderActionEnum.Action
                 );
                 const requestOptions = this.providerActionHandlers.getRequestOptions(
+                    key, data,
                     optionsList,
                     ProviderActionEnum.Action
                 );
@@ -166,6 +167,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                     isCreate ? ProviderActionEnum.Create : ProviderActionEnum.Append
                 );
                 const requestOptions = this.providerActionHandlers.getRequestOptions(
+                    undefined, object,
                     optionsList,
                     isCreate ? ProviderActionEnum.Create : ProviderActionEnum.Append
                 );
@@ -242,6 +244,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                         ProviderActionEnum.Update
                     );
                     const requestOptions = this.providerActionHandlers.getRequestOptions(
+                        key, object,
                         optionsList,
                         ProviderActionEnum.Update
                     );
@@ -269,6 +272,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                         ProviderActionEnum.Patch
                     );
                     const requestOptions = this.providerActionHandlers.getRequestOptions(
+                        key, object,
                         optionsList,
                         ProviderActionEnum.Patch
                     );
@@ -345,6 +349,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 ProviderActionEnum.Load
             );
             const requestOptions = this.providerActionHandlers.getRequestOptions(
+                key, undefined,
                 optionsList,
                 ProviderActionEnum.Load
             );
@@ -401,6 +406,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 ProviderActionEnum.Delete
             );
             const requestOptions = this.providerActionHandlers.getRequestOptions(
+                key, undefined,
                 optionsList,
                 ProviderActionEnum.Delete
             );
@@ -482,6 +488,8 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 ProviderActionEnum.LoadAll
             );
             const requestOptions = this.providerActionHandlers.getRequestOptions(
+                undefined,
+                filter,
                 optionsList,
                 ProviderActionEnum.LoadAll
             );

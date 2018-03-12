@@ -36,6 +36,8 @@ export interface IRestProviderActionHandlers {
         action: ProviderActionEnum
     ): string;
     getRequestOptions(
+        key: number | string,
+        data: any,
         optionsList: IRestProviderOptions<any>[],
         action: ProviderActionEnum
     );
