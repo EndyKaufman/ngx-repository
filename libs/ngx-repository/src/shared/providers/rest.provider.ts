@@ -4,12 +4,12 @@ import { HttpClient } from '@angular/common/http';
 import { ProviderActionEnum } from '../enums/provider-action.enum';
 import { IProviderOptions } from '../interfaces/provider-options';
 import { IRestProviderOptions } from '../interfaces/rest-provider-options';
-import { validate } from 'class-validator';
+import { validate, validateSync } from 'class-validator';
 import { ValidatorError } from '../exceptions/validator.error';
 import { List } from 'immutable';
 import { IModel } from '../interfaces/model';
 import { IRestProviderActionOptions } from '../interfaces/rest-provider-action-options';
-import { map, take } from 'rxjs/operators';
+import { map, first } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
 import { IHttpClient } from '../interfaces/http-client';
 import { IRestProviderActionHandlers } from '../interfaces/rest-provider-action-handlers';
@@ -72,7 +72,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         this.calcPaginationMetaByOptions(options);
 
         if (this.autoload !== false) {
-            this.loadAll(this.filter, this.loadAllOptions).pipe(take(1)).subscribe();
+            this.loadAll(this.filter, this.loadAllOptions).pipe(first()).subscribe();
         }
     }
     action<TProviderActionOptions extends IRestProviderActionOptions>(
@@ -80,141 +80,132 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         data?: any,
         options?: TProviderActionOptions
     ) {
-        return new Observable<any>(observer => {
-            this.actionIsActive$.next(true);
-            validate(data, { validationError: { target: false } }).then(errors => {
-                if (errors.length > 0 && options.globalEventIsActive !== false) {
-                    throw new ValidatorError(errors);
+        this.actionIsActive$.next(true);
+        const errors = validateSync(data, { validationError: { target: false } });
+        if (errors.length > 0 && options.globalEventIsActive !== false) {
+            throw new ValidatorError(errors);
+        }
+        const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
+        const requestUrl = this.providerActionHandlers.getRequestUrl(
+            key, data,
+            optionsList,
+            ProviderActionEnum.Action
+        );
+        const requestOptions = this.providerActionHandlers.getRequestOptions(
+            key, data,
+            optionsList,
+            ProviderActionEnum.Action
+        );
+        let request = this.providerActionHandlers.getRequest(
+            requestUrl,
+            data,
+            requestOptions,
+            optionsList,
+            ProviderActionEnum.Action
+        );
+        if (!request) {
+            request = this.httpClient.post<any>(
+                requestUrl,
+                data,
+                requestOptions
+            );
+        }
+        return request.pipe(
+            map(responseData =>
+                this.providerActionHandlers.getResponseData(
+                    responseData,
+                    optionsList,
+                    ProviderActionEnum.Action
+                )
+            ),
+            map(actionData => {
+                if (options === undefined || options.globalEventIsActive !== false) {
+                    this.action$.next({
+                        actionKey: key,
+                        requestData: data,
+                        responseData: actionData
+                    });
                 }
-                const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
-                const requestUrl = this.providerActionHandlers.getRequestUrl(
-                    key, data,
-                    optionsList,
-                    ProviderActionEnum.Action
-                );
-                const requestOptions = this.providerActionHandlers.getRequestOptions(
-                    key, data,
-                    optionsList,
-                    ProviderActionEnum.Action
-                );
-                let request = this.providerActionHandlers.getRequest(
-                    requestUrl,
-                    data,
-                    requestOptions,
-                    optionsList,
-                    ProviderActionEnum.Action
-                );
-                if (!request) {
-                    request = this.httpClient.post<any>(
-                        requestUrl,
-                        data,
-                        requestOptions
-                    );
-                }
-                request.pipe(map(responseData =>
-                    this.providerActionHandlers.getResponseData(
-                        responseData,
-                        optionsList,
-                        ProviderActionEnum.Action
-                    )
-                )).subscribe((actionData: any) => {
-                    if (options === undefined || options.globalEventIsActive !== false) {
-                        this.action$.next({
-                            actionKey: key,
-                            requestData: data,
-                            responseData: actionData
-                        });
-                    }
-                    this.actionIsActive$.next(false);
-                    observer.next(actionData);
-                },
-                    (error: any) => {
-                        throw error;
-                    }
-                );
-            });
-        });
+                this.actionIsActive$.next(false);
+                return actionData;
+            })
+        );
     }
     create<TProviderActionOptions extends IRestProviderActionOptions>(
         model: TModel,
         options?: TProviderActionOptions
     ) {
-        return new Observable<TModel>(observer => {
-            model = this.plainToClass(model, ProviderActionEnum.Create);
-            this.createIsActive$.next(true);
-            validate(model, { validationError: { target: false } }).then(errors => {
-                if (errors.length > 0 && options.globalEventIsActive !== false) {
-                    throw new ValidatorError(errors);
-                }
-                const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
-                const isCreate = this.providerActionHandlers.getRequestCreateType(
-                    optionsList,
-                    ProviderActionEnum.Create
-                ) === 'create';
-                let object;
+        model = this.plainToClass(model, ProviderActionEnum.Create);
+        this.createIsActive$.next(true);
+        const errors = validateSync(model, { validationError: { target: false } });
+        if (errors.length > 0 && options.globalEventIsActive !== false) {
+            throw new ValidatorError(errors);
+        }
+        const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
+        const isCreate = this.providerActionHandlers.getRequestCreateType(
+            optionsList,
+            ProviderActionEnum.Create
+        ) === 'create';
+        let object;
 
-                if (isCreate === true) {
-                    object = this.classToPlain(model, ProviderActionEnum.Create);
-                } else {
-                    object = this.classToPlain(model, ProviderActionEnum.Append);
-                }
-                const requestUrl = this.providerActionHandlers.getRequestUrl(
-                    undefined,
-                    object,
-                    optionsList,
-                    isCreate ? ProviderActionEnum.Create : ProviderActionEnum.Append
-                );
-                const requestOptions = this.providerActionHandlers.getRequestOptions(
-                    undefined, object,
-                    optionsList,
-                    isCreate ? ProviderActionEnum.Create : ProviderActionEnum.Append
-                );
-                let request = this.providerActionHandlers.getRequest(
+        if (isCreate === true) {
+            object = this.classToPlain(model, ProviderActionEnum.Create);
+        } else {
+            object = this.classToPlain(model, ProviderActionEnum.Append);
+        }
+        const requestUrl = this.providerActionHandlers.getRequestUrl(
+            undefined,
+            object,
+            optionsList,
+            isCreate ? ProviderActionEnum.Create : ProviderActionEnum.Append
+        );
+        const requestOptions = this.providerActionHandlers.getRequestOptions(
+            undefined, object,
+            optionsList,
+            isCreate ? ProviderActionEnum.Create : ProviderActionEnum.Append
+        );
+        let request = this.providerActionHandlers.getRequest(
+            requestUrl,
+            object,
+            requestOptions,
+            optionsList,
+            isCreate ? ProviderActionEnum.Create : ProviderActionEnum.Append
+        );
+        if (!request) {
+            request = (options === undefined || options.useFakeHttpClient !== true ? this.httpClient : this.fakeHttpClient).
+                post<any>(
                     requestUrl,
                     object,
-                    requestOptions,
+                    requestOptions
+                );
+        }
+        return request.pipe(
+            map(responseData =>
+                this.providerActionHandlers.getResponseData(
+                    responseData,
                     optionsList,
                     isCreate ? ProviderActionEnum.Create : ProviderActionEnum.Append
-                );
-                if (!request) {
-                    request = (options === undefined || options.globalEventIsActive === true ? this.httpClient : this.fakeHttpClient).
-                        post<any>(
-                            requestUrl,
-                            object,
-                            requestOptions
-                        );
+                )
+            ),
+            map(createdItem => {
+                let createdModel: TModel;
+                if (isCreate === true) {
+                    createdModel = this.plainToClass(createdItem, ProviderActionEnum.Create);
+                    this.items$.next(this.items$.getValue().unshift(createdModel));
+                } else {
+                    createdModel = this.plainToClass(createdItem, ProviderActionEnum.Append);
+                    this.items$.next(this.items$.getValue().push(createdModel));
                 }
-                request.pipe(map(responseData =>
-                    this.providerActionHandlers.getResponseData(
-                        responseData,
-                        optionsList,
-                        isCreate ? ProviderActionEnum.Create : ProviderActionEnum.Append
-                    )
-                )).subscribe(
-                    (createdItem: any) => {
-                        let createdModel: TModel;
-                        if (isCreate === true) {
-                            createdModel = this.plainToClass(createdItem, ProviderActionEnum.Create);
-                            this.items$.next(this.items$.getValue().unshift(createdModel));
-                        } else {
-                            createdModel = this.plainToClass(createdItem, ProviderActionEnum.Append);
-                            this.items$.next(this.items$.getValue().push(createdModel));
-                        }
-                        const paginationMeta = this.paginationMeta$.getValue();
-                        this.calcPaginationMeta({ totalResults: paginationMeta.totalResults + 1 });
-                        this.reconfigItems();
-                        if (options === undefined || options.globalEventIsActive !== false) {
-                            (isCreate ? this.create$ : this.append$).next(createdModel);
-                        }
-                        this.createIsActive$.next(false);
-                        observer.next(createdModel);
-                    },
-                    (error: any) => {
-                        throw error;
-                    }
-                );
-            });
-        });
+                const paginationMeta = this.paginationMeta$.getValue();
+                this.calcPaginationMeta({ totalResults: paginationMeta.totalResults + 1 });
+                this.reconfigItems();
+                if (options === undefined || options.globalEventIsActive !== false) {
+                    (isCreate ? this.create$ : this.append$).next(createdModel);
+                }
+                this.createIsActive$.next(false);
+                return createdModel;
+            })
+        );
     }
     private _update<TProviderActionOptions extends IRestProviderActionOptions>(
         key: number | string,
@@ -222,102 +213,97 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         isUpdate: boolean,
         options?: TProviderActionOptions
     ) {
-        return new Observable<TModel>(observer => {
-            model = this.plainToClass(model, ProviderActionEnum.Update);
-            this.updateIsActive$.next(true);
-            validate(model, { validationError: { target: false } }).then(errors => {
-                if (errors.length > 0 && options.globalEventIsActive !== false) {
-                    throw new ValidatorError(errors);
-                }
-                let object;
-                const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
+        model = this.plainToClass(model, ProviderActionEnum.Update);
+        this.updateIsActive$.next(true);
+        const errors = validateSync(model, { validationError: { target: false } });
+        if (errors.length > 0 && options.globalEventIsActive !== false) {
+            throw new ValidatorError(errors);
+        }
+        let object;
+        const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
 
-                let request;
-                if (isUpdate === true) {
-                    object = this.classToPlain(model, ProviderActionEnum.Update);
-                    const requestUrl = this.providerActionHandlers.getRequestUrl(
-                        key,
-                        object,
-                        optionsList,
-                        ProviderActionEnum.Update
-                    );
-                    const requestOptions = this.providerActionHandlers.getRequestOptions(
-                        key, object,
-                        optionsList,
-                        ProviderActionEnum.Update
-                    );
-                    request = this.providerActionHandlers.getRequest(
+        let request;
+        if (isUpdate === true) {
+            object = this.classToPlain(model, ProviderActionEnum.Update);
+            const requestUrl = this.providerActionHandlers.getRequestUrl(
+                key,
+                object,
+                optionsList,
+                ProviderActionEnum.Update
+            );
+            const requestOptions = this.providerActionHandlers.getRequestOptions(
+                key, object,
+                optionsList,
+                ProviderActionEnum.Update
+            );
+            request = this.providerActionHandlers.getRequest(
+                requestUrl,
+                object,
+                requestOptions,
+                optionsList,
+                ProviderActionEnum.Update
+            );
+            if (!request) {
+                request = (options === undefined || options.useFakeHttpClient !== true ? this.httpClient : this.fakeHttpClient).
+                    put<any>(
                         requestUrl,
                         object,
-                        requestOptions,
-                        optionsList,
-                        ProviderActionEnum.Update
+                        requestOptions
                     );
-                    if (!request) {
-                        request = (options === undefined || options.globalEventIsActive === true ? this.httpClient : this.fakeHttpClient).
-                            put<any>(
-                                requestUrl,
-                                object,
-                                requestOptions
-                            );
-                    }
-                } else {
-                    object = this.classToPlain(model, ProviderActionEnum.Patch);
-                    const requestUrl = this.providerActionHandlers.getRequestUrl(
-                        key,
-                        object,
-                        optionsList,
-                        ProviderActionEnum.Patch
-                    );
-                    const requestOptions = this.providerActionHandlers.getRequestOptions(
-                        key, object,
-                        optionsList,
-                        ProviderActionEnum.Patch
-                    );
-                    request = this.providerActionHandlers.getRequest(
-                        requestUrl,
-                        object,
-                        requestOptions,
-                        optionsList,
-                        ProviderActionEnum.Patch
-                    );
-                    if (!request) {
-                        request = this.httpClient.patch<any>(
-                            requestUrl,
-                            object,
-                            requestOptions
-                        );
-                    }
-                }
-                request.pipe(map(responseData =>
-                    this.providerActionHandlers.getResponseData(
-                        responseData,
-                        optionsList,
-                        isUpdate ? ProviderActionEnum.Update : ProviderActionEnum.Patch
-                    )
-                )).subscribe(
-                    (updatedItem: any) => {
-                        const updatedModel = this.plainToClass(
-                            updatedItem,
-                            isUpdate ? ProviderActionEnum.Update : ProviderActionEnum.Patch
-                        );
-                        const index = this.items$.getValue().findIndex(eachModel => eachModel.id === key);
-                        if (index !== -1) {
-                            this.items$.next(this.items$.getValue().set(index, updatedModel));
-                            this.reconfigItems();
-                        }
-                        if (options === undefined || options.globalEventIsActive !== false) {
-                            (isUpdate ? this.update$ : this.patch$).next(updatedModel);
-                        }
-                        this.updateIsActive$.next(false);
-                        observer.next(updatedModel);
-                    },
-                    (error: any) => {
-                        throw error;
-                    }
+            }
+        } else {
+            object = this.classToPlain(model, ProviderActionEnum.Patch);
+            const requestUrl = this.providerActionHandlers.getRequestUrl(
+                key,
+                object,
+                optionsList,
+                ProviderActionEnum.Patch
+            );
+            const requestOptions = this.providerActionHandlers.getRequestOptions(
+                key, object,
+                optionsList,
+                ProviderActionEnum.Patch
+            );
+            request = this.providerActionHandlers.getRequest(
+                requestUrl,
+                object,
+                requestOptions,
+                optionsList,
+                ProviderActionEnum.Patch
+            );
+            if (!request) {
+                request = this.httpClient.patch<any>(
+                    requestUrl,
+                    object,
+                    requestOptions
                 );
-            });
-        });
+            }
+        }
+        return request.pipe(
+            map(responseData =>
+                this.providerActionHandlers.getResponseData(
+                    responseData,
+                    optionsList,
+                    isUpdate ? ProviderActionEnum.Update : ProviderActionEnum.Patch
+                )
+            ),
+            map(updatedItem => {
+                const updatedModel = this.plainToClass(
+                    updatedItem,
+                    isUpdate ? ProviderActionEnum.Update : ProviderActionEnum.Patch
+                );
+                const index = this.items$.getValue().findIndex(eachModel => eachModel.id === key);
+                if (index !== -1) {
+                    this.items$.next(this.items$.getValue().set(index, updatedModel));
+                    this.reconfigItems();
+                }
+                if (options === undefined || options.globalEventIsActive !== false) {
+                    (isUpdate ? this.update$ : this.patch$).next(updatedModel);
+                }
+                this.updateIsActive$.next(false);
+                return updatedModel;
+            })
+        );
     }
     update<TProviderActionOptions extends IRestProviderActionOptions>(
         key: number | string,
@@ -337,126 +323,118 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         key: number | string,
         options?: TProviderActionOptions
     ) {
-        return new Observable<TModel>(observer => {
-            const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
-            this.loadIsActive$.next(true);
-            const requestUrl = this.providerActionHandlers.getRequestUrl(
-                key,
-                undefined,
-                optionsList,
-                ProviderActionEnum.Load
-            );
-            const requestOptions = this.providerActionHandlers.getRequestOptions(
-                key, undefined,
-                optionsList,
-                ProviderActionEnum.Load
-            );
-            let request = this.providerActionHandlers.getRequest(
-                requestUrl,
-                undefined,
-                requestOptions,
-                optionsList,
-                ProviderActionEnum.Load
-            );
-            if (!request) {
-                request = (options === undefined || options.globalEventIsActive === true ? this.httpClient : this.fakeHttpClient).
-                    get<any>(
-                        requestUrl,
-                        requestOptions
-                    );
-            }
-            request.pipe(map(responseData =>
+        const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
+        this.loadIsActive$.next(true);
+        const requestUrl = this.providerActionHandlers.getRequestUrl(
+            key,
+            undefined,
+            optionsList,
+            ProviderActionEnum.Load
+        );
+        const requestOptions = this.providerActionHandlers.getRequestOptions(
+            key, undefined,
+            optionsList,
+            ProviderActionEnum.Load
+        );
+        let request = this.providerActionHandlers.getRequest(
+            requestUrl,
+            undefined,
+            requestOptions,
+            optionsList,
+            ProviderActionEnum.Load
+        );
+        if (!request) {
+            request = (options === undefined || options.useFakeHttpClient !== true ? this.httpClient : this.fakeHttpClient).
+                get<any>(
+                    requestUrl,
+                    requestOptions
+                );
+        }
+        return request.pipe(
+            map(responseData =>
                 this.providerActionHandlers.getResponseData(
                     responseData,
                     optionsList,
                     ProviderActionEnum.Load
                 )
-            )).subscribe(
-                (loadedItem: any) => {
-                    const loadedModel = this.plainToClass(loadedItem, ProviderActionEnum.Load);
-                    const index = this.items$.getValue().findIndex(eachModel => eachModel.id === key);
-                    if (index !== -1) {
-                        this.items$.next(this.items$.getValue().set(index, loadedModel));
-                    }
-                    if (options === undefined || options.globalEventIsActive !== false) {
-                        this.load$.next(loadedModel);
-                    }
-                    this.loadIsActive$.next(false);
-                    observer.next(loadedModel);
-                },
-                (error: any) => {
-                    throw error;
+            ),
+            map(loadedItem => {
+                const loadedModel = this.plainToClass(loadedItem, ProviderActionEnum.Load);
+                const index = this.items$.getValue().findIndex(eachModel => eachModel.id === key);
+                if (index !== -1) {
+                    this.items$.next(this.items$.getValue().set(index, loadedModel));
                 }
-            );
-        });
+                if (options === undefined || options.globalEventIsActive !== false) {
+                    this.load$.next(loadedModel);
+                }
+                this.loadIsActive$.next(false);
+                return loadedModel;
+            })
+        );
     }
     delete<TProviderActionOptions extends IRestProviderActionOptions>(
         key: number | string,
         options?: TProviderActionOptions
     ) {
-        return new Observable<TModel>(observer => {
-            const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
-            this.deleteIsActive$.next(true);
-            const requestUrl = this.providerActionHandlers.getRequestUrl(
-                key,
-                undefined,
-                optionsList,
-                ProviderActionEnum.Delete
-            );
-            const requestOptions = this.providerActionHandlers.getRequestOptions(
-                key, undefined,
-                optionsList,
-                ProviderActionEnum.Delete
-            );
-            let request = this.providerActionHandlers.getRequest(
-                requestUrl,
-                undefined,
-                requestOptions,
-                optionsList,
-                ProviderActionEnum.Delete
-            );
-            if (!request) {
-                request = (options === undefined || options.globalEventIsActive === true ? this.httpClient : this.fakeHttpClient).
-                    delete<any>(
-                        requestUrl,
-                        requestOptions
-                    );
-            }
-            request.pipe(map(responseData =>
+        const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
+        this.deleteIsActive$.next(true);
+        const requestUrl = this.providerActionHandlers.getRequestUrl(
+            key,
+            undefined,
+            optionsList,
+            ProviderActionEnum.Delete
+        );
+        const requestOptions = this.providerActionHandlers.getRequestOptions(
+            key, undefined,
+            optionsList,
+            ProviderActionEnum.Delete
+        );
+        let request = this.providerActionHandlers.getRequest(
+            requestUrl,
+            undefined,
+            requestOptions,
+            optionsList,
+            ProviderActionEnum.Delete
+        );
+        if (!request) {
+            request = (options === undefined || options.useFakeHttpClient !== true ? this.httpClient : this.fakeHttpClient).
+                delete<any>(
+                    requestUrl,
+                    requestOptions
+                );
+        }
+        return request.pipe(
+            map(responseData =>
                 this.providerActionHandlers.getResponseData(
                     responseData,
                     optionsList,
                     ProviderActionEnum.Delete
                 )
-            )).subscribe(
-                (deleted: any) => {
-                    const index = this.items$.getValue().findIndex(eachModel => eachModel.id === key);
-                    const deletedModel = this.items$.getValue().get(index);
-                    if (index !== -1) {
-                        this.items$.next(this.items$.getValue().delete(index));
-                        const paginationMeta = this.paginationMeta$.getValue();
-                        const newPaginationMeta = this.calcPaginationMeta({
-                            totalResults: paginationMeta.totalResults === 0 ? 0 : paginationMeta.totalResults - 1
-                        });
-                        this.reconfigItems();
-                        if (this.items$.getValue().size === 0 || paginationMeta.totalPages !== newPaginationMeta.totalPages) {
-                            this.reloadAll();
-                        }
+            ),
+            map(deleted => {
+                const index = this.items$.getValue().findIndex(eachModel => eachModel.id === key);
+                const deletedModel = this.items$.getValue().get(index);
+                if (index !== -1) {
+                    this.items$.next(this.items$.getValue().delete(index));
+                    const paginationMeta = this.paginationMeta$.getValue();
+                    const newPaginationMeta = this.calcPaginationMeta({
+                        totalResults: paginationMeta.totalResults === 0 ? 0 : paginationMeta.totalResults - 1
+                    });
+                    this.reconfigItems();
+                    if (this.items$.getValue().size === 0 || paginationMeta.totalPages !== newPaginationMeta.totalPages) {
+                        this.reloadAll();
                     }
-                    if (options === undefined || options.globalEventIsActive !== false) {
-                        this.delete$.next(deletedModel);
-                    }
-                    this.deleteIsActive$.next(false);
-                    observer.next(deletedModel);
-                },
-                (error: any) => {
-                    throw error;
                 }
-            );
-        });
+                if (options === undefined || options.globalEventIsActive !== false) {
+                    this.delete$.next(deletedModel);
+                }
+                this.deleteIsActive$.next(false);
+                return deletedModel;
+            })
+        );
     }
     reloadAll() {
-        this.loadAll(this.filter, this.loadAllOptions).pipe(take(1)).subscribe();
+        this.loadAll(this.filter, this.loadAllOptions).pipe(first()).subscribe();
     }
     loadAll<TProviderActionOptions extends IRestProviderActionOptions>(
         filter?: any,
@@ -464,48 +442,48 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
     ) {
         this.filter = filter;
         this.loadAllOptions = options;
-        return new Observable<TModel[]>(observer => {
-            const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
-            this.loadAllIsActive$.next(true);
-            let requestUrl = this.providerActionHandlers.getRequestUrl(
-                undefined,
-                filter,
-                optionsList,
-                ProviderActionEnum.LoadAll
-            );
-            requestUrl = requestUrl + this.providerActionHandlers.getRequestLoadAllSearchQuery(
-                requestUrl,
-                filter,
-                optionsList,
-                ProviderActionEnum.LoadAll
-            );
-            requestUrl = requestUrl + this.providerActionHandlers.getRequestLoadAllPaginationQuery(
-                requestUrl,
-                this.paginationMeta$.getValue(),
-                optionsList,
-                ProviderActionEnum.LoadAll
-            );
-            const requestOptions = this.providerActionHandlers.getRequestOptions(
-                undefined,
-                filter,
-                optionsList,
-                ProviderActionEnum.LoadAll
-            );
-            let request = this.providerActionHandlers.getRequest(
-                requestUrl,
-                undefined,
-                requestOptions,
-                optionsList,
-                ProviderActionEnum.LoadAll
-            );
-            if (!request) {
-                request = (options === undefined || options.globalEventIsActive === true ? this.httpClient : this.fakeHttpClient).
-                    get<any>(
-                        requestUrl,
-                        requestOptions
-                    );
-            }
-            request.pipe(map(responseData => {
+        const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
+        this.loadAllIsActive$.next(true);
+        let requestUrl = this.providerActionHandlers.getRequestUrl(
+            undefined,
+            filter,
+            optionsList,
+            ProviderActionEnum.LoadAll
+        );
+        requestUrl = requestUrl + this.providerActionHandlers.getRequestLoadAllSearchQuery(
+            requestUrl,
+            filter,
+            optionsList,
+            ProviderActionEnum.LoadAll
+        );
+        requestUrl = requestUrl + this.providerActionHandlers.getRequestLoadAllPaginationQuery(
+            requestUrl,
+            this.paginationMeta$.getValue(),
+            optionsList,
+            ProviderActionEnum.LoadAll
+        );
+        const requestOptions = this.providerActionHandlers.getRequestOptions(
+            undefined,
+            filter,
+            optionsList,
+            ProviderActionEnum.LoadAll
+        );
+        let request = this.providerActionHandlers.getRequest(
+            requestUrl,
+            undefined,
+            requestOptions,
+            optionsList,
+            ProviderActionEnum.LoadAll
+        );
+        if (!request) {
+            request = (options === undefined || options.useFakeHttpClient !== true ? this.httpClient : this.fakeHttpClient).
+                get<any>(
+                    requestUrl,
+                    requestOptions
+                );
+        }
+        return request.pipe(
+            map(responseData => {
                 const responseLoadAllTotalCount = this.providerActionHandlers.getResponseLoadAllTotalCount(
                     responseData,
                     optionsList,
@@ -519,7 +497,8 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                     optionsList,
                     ProviderActionEnum.LoadAll
                 );
-            })).subscribe((loadedItems: any[]) => {
+            }),
+            map(loadedItems => {
                 const loadedModels = loadedItems === undefined ? [] : loadedItems.map(loadedItem =>
                     this.plainToClass(loadedItem, ProviderActionEnum.LoadAll)
                 );
@@ -529,11 +508,9 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                     this.loadAll$.next(loadedModels);
                 }
                 this.loadAllIsActive$.next(false);
-                observer.next(loadedModels);
-            }, (error: any) => {
-                throw error;
-            });
-        });
+                return loadedModels;
+            })
+        );
     }
     reconfigItems() {
         const paginationMeta = this.paginationMeta$.getValue();

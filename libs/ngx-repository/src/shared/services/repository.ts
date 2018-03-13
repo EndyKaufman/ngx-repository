@@ -9,7 +9,7 @@ import { IRestProviderOptions } from '../interfaces/rest-provider-options';
 import { IProviderOptions } from '../interfaces/provider-options';
 import { IProvider } from '../interfaces/provider';
 import { Subject } from 'rxjs/Subject';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, first } from 'rxjs/operators';
 import { IFactoryModel } from '../interfaces/factory-model';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -155,7 +155,9 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
                     eachProvider.name !== provider.name &&
                     eachProvider.instanceofFactoryModel(item)
                 ) {
-                    eachProvider.create(item, { globalEventIsActive: false });
+                    eachProvider.create(item,
+                        { useFakeHttpClient: true, globalEventIsActive: false }
+                    ).pipe(first()).subscribe();
                 }
             });
         });
@@ -166,7 +168,9 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
                     eachProvider.name !== provider.name &&
                     eachProvider.instanceofFactoryModel(item)
                 ) {
-                    eachProvider.append(item, { globalEventIsActive: false });
+                    eachProvider.append(item,
+                        { useFakeHttpClient: true, globalEventIsActive: false }
+                    ).pipe(first()).subscribe();
                 }
             });
         });
@@ -177,7 +181,9 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
                     eachProvider.name !== provider.name
                 ) {
                     if (eachProvider.instanceofFactoryModel(item)) {
-                        eachProvider.update(item.id, item, { globalEventIsActive: false });
+                        eachProvider.update(item.id, item,
+                            { useFakeHttpClient: true, globalEventIsActive: false }
+                        ).pipe(first()).subscribe();
                     }
                     if (eachProvider.instanceofNestedFactoryModel(item)) {
                         eachProvider.updateNestedFactoryModel(item);
@@ -192,7 +198,9 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
                     eachProvider.name !== provider.name
                 ) {
                     if (eachProvider.instanceofFactoryModel(item)) {
-                        eachProvider.patch(item.id, item, { globalEventIsActive: false });
+                        eachProvider.patch(item.id, item,
+                            { useFakeHttpClient: true, globalEventIsActive: false }
+                        ).pipe(first()).subscribe();
                     }
                 }
             });
@@ -204,7 +212,9 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
                     eachProvider.name !== provider.name
                 ) {
                     if (eachProvider.instanceofFactoryModel(item)) {
-                        eachProvider.delete(item.id, { globalEventIsActive: false });
+                        eachProvider.delete(item.id,
+                            { useFakeHttpClient: true, globalEventIsActive: false }
+                        ).pipe(first()).subscribe();
                     }
                     if (eachProvider.instanceofNestedFactoryModel(item)) {
                         eachProvider.deleteNestedFactoryModel(item);
@@ -219,7 +229,9 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
                     eachProvider.name !== provider.name &&
                     eachProvider.instanceofFactoryModel(item)
                 ) {
-                    eachProvider.update(item.id, item, { globalEventIsActive: false });
+                    eachProvider.update(item.id, item,
+                        { useFakeHttpClient: true, globalEventIsActive: false }
+                    ).pipe(first()).subscribe();
                 }
             });
         });
@@ -231,7 +243,9 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
                         eachProvider.name !== provider.name &&
                         eachProvider.instanceofFactoryModel(item)
                     ) {
-                        eachProvider.update(item.id, item, { globalEventIsActive: false });
+                        eachProvider.update(item.id, item,
+                            { useFakeHttpClient: true, globalEventIsActive: false }
+                        ).pipe(first()).subscribe();
                     }
                 })
             );
