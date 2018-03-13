@@ -125,6 +125,7 @@ export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
     }
     dialogRef.componentInstance.yes.subscribe((modal: UserWithGroupsModalComponent) =>
       this.repository.provider.save(modal.data).pipe(first()).subscribe(modalItem => {
+        console.log(modal.data, modalItem);
         if (modal.data !== undefined) {
           dialogRef.close();
         }
