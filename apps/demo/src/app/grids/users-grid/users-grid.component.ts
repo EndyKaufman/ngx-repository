@@ -5,7 +5,7 @@ import { User } from '../../shared/models/user';
 import { PageEvent, MatDialog } from '@angular/material';
 import { Repository, DynamicRepository } from 'ngx-repository';
 import { Subject } from 'rxjs/Subject';
-import { takeUntil, debounceTime, distinctUntilChanged, map, switchMap, take } from 'rxjs/operators';
+import { takeUntil, debounceTime, distinctUntilChanged, map, switchMap, first } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { plainToClass } from 'class-transformer';
 import { FormControl } from '@angular/forms';
@@ -71,7 +71,7 @@ export class UsersGridComponent implements OnInit, OnDestroy {
       debounceTime(400),
       distinctUntilChanged(),
       switchMap(value => this.repository.provider.loadAll({ searchText: value }))
-    ).subscribe(value => console.log(value));
+    ).subscribe();
 
     if (this.mockedItems === undefined) {
       this.repository.useRest({
@@ -123,7 +123,7 @@ export class UsersGridComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.title = (item.id && !isNaN(+item.id) ? this.strings.updateTitle : this.strings.createTitle).
       replace('{data.id}', item.id ? item.id.toString() : '');
     dialogRef.componentInstance.yes.subscribe((modal: UserModalComponent) =>
-      this.repository.provider.save(modal.data).pipe(take(1)).subscribe(modalItem => {
+      this.repository.provider.save(modal.data).pipe(first()).subscribe(modalItem => {
         if (modal.data !== undefined) {
           dialogRef.close();
         }
@@ -140,7 +140,7 @@ export class UsersGridComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.message = this.strings.deleteMessage.
       replace('{data.id}', item.id.toString());
     dialogRef.componentInstance.yes.subscribe((modal: UserModalComponent) =>
-      this.repository.provider.delete(item.id).pipe(take(1)).subscribe(modalItem =>
+      this.repository.provider.delete(item.id).pipe(first()).subscribe(modalItem =>
         dialogRef.close()
       )
     );
@@ -158,9 +158,9 @@ export class UsersGridComponent implements OnInit, OnDestroy {
       firstUser.id + '/custom-action',
       this.customActionRequest,
       actionRequestOptions
-    ).pipe(take(1)).subscribe(result => {
+    ).pipe(first()).subscribe(result => {
       this.customActionResponse = result;
-      this.messageBoxService.info(result.answer).pipe(take(1)).subscribe();
+      this.messageBoxService.info(result.answer).pipe(first()).subscribe();
     });
   }
   errorAction() {
@@ -175,7 +175,7 @@ export class UsersGridComponent implements OnInit, OnDestroy {
       'error-action',
       this.errorActionRequest,
       actionRequestOptions
-    ).pipe(take(1)).subscribe(result =>
+    ).pipe(first()).subscribe(result =>
       this.errorActionResponse = result
     );
   }

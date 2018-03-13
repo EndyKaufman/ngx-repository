@@ -3,7 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent, MatDialog } from '@angular/material';
 import { Repository, DynamicRepository } from 'ngx-repository';
 import { Subject } from 'rxjs/Subject';
-import { takeUntil, map, take } from 'rxjs/operators';
+import { takeUntil, map, first } from 'rxjs/operators';
 import { GroupModalComponent } from '../../../groups-grid/group-modal/group-modal.component';
 import { Group } from '../../../../shared/models/group';
 import { environment } from '../../../../../environments/environment';
@@ -56,7 +56,6 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
     this.repository = this.dynamicRepository.fork<Group>(Group);
   }
   ngOnInit() {
-
     if (this.mockedItems === undefined) {
       this.repository.useRest({
         apiUrl: environment.apiUrl + '/users/' + this.user.id,
@@ -99,7 +98,7 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.message = this.strings.deleteFromUserMessage.
       replace('{data.title}', item.title.toString());
     dialogRef.componentInstance.yes.subscribe((modal: GroupModalComponent) =>
-      this.repository.provider.delete(item.id).pipe(take(1)).subscribe(modalItem => {
+      this.repository.provider.delete(item.id, { globalEventIsActive: false }).pipe(first()).subscribe(modalItem => {
         const filtred = this.user.groups.filter(eachItem => eachItem.id !== modalItem.id);
         this.user.groups = filtred;
         this.userChange.emit(this.user);
@@ -109,7 +108,7 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
   }
   showAppendModal(): void {
     if (this.exampleUseNestedGroupsFromRest && this.user.id === undefined) {
-      this._messageBoxService.error('Before add group you must save current user!').pipe(take(1)).subscribe();
+      this._messageBoxService.error('Before add group you must save current user!').pipe(first()).subscribe();
       return;
     }
     const dialogRef = this.dialog.open(GroupsGridModalComponent, {
@@ -124,7 +123,7 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
       (modal.data as Group[]).forEach(group => {
         const foundedGroup = this.user.groups.find(item => item.id === group.id);
         if (!foundedGroup) {
-          observables.push(this.repository.provider.create(group));
+          observables.push(this.repository.provider.create(group, { globalEventIsActive: false }).pipe(first()));
         }
       });
       if (observables.length) {

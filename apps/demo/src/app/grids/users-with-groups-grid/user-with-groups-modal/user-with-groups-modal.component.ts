@@ -40,6 +40,8 @@ export class UserWithGroupsModalComponent implements OnInit {
   no = new EventEmitter<UserWithGroupsModalComponent>();
   @Output()
   yes = new EventEmitter<UserWithGroupsModalComponent>();
+  @Output()
+  altYes = new EventEmitter<UserWithGroupsModalComponent>();
 
   fb = new DynamicFormBuilder();
 
@@ -90,6 +92,18 @@ export class UserWithGroupsModalComponent implements OnInit {
     this.no.emit(this);
     if (this.hideOnNo) {
       this.dialogRef.close();
+    }
+  }
+  onAltYesClick(): void {
+    if (this.data) {
+      if (this.form.valid) {
+        this.data = this.form.object;
+        this.altYes.emit(this);
+      } else {
+        this.form.validateAllFormFields();
+      }
+    } else {
+      this.altYes.emit(this);
     }
   }
 }

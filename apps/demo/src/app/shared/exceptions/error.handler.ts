@@ -1,6 +1,6 @@
 import { ErrorHandler, Injector, Injectable, NgZone } from '@angular/core';
 import { MessageBoxService } from '../../others/message-box/message-box.service';
-import { take } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 @Injectable()
 export class CustomErrorHandler implements ErrorHandler {
     constructor(
@@ -13,7 +13,7 @@ export class CustomErrorHandler implements ErrorHandler {
             this.showErrorInConsole(error);
             const message = error.message ? error.message : error.toString();
             const messageBoxService = this._injector.get(MessageBoxService);
-            messageBoxService.error(message).pipe(take(1)).subscribe();
+            messageBoxService.error(message).pipe(first()).subscribe();
         });
     }
     private showErrorInConsole(error: any): void {
