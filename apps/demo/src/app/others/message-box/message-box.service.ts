@@ -30,8 +30,10 @@ export class MessageBoxService {
             });
         }).pipe(first());
     }
-    error(message: string, title: string = 'Error', width: string = '300px') {
+    error(error: string | any, title: string = 'Error', width: string = '300px') {
         return new Observable(observer => {
+            this.showErrorInConsole(error);
+            const message = error.message ? error.message : error.toString();
             const dialogRef = this.dialog.open(MessageBoxComponent, {
                 width: width,
                 data: null
@@ -48,5 +50,18 @@ export class MessageBoxService {
                 observer.next(false);
             });
         }).pipe(first());
+    }
+    private showErrorInConsole(error: any): void {
+        if (console && console.group && console.error) {
+            console.group('Error Log');
+            console.error(error);
+            if (error.message) {
+                console.error(error.message);
+            }
+            if (error.stack) {
+                console.error(error.stack);
+            }
+            console.groupEnd();
+        }
     }
 }

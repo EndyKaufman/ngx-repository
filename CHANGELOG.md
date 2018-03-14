@@ -1,3 +1,13 @@
+<a name="0.1.1"></a>
+## [0.1.1](https://github.com/EndyKaufman/ngx-repository/compare/0.1.0...0.1.1) (2018-03-14)
+
+
+### Bug Fixes
+
+* **errors:** Change throw error to Observable.throw(error) ([74ddb3b](https://github.com/EndyKaufman/ngx-repository/commit/74ddb3b))
+
+
+
 <a name="0.1.0"></a>
 # [0.1.0](https://github.com/EndyKaufman/ngx-repository/compare/0.0.4...0.1.0) (2018-03-14)
 

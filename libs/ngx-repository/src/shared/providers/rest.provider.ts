@@ -17,6 +17,7 @@ import { RestProviderActionHandlers } from './rest-provider-action-handlers';
 import { FakeHttpClient } from '../utils/fake-http-client';
 import { IFactoryModel } from '../interfaces/factory-model';
 import { ProviderError } from '../exceptions/provider.error';
+import { _throw } from 'rxjs/observable/throw';
 export class RestProvider<TModel extends IModel> extends Provider<TModel> {
 
     public pluralName: string;
@@ -86,7 +87,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 options.classValidatorOptions :
                 { validationError: { target: false } });
         if (errors.length > 0 && (!options || options.globalEventIsActive !== false)) {
-            throw new ValidatorError(errors);
+            return _throw(new ValidatorError(errors));
         }
         const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
         const requestUrl = this.providerActionHandlers.getRequestUrl(
@@ -151,7 +152,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 options.classValidatorOptions :
                 { validationError: { target: false } });
         if (errors.length > 0 && (!options || options.globalEventIsActive !== false)) {
-            throw new ValidatorError(errors);
+            return _throw(new ValidatorError(errors));
         }
         const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
         const isCreate = this.providerActionHandlers.getRequestCreateType(
@@ -262,7 +263,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 options.classValidatorOptions :
                 { validationError: { target: false } });
         if (errors.length > 0 && (!options || options.globalEventIsActive !== false)) {
-            throw new ValidatorError(errors);
+            return _throw(new ValidatorError(errors));
         }
         let object;
         const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];

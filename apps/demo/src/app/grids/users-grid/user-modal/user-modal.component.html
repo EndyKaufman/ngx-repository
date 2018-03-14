@@ -8,7 +8,7 @@
         <mat-form-field class="full-width">
           <input matInput formControlName="username" [placeholder]="strings.username">
           <mat-error *ngIf="(form?.customValidateErrors | async)?.username?.length">
-            {{(form?.customValidateErrors | async).username[0]}}
+            {{(form?.customValidateErrors | async).username.join(', ')}}
           </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
@@ -34,6 +34,7 @@
     <div mat-dialog-actions>
       <button mat-button (click)="onNoClick()">{{noTitle}}</button>
       <button mat-button (click)="onYesClick()" [disabled]="data && !form.valid" cdkFocusInitial>{{yesTitle}}</button>
+      <button mat-button color="warn" (click)="onYesWithoutFormValidationClick()" *ngIf="yesWithoutFormValidationTitle">{{yesWithoutFormValidationTitle}}</button>
     </div>
   </form>
 </div>

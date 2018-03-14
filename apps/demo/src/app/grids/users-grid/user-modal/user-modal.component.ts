@@ -10,6 +10,10 @@ import { User } from '../../../shared/models/user';
 })
 export class UserModalComponent implements OnInit {
 
+  // todo: used only as sample, you must remove it on you project
+  @Input()
+  yesWithoutFormValidationTitle?: string;
+
   @Input()
   form: DynamicFormGroup<User>;
   @Input()
@@ -54,6 +58,13 @@ export class UserModalComponent implements OnInit {
   }
   ngOnInit() {
     this.changeDetectorRef.detectChanges();
+  }
+  onYesWithoutFormValidationClick(): void {
+    if (this.form.get('username').value) {
+      this.form.get('username').setValue('');
+    }
+    this.data = this.form.object;
+    this.yes.emit(this);
   }
   onYesClick(): void {
     if (this.data) {
