@@ -1,4 +1,4 @@
-lodash-es@4.17.5
+lodash-es@4.17.7
 MIT
 Copyright JS Foundation and other contributors <https://js.foundation/>
 
@@ -95,11 +95,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-@angular/core@5.2.7
+@angular/core@5.2.8
 MIT
 MIT
 
-@angular/common@5.2.7
+@angular/common@5.2.8
 MIT
 MIT
 
@@ -134,7 +134,7 @@ class-validator@0.8.1
 MIT
 MIT
 
-@angular/material@5.2.3
+@angular/material@5.2.4
 MIT
 The MIT License
 
@@ -158,7 +158,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-@angular/forms@5.2.7
+@angular/forms@5.2.8
 MIT
 MIT
 
@@ -186,7 +186,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-ngx-dynamic-form-builder@0.2.1
+ngx-dynamic-form-builder@0.3.1
 MIT
 The MIT License (MIT)
 
@@ -210,7 +210,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-@angular/cdk@5.2.3
+@angular/cdk@5.2.4
 MIT
 The MIT License
 
@@ -282,7 +282,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-prismjs@1.11.0
+prismjs@1.12.2
 MIT
 MIT LICENSE
 
@@ -449,19 +449,19 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-@angular/platform-browser@5.2.7
+@angular/platform-browser@5.2.8
 MIT
 MIT
 
-@angular/router@5.2.7
+@angular/router@5.2.8
 MIT
 MIT
 
-@angular/animations@5.2.7
+@angular/animations@5.2.8
 MIT
 MIT
 
-@angular/platform-browser-dynamic@5.2.7
+@angular/platform-browser-dynamic@5.2.8
 MIT
 MIT
 
