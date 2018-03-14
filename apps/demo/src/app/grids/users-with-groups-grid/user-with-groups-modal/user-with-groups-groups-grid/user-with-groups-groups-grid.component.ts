@@ -50,7 +50,7 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     public changeDetectorRef: ChangeDetectorRef,
     private dynamicRepository: DynamicRepository,
-    private _messageBoxService: MessageBoxService
+    private messageBoxService: MessageBoxService
   ) {
     this.destroyed$ = new Subject<boolean>();
     this.repository = this.dynamicRepository.fork<Group>(Group);
@@ -103,12 +103,14 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
         this.user.groups = filtred;
         this.userChange.emit(this.user);
         dialogRef.close();
-      })
+      },
+        error =>
+          this.messageBoxService.error(error).subscribe())
     );
   }
   showAppendModal(): void {
     if (this.exampleUseNestedGroupsFromRest && this.user.id === undefined) {
-      this._messageBoxService.error('Before add group you must save current user!').subscribe();
+      this.messageBoxService.error('Before add group you must save current user!').subscribe();
       return;
     }
     const dialogRef = this.dialog.open(GroupsGridModalComponent, {

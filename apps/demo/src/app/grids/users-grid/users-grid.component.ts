@@ -13,6 +13,8 @@ import { ViewContainerRef } from '@angular/core';
 import { MessageBoxService } from '../../others/message-box/message-box.service';
 import { of } from 'rxjs/observable/of';
 import { Observable } from 'rxjs/Observable';
+import { ValidatorError } from 'ngx-repository';
+import { ValidationError } from 'class-validator';
 
 @Component({
   selector: 'users-grid',
@@ -113,20 +115,35 @@ export class UsersGridComponent implements OnInit, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
-  showModal(item?: User): void {
+  showModal(item?: User, yesWithoutFormValidationTitle?: string): void {
     if (item === undefined) {
       item = new User();
     }
     const dialogRef = this.dialog.open(UserModalComponent, {
-      width: '400px',
+      width: '500px',
       data: item
     });
+    dialogRef.componentInstance.yesWithoutFormValidationTitle = yesWithoutFormValidationTitle;
     dialogRef.componentInstance.title = (item.id && !isNaN(+item.id) ? this.strings.updateTitle : this.strings.createTitle).
       replace('{data.id}', item.id ? item.id.toString() : '');
     dialogRef.componentInstance.yes.subscribe((modal: UserModalComponent) =>
       this.repository.save(modal.data).subscribe(modalItem => {
         if (modal.data !== undefined) {
           dialogRef.close();
+        }
+      }, error => {
+        if (error instanceof ValidatorError) {
+          const otherErrors = error.errors as ValidationError[];
+          otherErrors.map(err => {
+            Object.keys(err.constraints).forEach(cons => {
+              err.constraints[cons] = 'custom error:' + err.constraints[cons];
+            });
+            return err;
+          });
+          modal.form.validate(otherErrors);
+          modal.form.validateAllFormFields();
+        } else {
+          this.messageBoxService.error(error).subscribe();
         }
       })
     );
@@ -142,7 +159,9 @@ export class UsersGridComponent implements OnInit, OnDestroy {
       replace('{data.id}', item.id.toString());
     dialogRef.componentInstance.yes.subscribe((modal: UserModalComponent) =>
       this.repository.delete(item.id).subscribe(modalItem =>
-        dialogRef.close()
+        dialogRef.close(),
+        error =>
+          this.messageBoxService.error(error).subscribe()
       )
     );
   }

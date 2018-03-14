@@ -3,13 +3,15 @@ import { UserWithGroupsModalComponent } from './user-with-groups-modal/user-with
 import { MatTableDataSource } from '@angular/material/table';
 import { UserWithGroups } from '../../shared/models/user-with-groups';
 import { PageEvent, MatDialog } from '@angular/material';
-import { Repository, DynamicRepository } from 'ngx-repository';
+import { Repository, DynamicRepository, ValidatorError } from 'ngx-repository';
 import { Subject } from 'rxjs/Subject';
 import { takeUntil, debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { plainToClass } from 'class-transformer';
 import { FormControl } from '@angular/forms';
 import { Group } from '../../shared/models/group';
+import { ValidationError } from 'class-validator';
+import { MessageBoxService } from '../../others/message-box/message-box.service';
 
 @Component({
   selector: 'users-with-groups-grid',
@@ -53,7 +55,8 @@ export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
   constructor(
     public dialog: MatDialog,
     public changeDetectorRef: ChangeDetectorRef,
-    private dynamicRepository: DynamicRepository
+    private dynamicRepository: DynamicRepository,
+    private messageBoxService: MessageBoxService
   ) {
     this.destroyed$ = new Subject<boolean>();
     this.repository = this.dynamicRepository.fork<UserWithGroups>(UserWithGroups);
@@ -128,6 +131,20 @@ export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
         if (modal.data !== undefined) {
           dialogRef.close();
         }
+      }, error => {
+        if (error instanceof ValidatorError) {
+          const otherErrors = error.errors as ValidationError[];
+          otherErrors.map(err => {
+            Object.keys(err.constraints).forEach(cons => {
+              err.constraints[cons] = 'custom error:' + err.constraints[cons];
+            });
+            return err;
+          });
+          modal.form.validate(otherErrors);
+          modal.form.validateAllFormFields();
+        } else {
+          this.messageBoxService.error(error).subscribe();
+        }
       })
     );
   }
@@ -144,7 +161,9 @@ export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.exampleUseNestedGroupsFromRest = this.exampleUseNestedGroupsFromRest;
     dialogRef.componentInstance.yes.subscribe((modal: UserWithGroupsModalComponent) =>
       this.repository.delete(item.id).subscribe(modalItem =>
-        dialogRef.close()
+        dialogRef.close(),
+        error =>
+          this.messageBoxService.error(error).subscribe()
       )
     );
   }
