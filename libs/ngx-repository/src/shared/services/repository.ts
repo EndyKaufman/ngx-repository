@@ -9,9 +9,11 @@ import { IRestProviderOptions } from '../interfaces/rest-provider-options';
 import { IProviderOptions } from '../interfaces/provider-options';
 import { IProvider } from '../interfaces/provider';
 import { Subject } from 'rxjs/Subject';
-import { takeUntil, first } from 'rxjs/operators';
+import { takeUntil, first, map } from 'rxjs/operators';
 import { IFactoryModel } from '../interfaces/factory-model';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { IRestProviderActionOptions } from 'ngx-repository';
+import { Observable } from 'rxjs/Observable';
 
 export class Repository<TModel extends IModel = any> implements OnDestroy {
 
@@ -36,6 +38,12 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
     }
     get providers() {
         return [this.restProvider, ...this.restProviders, this.mockProvider, ...this.mockProviders];
+    }
+    get items() {
+        return this.provider.items$.getValue().toArray();
+    }
+    get items$() {
+        return this.provider.items$.pipe(map(items => items.toArray()));
     }
     private _mockProviderIsActive = false;
     private _restProviderIsActive = false;
@@ -253,5 +261,62 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
     }
     setOptions(options: IProviderOptions<TModel>) {
         this.provider.setOptions(options);
+    }
+    action<TProviderActionOptions extends IRestProviderActionOptions>(
+        key: string,
+        data?: any,
+        options?: TProviderActionOptions
+    ): Observable<any> {
+        return this.provider.action<TProviderActionOptions>(key, data, options).pipe(first());
+    }
+    save<TProviderActionOptions extends IRestProviderActionOptions>(
+        model: TModel,
+        options?: TProviderActionOptions
+    ): Observable<TModel> {
+        return this.provider.save<TProviderActionOptions>(model, options).pipe(first());
+    }
+    create<TProviderActionOptions extends IRestProviderActionOptions>(
+        model: TModel,
+        options?: TProviderActionOptions
+    ): Observable<TModel> {
+        return this.provider.create<TProviderActionOptions>(model, options).pipe(first());
+    }
+    update<TProviderActionOptions extends IRestProviderActionOptions>(
+        key: number | string,
+        model: TModel,
+        options?: TProviderActionOptions
+    ): Observable<TModel> {
+        return this.provider.update<TProviderActionOptions>(key, model, options).pipe(first());
+    }
+    patch<TProviderActionOptions extends IRestProviderActionOptions>(
+        key: number | string,
+        model: TModel,
+        options?: TProviderActionOptions
+    ): Observable<TModel> {
+        return this.provider.patch<TProviderActionOptions>(key, model, options).pipe(first());
+    }
+    load<TProviderActionOptions extends IRestProviderActionOptions>(
+        key: number | string,
+        options?: TProviderActionOptions
+    ): Observable<TModel> {
+        return this.provider.load<TProviderActionOptions>(key, options).pipe(first());
+    }
+    delete<TProviderActionOptions extends IRestProviderActionOptions>(
+        key: number | string,
+        options?: TProviderActionOptions
+    ): Observable<TModel> {
+        return this.provider.delete<TProviderActionOptions>(key, options).pipe(first());
+    }
+    reloadAll() {
+        this.provider.reloadAll();
+    }
+    loadAll<TProviderActionOptions extends IRestProviderActionOptions>(
+        filter?: any,
+        options?: TProviderActionOptions
+    ): Observable<TModel[]> {
+        return this.provider.loadAll<TProviderActionOptions>(filter, options);
+    }
+    clone(model: TModel) {
+        return this.provider.classToClass(model);
     }
 }

@@ -5,13 +5,14 @@ import { User } from '../../shared/models/user';
 import { PageEvent, MatDialog } from '@angular/material';
 import { Repository, DynamicRepository } from 'ngx-repository';
 import { Subject } from 'rxjs/Subject';
-import { takeUntil, debounceTime, distinctUntilChanged, map, switchMap, first } from 'rxjs/operators';
+import { takeUntil, debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { plainToClass } from 'class-transformer';
 import { FormControl } from '@angular/forms';
 import { ViewContainerRef } from '@angular/core';
 import { MessageBoxService } from '../../others/message-box/message-box.service';
 import { of } from 'rxjs/observable/of';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'users-grid',
@@ -58,7 +59,7 @@ export class UsersGridComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     public changeDetectorRef: ChangeDetectorRef,
     public viewContainerRef: ViewContainerRef,
-    public dynamicRepository: DynamicRepository,
+    private dynamicRepository: DynamicRepository,
     public messageBoxService: MessageBoxService
   ) {
     this.destroyed$ = new Subject<boolean>();
@@ -70,7 +71,7 @@ export class UsersGridComponent implements OnInit, OnDestroy {
     this.searchField.valueChanges.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      switchMap(value => this.repository.provider.loadAll({ searchText: value }))
+      switchMap(value => this.repository.loadAll({ searchText: value }))
     ).subscribe();
 
     if (this.mockedItems === undefined) {
@@ -92,8 +93,8 @@ export class UsersGridComponent implements OnInit, OnDestroy {
       });
     }
 
-    this.repository.provider.items$.
-      pipe(takeUntil(this.destroyed$), map(items => items.toArray())).
+    this.repository.items$.
+      pipe(takeUntil(this.destroyed$)).
       subscribe(items => {
         this.dataSource.data = items;
       });
@@ -123,7 +124,7 @@ export class UsersGridComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.title = (item.id && !isNaN(+item.id) ? this.strings.updateTitle : this.strings.createTitle).
       replace('{data.id}', item.id ? item.id.toString() : '');
     dialogRef.componentInstance.yes.subscribe((modal: UserModalComponent) =>
-      this.repository.provider.save(modal.data).pipe(first()).subscribe(modalItem => {
+      this.repository.save(modal.data).subscribe(modalItem => {
         if (modal.data !== undefined) {
           dialogRef.close();
         }
@@ -140,7 +141,7 @@ export class UsersGridComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.message = this.strings.deleteMessage.
       replace('{data.id}', item.id.toString());
     dialogRef.componentInstance.yes.subscribe((modal: UserModalComponent) =>
-      this.repository.provider.delete(item.id).pipe(first()).subscribe(modalItem =>
+      this.repository.delete(item.id).subscribe(modalItem =>
         dialogRef.close()
       )
     );
@@ -153,14 +154,14 @@ export class UsersGridComponent implements OnInit, OnDestroy {
         return of(data);
       }
     } : undefined;
-    const firstUser = this.repository.provider.items$.getValue().get(0);
-    this.repository.provider.action(
+    const firstUser = this.repository.items[0];
+    this.repository.action(
       firstUser.id + '/custom-action',
       this.customActionRequest,
       actionRequestOptions
-    ).pipe(first()).subscribe(result => {
+    ).subscribe(result => {
       this.customActionResponse = result;
-      this.messageBoxService.info(result.answer).pipe(first()).subscribe();
+      this.messageBoxService.info(result.answer).subscribe();
     });
   }
   errorAction() {
@@ -171,11 +172,11 @@ export class UsersGridComponent implements OnInit, OnDestroy {
         throw new Error('Big problem');
       }
     } : undefined;
-    this.repository.provider.action(
+    this.repository.action(
       'error-action',
       this.errorActionRequest,
       actionRequestOptions
-    ).pipe(first()).subscribe(result =>
+    ).subscribe(result =>
       this.errorActionResponse = result
     );
   }

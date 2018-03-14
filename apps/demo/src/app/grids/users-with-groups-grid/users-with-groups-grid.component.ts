@@ -5,7 +5,7 @@ import { UserWithGroups } from '../../shared/models/user-with-groups';
 import { PageEvent, MatDialog } from '@angular/material';
 import { Repository, DynamicRepository } from 'ngx-repository';
 import { Subject } from 'rxjs/Subject';
-import { takeUntil, debounceTime, distinctUntilChanged, map, switchMap, first } from 'rxjs/operators';
+import { takeUntil, debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { plainToClass } from 'class-transformer';
 import { FormControl } from '@angular/forms';
@@ -53,7 +53,7 @@ export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
   constructor(
     public dialog: MatDialog,
     public changeDetectorRef: ChangeDetectorRef,
-    public dynamicRepository: DynamicRepository
+    private dynamicRepository: DynamicRepository
   ) {
     this.destroyed$ = new Subject<boolean>();
     this.repository = this.dynamicRepository.fork<UserWithGroups>(UserWithGroups);
@@ -64,7 +64,7 @@ export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
     this.searchField.valueChanges.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      switchMap(value => this.repository.provider.loadAll({ searchText: value }))
+      switchMap(value => this.repository.loadAll({ searchText: value }))
     ).subscribe();
 
     if (this.mockedItems === undefined) {
@@ -86,8 +86,8 @@ export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
       });
     }
 
-    this.repository.provider.items$.
-      pipe(takeUntil(this.destroyed$), map(items => items.toArray())).
+    this.repository.items$.
+      pipe(takeUntil(this.destroyed$)).
       subscribe(items => {
         this.dataSource.data = items;
       });
@@ -120,12 +120,11 @@ export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.exampleUseNestedGroupsFromRest = this.exampleUseNestedGroupsFromRest;
     if (this.exampleUseNestedGroupsFromRest) {
       dialogRef.componentInstance.altYes.subscribe((modal: UserWithGroupsModalComponent) =>
-        this.repository.provider.save(modal.data, { useFakeHttpClient: true }).pipe(first()).subscribe()
+        this.repository.save(modal.data, { useFakeHttpClient: true }).subscribe()
       );
     }
     dialogRef.componentInstance.yes.subscribe((modal: UserWithGroupsModalComponent) =>
-      this.repository.provider.save(modal.data).pipe(first()).subscribe(modalItem => {
-        console.log(modal.data, modalItem);
+      this.repository.save(modal.data).subscribe(modalItem => {
         if (modal.data !== undefined) {
           dialogRef.close();
         }
@@ -144,7 +143,7 @@ export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.exampleGroupMockedItems = this.exampleGroupMockedItems;
     dialogRef.componentInstance.exampleUseNestedGroupsFromRest = this.exampleUseNestedGroupsFromRest;
     dialogRef.componentInstance.yes.subscribe((modal: UserWithGroupsModalComponent) =>
-      this.repository.provider.delete(item.id).pipe(first()).subscribe(modalItem =>
+      this.repository.delete(item.id).subscribe(modalItem =>
         dialogRef.close()
       )
     );
