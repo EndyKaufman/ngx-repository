@@ -1,6 +1,6 @@
 {
     "name": "ngx-repository",
-    "version": "0.0.4",
+    "version": "0.1.0",
     "description": "Custom repository service for Angular5+, for easy work with the REST backend, with switch on fly from REST backend to the MOCK backend with save and use all CRUD operations",
     "keywords": [
         "repository-service",
@@ -33,10 +33,14 @@
         }
     ],
     "peerDependencies": {
-        "@angular/common": "^5.2.7",
-        "@angular/compiler": "^5.2.7",
-        "@angular/core": "^5.2.7",
-        "rxjs": "^5.5.6"
+        "@angular/common": "^5.2.8",
+        "@angular/compiler": "^5.2.8",
+        "@angular/core": "^5.2.8",
+        "rxjs": "^5.5.7",
+        "class-transformer": "^0.1.9",
+        "class-validator": "^0.8.1",
+        "immutable": "^3.8.2",
+        "url-parse": "^1.2.0"
     },
     "dependencies": {
         "reflect-metadata": "^0.1.12",

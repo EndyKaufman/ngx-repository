@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RestNestedDataPageComponent } from './rest-nested-data-page.component';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { UsersWithGroupsGridModule } from '../../grids/users-with-groups-grid/users-with-groups-grid.module';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';

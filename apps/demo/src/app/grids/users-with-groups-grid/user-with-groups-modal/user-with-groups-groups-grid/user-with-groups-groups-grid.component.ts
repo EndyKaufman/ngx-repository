@@ -1,21 +1,15 @@
 import { Component, OnDestroy, OnInit, ChangeDetectorRef, Input, EventEmitter, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent, MatDialog } from '@angular/material';
-import { Repository, PaginationMeta, DynamicRepository } from 'ngx-repository';
+import { Repository, DynamicRepository } from 'ngx-repository';
 import { Subject } from 'rxjs/Subject';
-import { takeUntil, debounceTime, distinctUntilChanged, map, switchMap, concat, catchError } from 'rxjs/operators';
-import { RestProvider } from 'ngx-repository';
-import { plainToClass } from 'class-transformer';
-import { FormControl } from '@angular/forms';
+import { takeUntil, map } from 'rxjs/operators';
 import { GroupModalComponent } from '../../../groups-grid/group-modal/group-modal.component';
 import { Group } from '../../../../shared/models/group';
 import { environment } from '../../../../../environments/environment';
 import { GroupsGridModalComponent } from '../../../groups-grid/groups-grid-modal/groups-grid-modal.component';
 import { UserWithGroups } from '../../../../shared/models/user-with-groups';
-import { Observable } from 'rxjs/Observable';
 import { forkJoin } from 'rxjs/observable/forkJoin';
-import { of } from 'rxjs/observable/of';
-import { fromPromise } from 'rxjs/observable/fromPromise';
 import { MessageBoxService } from '../../../../others/message-box/message-box.service';
 
 @Component({
@@ -55,14 +49,13 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
   constructor(
     public dialog: MatDialog,
     public changeDetectorRef: ChangeDetectorRef,
-    public dynamicRepository: DynamicRepository,
+    private dynamicRepository: DynamicRepository,
     private _messageBoxService: MessageBoxService
   ) {
     this.destroyed$ = new Subject<boolean>();
     this.repository = this.dynamicRepository.fork<Group>(Group);
   }
   ngOnInit() {
-
     if (this.mockedItems === undefined) {
       this.repository.useRest({
         apiUrl: environment.apiUrl + '/users/' + this.user.id,
@@ -85,7 +78,7 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
       });
     }
 
-    this.repository.provider.items$.
+    this.repository.items$.
       pipe(takeUntil(this.destroyed$)).
       subscribe(items => {
         this.dataSource.data = items;
@@ -104,21 +97,18 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
       replace('{data.title}', item.title.toString());
     dialogRef.componentInstance.message = this.strings.deleteFromUserMessage.
       replace('{data.title}', item.title.toString());
-    dialogRef.componentInstance.yes.subscribe(async (modal: GroupModalComponent) => {
-      try {
-        const modalItem = await this.repository.provider.delete(item.id);
+    dialogRef.componentInstance.yes.subscribe((modal: GroupModalComponent) =>
+      this.repository.delete(item.id, { globalEventIsActive: false }).subscribe(modalItem => {
         const filtred = this.user.groups.filter(eachItem => eachItem.id !== modalItem.id);
         this.user.groups = filtred;
         this.userChange.emit(this.user);
-      } catch (error) {
-        throw error;
-      }
-      dialogRef.close();
-    });
+        dialogRef.close();
+      })
+    );
   }
   showAppendModal(): void {
     if (this.exampleUseNestedGroupsFromRest && this.user.id === undefined) {
-      this._messageBoxService.errorSync('Before add group you must save current user!');
+      this._messageBoxService.error('Before add group you must save current user!').subscribe();
       return;
     }
     const dialogRef = this.dialog.open(GroupsGridModalComponent, {
@@ -133,7 +123,7 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
       (modal.data as Group[]).forEach(group => {
         const foundedGroup = this.user.groups.find(item => item.id === group.id);
         if (!foundedGroup) {
-          observables.push(fromPromise(this.repository.provider.create(group)));
+          observables.push(this.repository.create(group, { globalEventIsActive: false }));
         }
       });
       if (observables.length) {

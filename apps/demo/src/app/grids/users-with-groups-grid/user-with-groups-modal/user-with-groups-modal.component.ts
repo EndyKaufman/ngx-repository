@@ -2,8 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter, Inject, ChangeDetectorR
 import { DynamicFormGroup, DynamicFormBuilder } from 'ngx-dynamic-form-builder';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { UserWithGroups } from '../../../shared/models/user-with-groups';
-import { IModel } from 'ngx-repository';
-import { GROUPS_MOCKS } from '../../../shared/mocks/groups.mock';
 import { Group } from '../../../shared/models/group';
 import { UserWithGroupsGroupsGridComponent } from './user-with-groups-groups-grid/user-with-groups-groups-grid.component';
 
@@ -42,6 +40,8 @@ export class UserWithGroupsModalComponent implements OnInit {
   no = new EventEmitter<UserWithGroupsModalComponent>();
   @Output()
   yes = new EventEmitter<UserWithGroupsModalComponent>();
+  @Output()
+  altYes = new EventEmitter<UserWithGroupsModalComponent>();
 
   fb = new DynamicFormBuilder();
 
@@ -92,6 +92,18 @@ export class UserWithGroupsModalComponent implements OnInit {
     this.no.emit(this);
     if (this.hideOnNo) {
       this.dialogRef.close();
+    }
+  }
+  onAltYesClick(): void {
+    if (this.data) {
+      if (this.form.valid) {
+        this.data = this.form.object;
+        this.altYes.emit(this);
+      } else {
+        this.form.validateAllFormFields();
+      }
+    } else {
+      this.altYes.emit(this);
     }
   }
 }

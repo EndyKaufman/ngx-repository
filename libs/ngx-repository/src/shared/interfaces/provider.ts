@@ -3,15 +3,15 @@ import { IPaginationMeta } from './pagination-meta';
 import { ProviderActionEnum } from '../enums/provider-action.enum';
 import { IProviderOptions } from './provider-options';
 import { Subject } from 'rxjs/Subject';
-import { IModel } from './model';
 import { List } from 'immutable';
 import { IProviderActionOptions } from './provider-action-options';
 import { IProviderActionActionModel } from './provider-action-action-model';
+import { Observable } from 'rxjs/Observable';
+import { ClassTransformOptions } from 'class-transformer';
 
 export interface IProvider<TModel> {
     name: string;
-    items: List<TModel>;
-    items$: Subject<TModel[]>;
+    items$: BehaviorSubject<List<TModel>>;
     action$: Subject<IProviderActionActionModel>;
     create$: Subject<TModel>;
     append$: Subject<TModel>;
@@ -31,47 +31,49 @@ export interface IProvider<TModel> {
     instanceofNestedFactoryModel(data: any): boolean;
     updateNestedFactoryModel(data: any): void;
     deleteNestedFactoryModel(data: any): void;
-    plainToClass(data: any, action: ProviderActionEnum);
-    classToPlain(model: TModel, action: ProviderActionEnum);
+    classToClass(model: TModel, classTransformOptions?: ClassTransformOptions);
+    plainToClass(data: any, action: ProviderActionEnum, classTransformOptions?: ClassTransformOptions);
+    classToPlain(model: TModel, action: ProviderActionEnum, classTransformOptions?: ClassTransformOptions);
     action<TProviderActionOptions= IProviderActionOptions>(
         key: string,
         data?: any,
         options?: TProviderActionOptions
-    ): Promise<any>;
+    ): Observable<any>;
     save<TProviderActionOptions= IProviderActionOptions>(
         model: TModel,
         options?: TProviderActionOptions
-    ): Promise<TModel>;
+    ): Observable<TModel>;
     create<TProviderActionOptions= IProviderActionOptions>(
         model: TModel,
         options?: TProviderActionOptions
-    ): Promise<TModel>;
+    ): Observable<TModel>;
     append<TProviderActionOptions= IProviderActionOptions>(
         model: TModel,
         options?: TProviderActionOptions
-    ): Promise<TModel>;
+    ): Observable<TModel>;
     patch<TProviderActionOptions= IProviderActionOptions>(
         key: number | string,
         model: TModel,
         options?: TProviderActionOptions
-    ): Promise<TModel>;
+    ): Observable<TModel>;
     update<TProviderActionOptions= IProviderActionOptions>(
         key: number | string,
         model: TModel,
         options?: TProviderActionOptions
-    ): Promise<TModel>;
+    ): Observable<TModel>;
     delete<TProviderActionOptions= IProviderActionOptions>(
         key: number | string,
         options?: TProviderActionOptions
-    ): Promise<TModel>;
+    ): Observable<TModel>;
     load<TProviderActionOptions= IProviderActionOptions>(
         key: number | string,
         options?: TProviderActionOptions
-    ): Promise<TModel>;
+    ): Observable<TModel>;
     loadAll<TProviderActionOptions= IProviderActionOptions>(
         filter?: any,
         options?: TProviderActionOptions
-    ): Promise<TModel[]>;
+    ): Observable<TModel[]>;
+    reloadAll();
     calcPaginationMetaByOptions(options: IProviderOptions<TModel>): IPaginationMeta;
     calcPaginationMeta(newPaginationMeta: IPaginationMeta): IPaginationMeta;
     setOptions(options: IProviderOptions<TModel>);

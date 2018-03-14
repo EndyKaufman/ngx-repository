@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { OnDestroy } from '@angular/core';
 import { MockProvider } from '../providers/mock.provider';
 import { RestProvider } from '../providers/rest.provider';
 import { Provider } from '../providers/provider';
@@ -6,14 +6,14 @@ import { Injector } from '@angular/core';
 import { IModel } from '../interfaces/model';
 import { IMockProviderOptions } from '../interfaces/mock-provider-options';
 import { IRestProviderOptions } from '../interfaces/rest-provider-options';
-import { PaginationMeta } from '../models/pagination-meta';
-import { IPaginationMeta } from '../interfaces/pagination-meta';
 import { IProviderOptions } from '../interfaces/provider-options';
 import { IProvider } from '../interfaces/provider';
 import { Subject } from 'rxjs/Subject';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, first, map } from 'rxjs/operators';
 import { IFactoryModel } from '../interfaces/factory-model';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { IRestProviderActionOptions } from 'ngx-repository';
+import { Observable } from 'rxjs/Observable';
 
 export class Repository<TModel extends IModel = any> implements OnDestroy {
 
@@ -38,6 +38,12 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
     }
     get providers() {
         return [this.restProvider, ...this.restProviders, this.mockProvider, ...this.mockProviders];
+    }
+    get items() {
+        return this.provider.items$.getValue().toArray();
+    }
+    get items$() {
+        return this.provider.items$.pipe(map(items => items.toArray()));
     }
     private _mockProviderIsActive = false;
     private _restProviderIsActive = false;
@@ -125,7 +131,7 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
             this.subscribeToProvider(this.mockProvider);
         }
     }
-    useRest<TMockProviderOptions extends IRestProviderOptions<IModel>>(options?: IRestProviderOptions<TModel>) {
+    useRest<TMockProviderOptions extends IRestProviderOptions<IModel>>(options?: IRestProviderOptions<TModel>) {  // tslint:disable-line
         this._restProviderIsActive = true;
         this._mockProviderIsActive = false;
         if (this.restProvider === undefined && options !== undefined) {
@@ -157,7 +163,9 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
                     eachProvider.name !== provider.name &&
                     eachProvider.instanceofFactoryModel(item)
                 ) {
-                    eachProvider.create(item, { globalEventIsActive: false });
+                    eachProvider.create(item,
+                        { useFakeHttpClient: true, globalEventIsActive: false }
+                    ).pipe(first()).subscribe();
                 }
             });
         });
@@ -168,7 +176,9 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
                     eachProvider.name !== provider.name &&
                     eachProvider.instanceofFactoryModel(item)
                 ) {
-                    eachProvider.append(item, { globalEventIsActive: false });
+                    eachProvider.append(item,
+                        { useFakeHttpClient: true, globalEventIsActive: false }
+                    ).pipe(first()).subscribe();
                 }
             });
         });
@@ -179,7 +189,9 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
                     eachProvider.name !== provider.name
                 ) {
                     if (eachProvider.instanceofFactoryModel(item)) {
-                        eachProvider.update(item.id, item, { globalEventIsActive: false });
+                        eachProvider.update(item.id, item,
+                            { useFakeHttpClient: true, globalEventIsActive: false }
+                        ).pipe(first()).subscribe();
                     }
                     if (eachProvider.instanceofNestedFactoryModel(item)) {
                         eachProvider.updateNestedFactoryModel(item);
@@ -194,7 +206,9 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
                     eachProvider.name !== provider.name
                 ) {
                     if (eachProvider.instanceofFactoryModel(item)) {
-                        eachProvider.patch(item.id, item, { globalEventIsActive: false });
+                        eachProvider.patch(item.id, item,
+                            { useFakeHttpClient: true, globalEventIsActive: false }
+                        ).pipe(first()).subscribe();
                     }
                 }
             });
@@ -206,7 +220,9 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
                     eachProvider.name !== provider.name
                 ) {
                     if (eachProvider.instanceofFactoryModel(item)) {
-                        eachProvider.delete(item.id, { globalEventIsActive: false });
+                        eachProvider.delete(item.id,
+                            { useFakeHttpClient: true, globalEventIsActive: false }
+                        ).pipe(first()).subscribe();
                     }
                     if (eachProvider.instanceofNestedFactoryModel(item)) {
                         eachProvider.deleteNestedFactoryModel(item);
@@ -221,7 +237,9 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
                     eachProvider.name !== provider.name &&
                     eachProvider.instanceofFactoryModel(item)
                 ) {
-                    eachProvider.update(item.id, item, { globalEventIsActive: false });
+                    eachProvider.update(item.id, item,
+                        { useFakeHttpClient: true, globalEventIsActive: false }
+                    ).pipe(first()).subscribe();
                 }
             });
         });
@@ -233,7 +251,9 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
                         eachProvider.name !== provider.name &&
                         eachProvider.instanceofFactoryModel(item)
                     ) {
-                        eachProvider.update(item.id, item, { globalEventIsActive: false });
+                        eachProvider.update(item.id, item,
+                            { useFakeHttpClient: true, globalEventIsActive: false }
+                        ).pipe(first()).subscribe();
                     }
                 })
             );
@@ -241,5 +261,62 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
     }
     setOptions(options: IProviderOptions<TModel>) {
         this.provider.setOptions(options);
+    }
+    action<TProviderActionOptions extends IRestProviderActionOptions>(
+        key: string,
+        data?: any,
+        options?: TProviderActionOptions
+    ): Observable<any> {
+        return this.provider.action<TProviderActionOptions>(key, data, options).pipe(first());
+    }
+    save<TProviderActionOptions extends IRestProviderActionOptions>(
+        model: TModel,
+        options?: TProviderActionOptions
+    ): Observable<TModel> {
+        return this.provider.save<TProviderActionOptions>(model, options).pipe(first());
+    }
+    create<TProviderActionOptions extends IRestProviderActionOptions>(
+        model: TModel,
+        options?: TProviderActionOptions
+    ): Observable<TModel> {
+        return this.provider.create<TProviderActionOptions>(model, options).pipe(first());
+    }
+    update<TProviderActionOptions extends IRestProviderActionOptions>(
+        key: number | string,
+        model: TModel,
+        options?: TProviderActionOptions
+    ): Observable<TModel> {
+        return this.provider.update<TProviderActionOptions>(key, model, options).pipe(first());
+    }
+    patch<TProviderActionOptions extends IRestProviderActionOptions>(
+        key: number | string,
+        model: TModel,
+        options?: TProviderActionOptions
+    ): Observable<TModel> {
+        return this.provider.patch<TProviderActionOptions>(key, model, options).pipe(first());
+    }
+    load<TProviderActionOptions extends IRestProviderActionOptions>(
+        key: number | string,
+        options?: TProviderActionOptions
+    ): Observable<TModel> {
+        return this.provider.load<TProviderActionOptions>(key, options).pipe(first());
+    }
+    delete<TProviderActionOptions extends IRestProviderActionOptions>(
+        key: number | string,
+        options?: TProviderActionOptions
+    ): Observable<TModel> {
+        return this.provider.delete<TProviderActionOptions>(key, options).pipe(first());
+    }
+    reloadAll() {
+        this.provider.reloadAll();
+    }
+    loadAll<TProviderActionOptions extends IRestProviderActionOptions>(
+        filter?: any,
+        options?: TProviderActionOptions
+    ): Observable<TModel[]> {
+        return this.provider.loadAll<TProviderActionOptions>(filter, options);
+    }
+    clone(model: TModel) {
+        return this.provider.classToClass(model);
     }
 }

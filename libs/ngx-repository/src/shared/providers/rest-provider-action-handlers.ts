@@ -1,8 +1,6 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { ProviderActionEnum } from '../enums/provider-action.enum';
-import { HttpHeaders, HttpParams, HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { PaginationMeta } from '../models/pagination-meta';
+import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { IPaginationMeta } from '../interfaces/pagination-meta';
 import { IRestProviderActionHandlers } from '../interfaces/rest-provider-action-handlers';
 import { IRestProviderOptions } from '../interfaces/rest-provider-options';
@@ -180,6 +178,8 @@ export class RestProviderActionHandlers implements IRestProviderActionHandlers {
         }
     }
     getRequestOptions(
+        key: number | string,
+        data: any,
         optionsList: IRestProviderOptions<any>[],
         action: ProviderActionEnum
     ) {
@@ -200,23 +200,24 @@ export class RestProviderActionHandlers implements IRestProviderActionHandlers {
         optionsList.reverse().forEach(eachOptions => {
             if (eachOptions !== undefined && eachOptions.actionOptions !== undefined &&
                 eachOptions.actionOptions.requestOptions !== undefined) {
-                if (eachOptions.actionOptions.requestOptions.headers !== undefined) {
-                    requestOptions.headers = eachOptions.actionOptions.requestOptions.headers;
+                const actionOptionsRequestOptions = eachOptions.actionOptions.requestOptions(key, data, action);
+                if (actionOptionsRequestOptions.headers !== undefined) {
+                    requestOptions.headers = actionOptionsRequestOptions.headers;
                 }
-                if (eachOptions.actionOptions.requestOptions.observe !== undefined) {
-                    requestOptions.observe = eachOptions.actionOptions.requestOptions.observe;
+                if (actionOptionsRequestOptions.observe !== undefined) {
+                    requestOptions.observe = actionOptionsRequestOptions.observe;
                 }
-                if (eachOptions.actionOptions.requestOptions.params !== undefined) {
-                    requestOptions.params = eachOptions.actionOptions.requestOptions.params;
+                if (actionOptionsRequestOptions.params !== undefined) {
+                    requestOptions.params = actionOptionsRequestOptions.params;
                 }
-                if (eachOptions.actionOptions.requestOptions.reportProgress !== undefined) {
-                    requestOptions.reportProgress = eachOptions.actionOptions.requestOptions.reportProgress;
+                if (actionOptionsRequestOptions.reportProgress !== undefined) {
+                    requestOptions.reportProgress = actionOptionsRequestOptions.reportProgress;
                 }
-                if (eachOptions.actionOptions.requestOptions.responseType !== undefined) {
-                    requestOptions.responseType = eachOptions.actionOptions.requestOptions.responseType;
+                if (actionOptionsRequestOptions.responseType !== undefined) {
+                    requestOptions.responseType = actionOptionsRequestOptions.responseType;
                 }
-                if (eachOptions.actionOptions.requestOptions.withCredentials !== undefined) {
-                    requestOptions.withCredentials = eachOptions.actionOptions.requestOptions.withCredentials;
+                if (actionOptionsRequestOptions.withCredentials !== undefined) {
+                    requestOptions.withCredentials = actionOptionsRequestOptions.withCredentials;
                 }
             }
         });
@@ -230,7 +231,7 @@ export class RestProviderActionHandlers implements IRestProviderActionHandlers {
         optionsList.forEach(eachOptions => {
             if (eachOptions !== undefined && eachOptions.actionOptions !== undefined &&
                 eachOptions.actionOptions.requestCreateType !== undefined) {
-                    requestCreateType = eachOptions.actionOptions.requestCreateType(action);
+                requestCreateType = eachOptions.actionOptions.requestCreateType(action);
                 return requestCreateType;
             }
         });

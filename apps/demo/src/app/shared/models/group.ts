@@ -1,6 +1,5 @@
-import { plainToClass, Transform, Type, plainToClassFromExist } from 'class-transformer';
-import { IsNotEmpty, IsEmail, ValidateNested, IsOptional } from 'class-validator';
-import { transformStringToDate, transformDateToString } from '../utils/custom-transforms';
+import { plainToClassFromExist } from 'class-transformer';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 import { IModel } from 'ngx-repository';
 
 export class Group implements IModel {

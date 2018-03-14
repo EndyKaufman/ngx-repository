@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter, Inject, ChangeDetectorR
 import { DynamicFormGroup, DynamicFormBuilder } from 'ngx-dynamic-form-builder';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { User } from '../../../shared/models/user';
-import { IModel } from 'ngx-repository';
 
 @Component({
   selector: 'user-modal',

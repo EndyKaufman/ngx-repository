@@ -1,8 +1,7 @@
-import { Injectable, Injector } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Injector } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
-import { plainToClassFromExist, classToPlainFromExist } from 'class-transformer';
+import { plainToClassFromExist, classToPlainFromExist, classToClass, ClassTransformOptions } from 'class-transformer';
 import { ProviderActionEnum } from '../enums/provider-action.enum';
 import { IProviderOptions } from '../interfaces/provider-options';
 import { IModel } from '../interfaces/model';
@@ -13,8 +12,9 @@ import { List } from 'immutable';
 import { IProviderActionOptions } from '../interfaces/provider-action-options';
 import { IProviderActionActionModel } from '../interfaces/provider-action-action-model';
 import { IFactoryModel } from '../interfaces/factory-model';
-import { map } from 'rxjs/operators';
-
+import { of } from 'rxjs/observable/of';
+import { delay } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
 export class Provider<TModel extends IModel = any> implements IProvider<TModel> {
 
     filter?: any;
@@ -22,7 +22,7 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
     delay = 0;
     name: string;
 
-    items$ = new Subject<TModel[]>();
+    items$ = new BehaviorSubject<List<TModel>>(List([]));
 
     action$ = new Subject<IProviderActionActionModel>();
     create$ = new Subject<TModel>();
@@ -42,8 +42,6 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
 
     paginationMeta$ = new BehaviorSubject<IPaginationMeta>(new PaginationMeta());
 
-    items: List<TModel> = List([]);
-
     protected loadAllOptions?: IProviderActionOptions;
     protected destroy$: Subject<boolean> = new Subject();
 
@@ -62,62 +60,70 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
                 filter(key => data instanceof this.factoryModel.nested[key]).length > 0;
     }
     updateNestedFactoryModel(data: any) {
-        Object.keys(this.factoryModel.nested).forEach(key => {
-            this.items.map(item => {
-                if (item[key]) {
-                    if (Array.isArray(item[key])) {
-                        item[key].forEach((eachItem, index) => {
-                            if (eachItem.id === data.id) {
-                                item[key][index] = data;
-                            }
-                        });
-                    } else {
-                        item[key] = data;
+        Object.keys(this.factoryModel.nested).forEach(key =>
+            this.items$.next(
+                this.items$.getValue().map(item => {
+                    if (item[key]) {
+                        if (Array.isArray(item[key])) {
+                            item[key].forEach((eachItem, index) => {
+                                if (eachItem.id === data.id) {
+                                    item[key][index] = data;
+                                }
+                            });
+                        } else {
+                            item[key] = data;
+                        }
+                        this.update(item.id, item, { globalEventIsActive: false });
                     }
-                    this.update(item.id, item, { globalEventIsActive: false });
-                }
-            });
-        });
+                    return item;
+                }).toList()
+            )
+        );
     }
     deleteNestedFactoryModel(data: any) {
-        Object.keys(this.factoryModel.nested).forEach(key => {
-            this.items.map(item => {
-                if (item[key]) {
-                    if (Array.isArray(item[key])) {
-                        item[key] = item[key].filter((eachItem, index) => eachItem.id !== data.id);
-                    } else {
-                        item[key] = undefined;
+        Object.keys(this.factoryModel.nested).forEach(key =>
+            this.items$.next(
+                this.items$.getValue().map(item => {
+                    if (item[key]) {
+                        if (Array.isArray(item[key])) {
+                            item[key] = item[key].filter(eachItem => eachItem.id !== data.id);
+                        } else {
+                            item[key] = undefined;
+                        }
+                        this.update(item.id, item, { globalEventIsActive: false });
                     }
-                    this.update(item.id, item, { globalEventIsActive: false });
-                }
-            });
-        });
+                    return item;
+                }).toList()
+            )
+        );
     }
-    plainToClass(data: any, action: ProviderActionEnum) {
+    // tslint
+    plainToClass(data: any, action: ProviderActionEnum, classTransformOptions?: ClassTransformOptions) {
         let model: TModel;
         if (!(data instanceof this.factoryModel)) {
-            model = plainToClassFromExist(new this.factoryModel(), data) as TModel;
+            model = plainToClassFromExist(new this.factoryModel(), data, classTransformOptions) as TModel;
         } else {
             model = data as TModel;
         }
         return model;
     }
-    classToPlain(model: TModel, action: ProviderActionEnum) {
-        return classToPlainFromExist(model, {});
+    classToPlain(model: TModel, action: ProviderActionEnum, classTransformOptions?: ClassTransformOptions) {
+        return classToPlainFromExist(model, {}, classTransformOptions);
+    }
+    classToClass(model: TModel, classTransformOptions?: ClassTransformOptions) {
+        return classToClass(model, classTransformOptions);
     }
     action<TProviderActionOptions extends IProviderActionOptions>(
         key: string,
         data?: any,
         options?: TProviderActionOptions
-    ) {
-        return new Promise<any>((resolve, reject) =>
-            setTimeout(() => resolve(data), this.delay)
-        );
+    ): Observable<any> {
+        return of(data).pipe(delay(this.delay));
     }
     save<TProviderActionOptions extends IProviderActionOptions>(
         model: TModel,
         options?: TProviderActionOptions
-    ) {
+    ): Observable<TModel> {
         if (model.id === undefined) {
             return this.create(model, options);
         }
@@ -126,63 +132,67 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
     create<TProviderActionOptions extends IProviderActionOptions>(
         model: TModel,
         options?: TProviderActionOptions
-    ) {
-        return new Promise<any>((resolve, reject) =>
-            setTimeout(() => resolve(model), this.delay)
-        );
+    ): Observable<TModel> {
+        return of(model).pipe<TModel>(delay(this.delay));
     }
     append<TProviderActionOptions extends IProviderActionOptions>(
         model: TModel,
         options?: TProviderActionOptions
-    ) {
-        return new Promise<any>((resolve, reject) =>
-            setTimeout(() => resolve(model), this.delay)
-        );
+    ): Observable<TModel> {
+        return of(model).pipe<TModel>(delay(this.delay));
     }
     update<TProviderActionOptions extends IProviderActionOptions>(
         key: number | string,
         model: TModel,
         options?: TProviderActionOptions
-    ) {
-        return new Promise<any>((resolve, reject) =>
-            setTimeout(() => resolve(model), this.delay)
-        );
+    ): Observable<TModel> {
+        return of(model).pipe<TModel>(delay(this.delay));
     }
     patch<TProviderActionOptions extends IProviderActionOptions>(
         key: number | string,
         model: TModel,
         options?: TProviderActionOptions
-    ) {
-        return new Promise<any>((resolve, reject) =>
-            setTimeout(() => resolve(model), this.delay)
-        );
+    ): Observable<TModel> {
+        return of(model).pipe<TModel>(delay(this.delay));
     }
     delete<TProviderActionOptions extends IProviderActionOptions>(
         key: number | string,
         options?: TProviderActionOptions
-    ) {
-        return new Promise<any>((resolve, reject) => {
-            const newModel = this.plainToClass({ id: key }, ProviderActionEnum.Delete);
-            setTimeout(() => resolve(newModel), this.delay);
-        });
+    ): Observable<TModel> {
+        const newModel = this.plainToClass(
+            { id: key },
+            ProviderActionEnum.Delete,
+            options && options.classTransformOptions ?
+                options.classTransformOptions :
+                undefined
+        );
+        return of(newModel).pipe<TModel>(delay(this.delay));
     }
     load<TProviderActionOptions extends IProviderActionOptions>(
         key: number | string,
         options?: TProviderActionOptions
-    ) {
-        return new Promise<any>((resolve, reject) => {
-            const newModel = this.plainToClass({ id: key }, ProviderActionEnum.Delete);
-            setTimeout(() => resolve(newModel), this.delay);
-        });
+    ): Observable<TModel> {
+        const newModel = this.plainToClass(
+            { id: key },
+            ProviderActionEnum.Delete,
+            options && options.classTransformOptions ?
+                options.classTransformOptions :
+                undefined
+        );
+        return of(newModel).pipe<TModel>(delay(this.delay));
     }
     loadAll<TProviderActionOptions extends IProviderActionOptions>(
         filter?: any,
         options?: TProviderActionOptions
-    ) {
-        return new Promise<any>((resolve, reject) => {
-            const newModels = [this.plainToClass({}, ProviderActionEnum.Delete)];
-            setTimeout(() => resolve(newModels), this.delay);
-        });
+    ): Observable<TModel[]> {
+        const newModels = [this.plainToClass(
+            {},
+            ProviderActionEnum.Delete,
+            options && options.classTransformOptions ?
+                options.classTransformOptions :
+                undefined
+        )];
+        return of(newModels).pipe<TModel[]>(delay(this.delay));
     }
     calcPaginationMetaByOptions(options: IProviderOptions<TModel>): IPaginationMeta {
         const paginationMeta = this.paginationMeta$.getValue();
@@ -234,9 +244,8 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
         this.paginationMeta$.next(paginationMeta);
         return this.paginationMeta$.getValue();
     }
-    checkFilterAndOptions() {
-
-    }
+    reloadAll() { }
+    checkFilterAndOptions() { }
     setOptions(options: IProviderOptions<TModel>) { }
     reconfigItems() { }
 }
