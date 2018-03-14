@@ -18,6 +18,7 @@ import { FakeHttpClient } from '../utils/fake-http-client';
 import { IFactoryModel } from '../interfaces/factory-model';
 import { ProviderError } from '../exceptions/provider.error';
 import { _throw } from 'rxjs/observable/throw';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 export class RestProvider<TModel extends IModel> extends Provider<TModel> {
 
     public pluralName: string;
@@ -80,7 +81,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         key: string,
         data?: any,
         options?: TProviderActionOptions
-    ) {
+    ): ErrorObservable | Observable<TModel> {
         this.actionIsActive$.next(true);
         const errors = validateSync(data,
             options && options.classValidatorOptions ?
@@ -138,7 +139,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
     create<TProviderActionOptions extends IRestProviderActionOptions>(
         model: TModel,
         options?: TProviderActionOptions
-    ) {
+    ): ErrorObservable | Observable<TModel> {
         model = this.plainToClass(
             model,
             ProviderActionEnum.Create,
@@ -249,7 +250,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         model: TModel,
         isUpdate: boolean,
         options?: TProviderActionOptions
-    ) {
+    ): ErrorObservable | Observable<TModel> {
         model = this.plainToClass(
             model,
             ProviderActionEnum.Update,
