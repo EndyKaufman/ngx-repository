@@ -81,8 +81,11 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         options?: TProviderActionOptions
     ) {
         this.actionIsActive$.next(true);
-        const errors = validateSync(data, { validationError: { target: false } });
-        if (errors.length > 0 && options.globalEventIsActive !== false) {
+        const errors = validateSync(data,
+            options && options.classValidatorOptions ?
+                options.classValidatorOptions :
+                { validationError: { target: false } });
+        if (errors.length > 0 && (!options || options.globalEventIsActive !== false)) {
             throw new ValidatorError(errors);
         }
         const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
@@ -135,10 +138,19 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         model: TModel,
         options?: TProviderActionOptions
     ) {
-        model = this.plainToClass(model, ProviderActionEnum.Create);
+        model = this.plainToClass(
+            model,
+            ProviderActionEnum.Create,
+            options && options.classTransformOptions ?
+                options.classTransformOptions :
+                undefined
+        );
         this.createIsActive$.next(true);
-        const errors = validateSync(model, { validationError: { target: false } });
-        if (errors.length > 0 && options.globalEventIsActive !== false) {
+        const errors = validateSync(model,
+            options && options.classValidatorOptions ?
+                options.classValidatorOptions :
+                { validationError: { target: false } });
+        if (errors.length > 0 && (!options || options.globalEventIsActive !== false)) {
             throw new ValidatorError(errors);
         }
         const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
@@ -149,9 +161,21 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         let object;
 
         if (isCreate === true) {
-            object = this.classToPlain(model, ProviderActionEnum.Create);
+            object = this.classToPlain(
+                model,
+                ProviderActionEnum.Create,
+                options && options.classTransformOptions ?
+                    options.classTransformOptions :
+                    undefined
+            );
         } else {
-            object = this.classToPlain(model, ProviderActionEnum.Append);
+            object = this.classToPlain(
+                model,
+                ProviderActionEnum.Append,
+                options && options.classTransformOptions ?
+                    options.classTransformOptions :
+                    undefined
+            );
         }
         const requestUrl = this.providerActionHandlers.getRequestUrl(
             undefined,
@@ -190,10 +214,22 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
             map(createdItem => {
                 let createdModel: TModel;
                 if (isCreate === true) {
-                    createdModel = this.plainToClass(createdItem, ProviderActionEnum.Create);
+                    createdModel = this.plainToClass(
+                        createdItem,
+                        ProviderActionEnum.Create,
+                        options && options.classTransformOptions ?
+                            options.classTransformOptions :
+                            undefined
+                    );
                     this.items$.next(this.items$.getValue().unshift(createdModel));
                 } else {
-                    createdModel = this.plainToClass(createdItem, ProviderActionEnum.Append);
+                    createdModel = this.plainToClass(
+                        createdItem,
+                        ProviderActionEnum.Append,
+                        options && options.classTransformOptions ?
+                            options.classTransformOptions :
+                            undefined
+                    );
                     this.items$.next(this.items$.getValue().push(createdModel));
                 }
                 const paginationMeta = this.paginationMeta$.getValue();
@@ -213,10 +249,19 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         isUpdate: boolean,
         options?: TProviderActionOptions
     ) {
-        model = this.plainToClass(model, ProviderActionEnum.Update);
+        model = this.plainToClass(
+            model,
+            ProviderActionEnum.Update,
+            options && options.classTransformOptions ?
+                options.classTransformOptions :
+                undefined
+        );
         this.updateIsActive$.next(true);
-        const errors = validateSync(model, { validationError: { target: false } });
-        if (errors.length > 0 && options.globalEventIsActive !== false) {
+        const errors = validateSync(model,
+            options && options.classValidatorOptions ?
+                options.classValidatorOptions :
+                { validationError: { target: false } });
+        if (errors.length > 0 && (!options || options.globalEventIsActive !== false)) {
             throw new ValidatorError(errors);
         }
         let object;
@@ -224,7 +269,13 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
 
         let request;
         if (isUpdate === true) {
-            object = this.classToPlain(model, ProviderActionEnum.Update);
+            object = this.classToPlain(
+                model,
+                ProviderActionEnum.Update,
+                options && options.classTransformOptions ?
+                    options.classTransformOptions :
+                    undefined
+            );
             const requestUrl = this.providerActionHandlers.getRequestUrl(
                 key,
                 object,
@@ -252,7 +303,13 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                     );
             }
         } else {
-            object = this.classToPlain(model, ProviderActionEnum.Patch);
+            object = this.classToPlain(
+                model,
+                ProviderActionEnum.Patch,
+                options && options.classTransformOptions ?
+                    options.classTransformOptions :
+                    undefined
+            );
             const requestUrl = this.providerActionHandlers.getRequestUrl(
                 key,
                 object,
@@ -359,7 +416,13 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 )
             ),
             map(loadedItem => {
-                const loadedModel = this.plainToClass(loadedItem, ProviderActionEnum.Load);
+                const loadedModel = this.plainToClass(
+                    loadedItem,
+                    ProviderActionEnum.Load,
+                    options && options.classTransformOptions ?
+                        options.classTransformOptions :
+                        undefined
+                );
                 const index = this.items$.getValue().findIndex(eachModel => eachModel.id === key);
                 if (index !== -1) {
                     this.items$.next(this.items$.getValue().set(index, loadedModel));
@@ -500,7 +563,13 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
             }),
             map(loadedItems => {
                 const loadedModels = loadedItems === undefined ? [] : loadedItems.map(loadedItem =>
-                    this.plainToClass(loadedItem, ProviderActionEnum.LoadAll)
+                    this.plainToClass(
+                        loadedItem,
+                        ProviderActionEnum.LoadAll,
+                        options && options.classTransformOptions ?
+                            options.classTransformOptions :
+                            undefined
+                    )
                 );
                 this.items$.next(List(loadedModels));
                 this.reconfigItems();

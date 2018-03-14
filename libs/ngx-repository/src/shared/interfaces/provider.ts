@@ -7,6 +7,7 @@ import { List } from 'immutable';
 import { IProviderActionOptions } from './provider-action-options';
 import { IProviderActionActionModel } from './provider-action-action-model';
 import { Observable } from 'rxjs/Observable';
+import { ClassTransformOptions } from 'class-transformer';
 
 export interface IProvider<TModel> {
     name: string;
@@ -30,8 +31,9 @@ export interface IProvider<TModel> {
     instanceofNestedFactoryModel(data: any): boolean;
     updateNestedFactoryModel(data: any): void;
     deleteNestedFactoryModel(data: any): void;
-    plainToClass(data: any, action: ProviderActionEnum);
-    classToPlain(model: TModel, action: ProviderActionEnum);
+    classToClass(model: TModel, classTransformOptions?: ClassTransformOptions);
+    plainToClass(data: any, action: ProviderActionEnum, classTransformOptions?: ClassTransformOptions);
+    classToPlain(model: TModel, action: ProviderActionEnum, classTransformOptions?: ClassTransformOptions);
     action<TProviderActionOptions= IProviderActionOptions>(
         key: string,
         data?: any,
@@ -71,6 +73,7 @@ export interface IProvider<TModel> {
         filter?: any,
         options?: TProviderActionOptions
     ): Observable<TModel[]>;
+    reloadAll();
     calcPaginationMetaByOptions(options: IProviderOptions<TModel>): IPaginationMeta;
     calcPaginationMeta(newPaginationMeta: IPaginationMeta): IPaginationMeta;
     setOptions(options: IProviderOptions<TModel>);

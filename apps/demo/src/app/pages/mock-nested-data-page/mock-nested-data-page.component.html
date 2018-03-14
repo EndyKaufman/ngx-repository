@@ -9,7 +9,7 @@
         <div class="debug">
           <p>
             <strong>Items:</strong>
-            {{usersGrid1?.repository?.provider.items$ | async | json}}
+            {{usersGrid1?.repository?.items$ | async | json}}
           </p>
         </div>
       </ngx-docs-example>
@@ -21,7 +21,7 @@
         <div class="debug">
           <p>
             <strong>Items:</strong>
-            {{usersGrid2?.repository?.provider.items$ | async | json}}
+            {{usersGrid2?.repository?.items$ | async | json}}
           </p>
         </div>
       </ngx-docs-example>
@@ -36,10 +36,10 @@
             <button mat-raised-button color="primary" (click)="usersGrid1?.showModal()">
               <mat-icon>add</mat-icon> Add
             </button>
-            <button mat-raised-button (click)="usersGrid1?.showModal(usersGrid1?.repository?.provider.items$.getValue().get(0))">
+            <button mat-raised-button (click)="usersGrid1?.showModal(usersGrid1?.repository?.items[0])">
               <mat-icon>edit</mat-icon> Edit
             </button>
-            <button mat-raised-button (click)="usersGrid1?.showRemoveModal(usersGrid1?.repository?.provider.items$.getValue().get(0))">
+            <button mat-raised-button (click)="usersGrid1?.showRemoveModal(usersGrid1?.repository?.items[0])">
               <mat-icon>close</mat-icon> Delete
             </button>
           </div>
@@ -52,7 +52,7 @@
           <div class="debug">
             <p>
               <strong>Items:</strong>
-              {{groupsGrid1?.repository?.provider.items$ | async | json}}
+              {{groupsGrid1?.repository?.items$ | async | json}}
             </p>
             <p>
               <strong>Selected:</strong>
@@ -66,29 +66,29 @@
             <button mat-raised-button color="primary" (click)="groupsGrid1?.showModal()">
               <mat-icon>add</mat-icon> Add
             </button>
-            <button mat-raised-button (click)="groupsGrid1?.showModal(groupsGrid1?.repository?.provider.items$.getValue().get(0))">
+            <button mat-raised-button (click)="groupsGrid1?.showModal(groupsGrid1?.repository?.items[0])">
               <mat-icon>edit</mat-icon> Edit
             </button>
-            <button mat-raised-button (click)="groupsGrid1?.showRemoveModal(groupsGrid1?.repository?.provider.items$.getValue().get(0))">
+            <button mat-raised-button (click)="groupsGrid1?.showRemoveModal(groupsGrid1?.repository?.items[0])">
               <mat-icon>close</mat-icon> Delete
             </button>
           </div>
         </ngx-docs-example>
         <ngx-docs-example title="User groups" [html]="userGroupsGridSource.html" [css]="userGroupsGridSource.css" [ts]="userGroupsGridSource.ts"
-          fxFlex.gt-sm="50" fxFlex.lt-sm="100" *ngIf="usersGrid1?.repository?.provider.items$.getValue().get(0)">
+          fxFlex.gt-sm="50" fxFlex.lt-sm="100" *ngIf="usersGrid1?.repository?.items[0]">
           <div class="body">
-            <user-with-groups-groups-grid [mockedItems]="usersGrid1?.repository?.provider.items$.getValue().get(0).groups" [exampleGroupMockedItems]="exampleGroupMockedItems"
-              [user]="usersGrid1?.repository?.provider.items$.getValue().get(0)" #groupsGrid2></user-with-groups-groups-grid>
+            <user-with-groups-groups-grid [mockedItems]="usersGrid1?.repository?.items[0]?.groups" [exampleGroupMockedItems]="exampleGroupMockedItems"
+              [user]="usersGrid1?.repository?.items[0]" #groupsGrid2></user-with-groups-groups-grid>
           </div>
           <div class="debug">
             <p>
               <strong>User:</strong>
-              {{usersGrid1?.repository?.provider.items$.getValue().get(0) | json}}
+              {{usersGrid1?.repository?.items[0] | json}}
             </p>
           </div>
         </ngx-docs-example>
         <ngx-docs-example title="Groups grid modal" [html]="groupsGridModalSource.html" [css]="groupsGridModalSource.css" [ts]="groupsGridModalSource.ts"
-          fxFlex.gt-sm="50" fxFlex.lt-sm="100" *ngIf="usersGrid1?.repository?.provider.items$.getValue().get(0)">
+          fxFlex.gt-sm="50" fxFlex.lt-sm="100" *ngIf="usersGrid1?.repository?.items[0]">
           <div class="body">
             <button mat-raised-button (click)="groupsGrid2?.showAppendModal()" *ngIf="groupsGrid2?.showAppendModal">
               <mat-icon>add</mat-icon> Select

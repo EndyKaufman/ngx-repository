@@ -1,7 +1,7 @@
 import { Injector } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
-import { plainToClassFromExist, classToPlainFromExist } from 'class-transformer';
+import { plainToClassFromExist, classToPlainFromExist, classToClass, ClassTransformOptions } from 'class-transformer';
 import { ProviderActionEnum } from '../enums/provider-action.enum';
 import { IProviderOptions } from '../interfaces/provider-options';
 import { IModel } from '../interfaces/model';
@@ -14,6 +14,7 @@ import { IProviderActionActionModel } from '../interfaces/provider-action-action
 import { IFactoryModel } from '../interfaces/factory-model';
 import { of } from 'rxjs/observable/of';
 import { delay } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
 export class Provider<TModel extends IModel = any> implements IProvider<TModel> {
 
     filter?: any;
@@ -97,29 +98,32 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
         );
     }
     // tslint
-    plainToClass(data: any, action: ProviderActionEnum) {
+    plainToClass(data: any, action: ProviderActionEnum, classTransformOptions?: ClassTransformOptions) {
         let model: TModel;
         if (!(data instanceof this.factoryModel)) {
-            model = plainToClassFromExist(new this.factoryModel(), data) as TModel;
+            model = plainToClassFromExist(new this.factoryModel(), data, classTransformOptions) as TModel;
         } else {
             model = data as TModel;
         }
         return model;
     }
-    classToPlain(model: TModel, action: ProviderActionEnum) {
-        return classToPlainFromExist(model, {});
+    classToPlain(model: TModel, action: ProviderActionEnum, classTransformOptions?: ClassTransformOptions) {
+        return classToPlainFromExist(model, {}, classTransformOptions);
+    }
+    classToClass(model: TModel, classTransformOptions?: ClassTransformOptions) {
+        return classToClass(model, classTransformOptions);
     }
     action<TProviderActionOptions extends IProviderActionOptions>(
         key: string,
         data?: any,
         options?: TProviderActionOptions
-    ) {
+    ): Observable<any> {
         return of(data).pipe(delay(this.delay));
     }
     save<TProviderActionOptions extends IProviderActionOptions>(
         model: TModel,
         options?: TProviderActionOptions
-    ) {
+    ): Observable<TModel> {
         if (model.id === undefined) {
             return this.create(model, options);
         }
@@ -128,48 +132,66 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
     create<TProviderActionOptions extends IProviderActionOptions>(
         model: TModel,
         options?: TProviderActionOptions
-    ) {
+    ): Observable<TModel> {
         return of(model).pipe<TModel>(delay(this.delay));
     }
     append<TProviderActionOptions extends IProviderActionOptions>(
         model: TModel,
         options?: TProviderActionOptions
-    ) {
+    ): Observable<TModel> {
         return of(model).pipe<TModel>(delay(this.delay));
     }
     update<TProviderActionOptions extends IProviderActionOptions>(
         key: number | string,
         model: TModel,
         options?: TProviderActionOptions
-    ) {
+    ): Observable<TModel> {
         return of(model).pipe<TModel>(delay(this.delay));
     }
     patch<TProviderActionOptions extends IProviderActionOptions>(
         key: number | string,
         model: TModel,
         options?: TProviderActionOptions
-    ) {
+    ): Observable<TModel> {
         return of(model).pipe<TModel>(delay(this.delay));
     }
     delete<TProviderActionOptions extends IProviderActionOptions>(
         key: number | string,
         options?: TProviderActionOptions
-    ) {
-        const newModel = this.plainToClass({ id: key }, ProviderActionEnum.Delete);
+    ): Observable<TModel> {
+        const newModel = this.plainToClass(
+            { id: key },
+            ProviderActionEnum.Delete,
+            options && options.classTransformOptions ?
+                options.classTransformOptions :
+                undefined
+        );
         return of(newModel).pipe<TModel>(delay(this.delay));
     }
     load<TProviderActionOptions extends IProviderActionOptions>(
         key: number | string,
         options?: TProviderActionOptions
-    ) {
-        const newModel = this.plainToClass({ id: key }, ProviderActionEnum.Delete);
+    ): Observable<TModel> {
+        const newModel = this.plainToClass(
+            { id: key },
+            ProviderActionEnum.Delete,
+            options && options.classTransformOptions ?
+                options.classTransformOptions :
+                undefined
+        );
         return of(newModel).pipe<TModel>(delay(this.delay));
     }
     loadAll<TProviderActionOptions extends IProviderActionOptions>(
         filter?: any,
         options?: TProviderActionOptions
-    ) {
-        const newModels = [this.plainToClass({}, ProviderActionEnum.Delete)];
+    ): Observable<TModel[]> {
+        const newModels = [this.plainToClass(
+            {},
+            ProviderActionEnum.Delete,
+            options && options.classTransformOptions ?
+                options.classTransformOptions :
+                undefined
+        )];
         return of(newModels).pipe<TModel[]>(delay(this.delay));
     }
     calcPaginationMetaByOptions(options: IProviderOptions<TModel>): IPaginationMeta {
@@ -222,9 +244,8 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
         this.paginationMeta$.next(paginationMeta);
         return this.paginationMeta$.getValue();
     }
-    checkFilterAndOptions() {
-
-    }
+    reloadAll() { }
+    checkFilterAndOptions() { }
     setOptions(options: IProviderOptions<TModel>) { }
     reconfigItems() { }
 }

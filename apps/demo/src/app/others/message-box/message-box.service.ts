@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { MessageBoxComponent } from './message-box.component';
 import { Observable } from 'rxjs/Observable';
+import { first } from 'rxjs/operators';
 
 @Injectable()
 export class MessageBoxService {
@@ -27,7 +28,7 @@ export class MessageBoxService {
                 dialogRef.close();
                 observer.next(false);
             });
-        });
+        }).pipe(first());
     }
     error(message: string, title: string = 'Error', width: string = '300px') {
         return new Observable(observer => {
@@ -46,6 +47,6 @@ export class MessageBoxService {
                 dialogRef.close();
                 observer.next(false);
             });
-        });
+        }).pipe(first());
     }
 }

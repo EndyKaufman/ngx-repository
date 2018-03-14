@@ -67,14 +67,25 @@ import { UserModel } from './user-model';
 @Component({
   selector: 'users-grid',
   template: `
-  <ul>
-    <li *ngFor="let item of this.repository.provider.items$ | async">
-        {{item.username}}
-    </li>
-  </ul>
+<button (click)="create()"> Create </button>
+<ul>
+  <li *ngFor="let item of repository.items$ | async">
+    <span *ngIf="editedUser?.id!==item?.id">
+      {{item.username}}
+      <button (click)="startEdit(item)"> Edit </button>
+      <button (click)="delete(item) "> Delete </button>
+    </span>
+    <span *ngIf="editedUser?.id===item?.id">
+      <input [(ngModel)]="editedUser.username" />
+      <button (click)="save(editedUser)"> Save </button>
+      <button (click)="cancel()"> Cancel </button>
+    </span>
+  </li>
+</ul>
   `
 })
 export class UsersGridComponent implements OnInit {
+  public editedUser: UserModel;
   public repository: Repository<UserModel>;
   private mockedItems = [
     {
@@ -96,7 +107,7 @@ export class UsersGridComponent implements OnInit {
     }
   ];
   constructor(
-    public dynamicRepository: DynamicRepository
+    private dynamicRepository: DynamicRepository
   ) {
     this.repository = this.dynamicRepository.fork<UserModel>(UserModel);
   }
@@ -107,6 +118,31 @@ export class UsersGridComponent implements OnInit {
             perPage: 2
         }
     });
+    /* For real backend
+    this.repository.useRest({
+      apiUrl: environment.apiUrl,
+      paginationMeta: {
+        perPage: 2
+      }
+    });*/
+  }
+  startEdit(user: UserModel) {
+    this.editedUser = this.repository.clone(user);
+  }
+  cancel() {
+    this.editedUser = undefined;
+  }
+  save(user: UserModel) {
+    this.repository.save(user).subscribe();
+    this.editedUser = undefined;
+  }
+  create() {
+    this.repository.create(new UserModel({
+      username: 'new user'
+    })).subscribe();
+  }
+  delete(user: UserModel) {
+    this.repository.delete(user.id).subscribe();
   }
 }
 ```
