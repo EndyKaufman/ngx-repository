@@ -9,4 +9,36 @@ export class CustomizationPageComponent {
   customization =
     require('html-loader!markdown-loader!./../../../../../../CUSTOMIZATION.md').
       replace('<h1 id="customization">customization</h1>', '');
+
+  customOptions = {
+    pluralName: 'custom-groups',
+    autoload: true,
+    actionOptions: {
+      requestOptions: (key: number | string, data: any, action: ProviderActionEnum) => {
+        const headers = {
+          'Content-Type': 'application/json',
+          'access_token': 'JWT test'
+        };
+        return {
+          headers: headers,
+          withCredentials: false
+        };
+      },
+      responseData: (data: any, action: ProviderActionEnum) => {
+        if (action === ProviderActionEnum.LoadAll) {
+          return plainToClass(Group, data.body.groups);
+        } else {
+          return plainToClass(Group, data.body.group);
+        }
+      },
+      responseLoadAllTotalCount: (data: any, action: ProviderActionEnum) => {
+        return data && data.body.meta && data.body.meta.totalResults;
+      },
+      requestLoadAllPaginationQuery: (currentUrl: string, paginationMeta: PaginationMeta, action: ProviderActionEnum) =>
+        (currentUrl.indexOf('?') === -1 ? '?' : '&') + `cur_page=${paginationMeta.curPage}&per_page=${paginationMeta.perPage}`,
+      requestLoadAllSearchQuery: (currentUrl: string, filter: any, action: ProviderActionEnum) =>
+        (filter && filter.searchText) ?
+          ((currentUrl.indexOf('?') === -1 ? '?' : '&') + `q=${filter.searchText}`) : ''
+    }
+  };
 }

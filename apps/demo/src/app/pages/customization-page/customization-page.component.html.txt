@@ -1,3 +1,4 @@
 <div class="customization-page">
-  <div [innerHtml]="customization | safeHtml"></div>
+    <div [innerHtml]="customization | safeHtml"></div>
+    <groups-grid [exampleCustomOptions]="customOptions" #grid1></groups-grid>
 </div>

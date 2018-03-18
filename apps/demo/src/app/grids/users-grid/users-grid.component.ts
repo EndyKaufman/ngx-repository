@@ -29,6 +29,10 @@ export class UsersGridComponent implements OnInit, OnDestroy {
   @ViewChild('table')
   usersGrid: UsersGridComponent;
 
+  // todo: used only as sample, you must remove it on you project
+  @Input()
+  exampleCustomOptions = {};
+
   @Input()
   mockedItems?: User[];
 
@@ -78,20 +82,26 @@ export class UsersGridComponent implements OnInit, OnDestroy {
 
     if (this.mockedItems === undefined) {
       this.repository.useRest({
-        apiUrl: environment.apiUrl,
-        pluralName: 'users',
-        paginationMeta: {
-          perPage: 5
+        ...{
+          apiUrl: environment.apiUrl,
+          pluralName: 'users',
+          paginationMeta: {
+            perPage: 5
+          },
+          ...this.exampleCustomOptions
         }
       });
     }
 
     if (this.mockedItems !== undefined) {
       this.repository.useMock({
-        items: this.mockedItems,
-        paginationMeta: {
-          perPage: 5
-        }
+        ...{
+          items: this.mockedItems,
+          paginationMeta: {
+            perPage: 5
+          }
+        },
+        ...this.exampleCustomOptions
       });
     }
 

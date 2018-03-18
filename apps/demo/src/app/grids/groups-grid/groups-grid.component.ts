@@ -26,6 +26,10 @@ export class GroupsGridComponent implements OnInit, OnDestroy {
   @Input()
   mockedItems?: Group[];
 
+  // todo: used only as sample, you must remove it on you project
+  @Input()
+  exampleCustomOptions = {};
+
   searchField: FormControl;
 
   displayedColumns = ['select', 'id', 'name', 'title', 'action'];
@@ -66,20 +70,26 @@ export class GroupsGridComponent implements OnInit, OnDestroy {
 
     if (this.mockedItems === undefined) {
       this.repository.useRest({
-        apiUrl: environment.apiUrl,
-        pluralName: 'groups',
-        paginationMeta: {
-          perPage: 5
-        }
+        ...{
+          apiUrl: environment.apiUrl,
+          pluralName: 'groups',
+          paginationMeta: {
+            perPage: 5
+          }
+        },
+        ...this.exampleCustomOptions
       });
     }
 
     if (this.mockedItems !== undefined) {
       this.repository.useMock({
-        items: this.mockedItems,
-        paginationMeta: {
-          perPage: 5
-        }
+        ...{
+          items: this.mockedItems,
+          paginationMeta: {
+            perPage: 5
+          }
+        },
+        ...this.exampleCustomOptions
       });
     }
 

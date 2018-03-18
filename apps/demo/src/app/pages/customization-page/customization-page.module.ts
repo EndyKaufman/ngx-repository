@@ -6,10 +6,12 @@ import { DocsExampleModule } from '@ngx-docs/example';
 import { SharedModule } from '../../shared/shared.module';
 import { SourceTabsModule } from '../../others/source-tabs/source-tabs.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { GroupsGridModule } from '../../grids/groups-grid/groups-grid.module';
 
 @NgModule({
   imports: [
     SharedModule.forRoot(),
+    GroupsGridModule.forRoot(),
     RouterModule.forChild(CustomizationPageRoutes),
     DocsExampleModule.forRoot(),
     SourceTabsModule.forRoot(),
