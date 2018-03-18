@@ -1,3 +1,13 @@
+<a name="0.1.3"></a>
+## [0.1.3](https://github.com/EndyKaufman/ngx-repository/compare/0.1.2...0.1.3) (2018-03-18)
+
+
+### Bug Fixes
+
+* **rest.provider:** Add merge options with prev options ([0b252b4](https://github.com/EndyKaufman/ngx-repository/commit/0b252b4))
+
+
+
 <a name="0.1.2"></a>
 ## [0.1.2](https://github.com/EndyKaufman/ngx-repository/compare/0.1.1...0.1.2) (2018-03-18)
 

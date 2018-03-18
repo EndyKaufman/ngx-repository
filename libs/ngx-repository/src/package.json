@@ -1,6 +1,6 @@
 {
     "name": "ngx-repository",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "Custom repository service for Angular5+, for easy work with the REST backend, with switch on fly from REST backend to the MOCK backend with save and use all CRUD operations",
     "keywords": [
         "repository-service",
