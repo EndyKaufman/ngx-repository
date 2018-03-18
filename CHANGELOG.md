@@ -1,3 +1,14 @@
+<a name="0.1.2"></a>
+## [0.1.2](https://github.com/EndyKaufman/ngx-repository/compare/0.1.1...0.1.2) (2018-03-18)
+
+
+### Bug Fixes
+
+* Add import for ErrorObservable ([ea4c678](https://github.com/EndyKaufman/ngx-repository/commit/ea4c678))
+* **rest-provider-action-options:** Add paginationMeta attribute to requestLoadAllPaginationQuery ([d3f2e7a](https://github.com/EndyKaufman/ngx-repository/commit/d3f2e7a))
+
+
+
 <a name="0.1.1"></a>
 ## [0.1.1](https://github.com/EndyKaufman/ngx-repository/compare/0.1.0...0.1.1) (2018-03-14)
 
