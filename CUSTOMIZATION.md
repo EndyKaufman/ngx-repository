@@ -33,7 +33,7 @@ this.repository.useRest({
     }
     actionOptions:{
         requestLoadAllPaginationQuery: 
-            (currentUrl, action) =>
+            (currentUrl, paginationMeta, action) =>
                 (currentUrl.indexOf('?') === -1 ? '?' : '&') +
                     `cur_page=${paginationMeta.curPage}&per_page=${paginationMeta.perPage}`,
         requestLoadAllSearchQuery: 
@@ -100,7 +100,7 @@ this.repository.useRest({
         // Total count from response 
         responseLoadAllTotalCount:
             (data, action) =>
-                return data.meta.totalResults,
+                return data.body.meta.totalResults,
         // Entities from response 
         responseData: 
             (data, action) =>
