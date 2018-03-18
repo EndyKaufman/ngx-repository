@@ -7,6 +7,8 @@
 
 Custom repository service for Angular5+, for easy work with the REST backend, with switch on fly from REST backend to the MOCK backend with save and use all CRUD operations
 
+[![How it work](https://img.youtube.com/vi/lEFD8ey82ek/0.jpg)](https://www.youtube.com/watch?v=lEFD8ey82ek)
+
 ## Installation
 
 ```bash

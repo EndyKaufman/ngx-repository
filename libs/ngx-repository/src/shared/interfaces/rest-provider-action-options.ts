@@ -2,6 +2,7 @@ import { IProviderActionOptions } from './provider-action-options';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { ProviderActionEnum } from '../enums/provider-action.enum';
+import { IPaginationMeta } from './pagination-meta';
 
 export interface IRestProviderActionOptions extends IProviderActionOptions {
     request?: (url: string, body: any) => Observable<any>;
@@ -18,7 +19,7 @@ export interface IRestProviderActionOptions extends IProviderActionOptions {
         responseType?: 'json';
         withCredentials?: boolean;
     };
-    requestLoadAllPaginationQuery?: (currentUrl: string, action: ProviderActionEnum) => string;
+    requestLoadAllPaginationQuery?: (currentUrl: string, paginationMeta: IPaginationMeta, action: ProviderActionEnum) => string;
     requestLoadAllSearchQuery?: (currentUrl: string, filter: any, action: ProviderActionEnum) => string;
     requestCreateType?: (action: ProviderActionEnum) => 'create' | 'append';
     responseData?: (data: any, action: ProviderActionEnum) => any;
