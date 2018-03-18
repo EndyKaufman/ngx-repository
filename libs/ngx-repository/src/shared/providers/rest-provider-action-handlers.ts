@@ -97,7 +97,7 @@ export class RestProviderActionHandlers implements IRestProviderActionHandlers {
         optionsList.forEach(eachOptions => {
             if (eachOptions !== undefined && eachOptions.actionOptions !== undefined &&
                 eachOptions.actionOptions.requestLoadAllPaginationQuery !== undefined) {
-                loadAllPaginationQuery = eachOptions.actionOptions.requestLoadAllPaginationQuery(currentUrl, action);
+                loadAllPaginationQuery = eachOptions.actionOptions.requestLoadAllPaginationQuery(currentUrl, paginationMeta, action);
                 return loadAllPaginationQuery;
             }
         });
