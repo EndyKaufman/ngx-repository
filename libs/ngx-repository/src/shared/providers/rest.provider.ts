@@ -42,6 +42,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         this.setOptions(this.options as IRestProviderOptions<TModel>);
     }
     setOptions(options?: IRestProviderOptions<TModel>) {
+        options = { ...this.options, ...options };
         const autoload = options === undefined ? undefined : options.autoload;
         const pluralName = options === undefined ? undefined : options.pluralName;
         const name = options === undefined ? undefined : options.name;
