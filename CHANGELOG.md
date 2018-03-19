@@ -1,3 +1,13 @@
+<a name="0.1.4"></a>
+## [0.1.4](https://github.com/EndyKaufman/ngx-repository/compare/0.1.3...0.1.4) (2018-03-19)
+
+
+### Bug Fixes
+
+* Correct work with pagination over FakeHttpClient ([99a6112](https://github.com/EndyKaufman/ngx-repository/commit/99a6112))
+
+
+
 <a name="0.1.3"></a>
 ## [0.1.3](https://github.com/EndyKaufman/ngx-repository/compare/0.1.2...0.1.3) (2018-03-18)
 
