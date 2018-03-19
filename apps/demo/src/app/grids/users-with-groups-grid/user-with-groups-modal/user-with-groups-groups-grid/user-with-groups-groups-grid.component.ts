@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ChangeDetectorRef, Input, EventEmitter, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent, MatDialog } from '@angular/material';
-import { Repository, DynamicRepository } from 'ngx-repository';
+import { Repository, DynamicRepository, ProviderActionEnum } from 'ngx-repository';
 import { Subject } from 'rxjs/Subject';
 import { takeUntil, map } from 'rxjs/operators';
 import { GroupModalComponent } from '../../../groups-grid/group-modal/group-modal.component';
@@ -64,7 +64,10 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
           curPage: 1,
           perPage: 10000
         },
-        autoload: !!this.user.id
+        autoload: !!this.user.id,
+        globalEventResolver: (data: any, action: ProviderActionEnum) => {
+          return action !== ProviderActionEnum.Create && action !== ProviderActionEnum.Delete;
+        }
       });
     }
 
@@ -74,6 +77,9 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
         paginationMeta: {
           curPage: 1,
           perPage: 10000
+        },
+        globalEventResolver: (data: any, action: ProviderActionEnum) => {
+          return action !== ProviderActionEnum.Create && action !== ProviderActionEnum.Delete;
         }
       });
     }
