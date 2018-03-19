@@ -24,17 +24,20 @@ export class RestProviderActionHandlers implements IRestProviderActionHandlers {
             withCredentials?: boolean
         },
         optionsList: IRestProviderOptions<any>[],
-        action: ProviderActionEnum
+        action: ProviderActionEnum,
+        useDefault?: boolean
     ) {
         let request;
-        optionsList.forEach(eachOptions => {
-            if (eachOptions !== undefined &&
-                eachOptions.actionOptions !== undefined &&
-                eachOptions.actionOptions.request !== undefined) {
-                request = eachOptions.actionOptions.request;
-                return request;
-            }
-        });
+        if (useDefault !== true) {
+            optionsList.forEach(eachOptions => {
+                if (eachOptions !== undefined &&
+                    eachOptions.actionOptions !== undefined &&
+                    eachOptions.actionOptions.request !== undefined) {
+                    request = eachOptions.actionOptions.request;
+                    return request;
+                }
+            });
+        }
         if (request !== undefined) {
             return request(
                 requestUrl,
@@ -47,16 +50,19 @@ export class RestProviderActionHandlers implements IRestProviderActionHandlers {
     getResponseData(
         data: any,
         optionsList: IRestProviderOptions<any>[],
-        action: ProviderActionEnum
+        action: ProviderActionEnum,
+        useDefault?: boolean
     ) {
         let responseData;
-        optionsList.forEach(eachOptions => {
-            if (eachOptions !== undefined && eachOptions.actionOptions !== undefined &&
-                eachOptions.actionOptions.responseData !== undefined) {
-                responseData = eachOptions.actionOptions.responseData(data, action);
-                return responseData;
-            }
-        });
+        if (useDefault !== true) {
+            optionsList.forEach(eachOptions => {
+                if (eachOptions !== undefined && eachOptions.actionOptions !== undefined &&
+                    eachOptions.actionOptions.responseData !== undefined) {
+                    responseData = eachOptions.actionOptions.responseData(data, action);
+                    return responseData;
+                }
+            });
+        }
         if (responseData !== undefined) {
             return responseData;
         }
@@ -65,21 +71,24 @@ export class RestProviderActionHandlers implements IRestProviderActionHandlers {
     getResponseLoadAllTotalCount(
         data: any,
         optionsList: IRestProviderOptions<any>[],
-        action: ProviderActionEnum
+        action: ProviderActionEnum,
+        useDefault?: boolean
     ) {
         let responseLoadAllTotalCount;
-        optionsList.forEach(eachOptions => {
-            if (eachOptions !== undefined &&
-                eachOptions.actionOptions !== undefined && eachOptions.actionOptions.responseLoadAllTotalCount !== undefined) {
-                responseLoadAllTotalCount = eachOptions.actionOptions.responseLoadAllTotalCount(data, action);
-                return responseLoadAllTotalCount;
-            }
-        });
+        if (useDefault !== true) {
+            optionsList.forEach(eachOptions => {
+                if (eachOptions !== undefined &&
+                    eachOptions.actionOptions !== undefined && eachOptions.actionOptions.responseLoadAllTotalCount !== undefined) {
+                    responseLoadAllTotalCount = eachOptions.actionOptions.responseLoadAllTotalCount(data, action);
+                    return responseLoadAllTotalCount;
+                }
+            });
+        }
         if (responseLoadAllTotalCount !== undefined) {
             return responseLoadAllTotalCount;
         }
         responseLoadAllTotalCount = NaN;
-        const keys: string[] = data.headers.keys();
+        const keys: string[] = data.headers ? (data.headers.keys ? data.headers.keys() : data.headers) : [];
         keys.forEach(key => {
             if (key.toLowerCase() === 'x-total-count') {
                 responseLoadAllTotalCount = +data.headers.get(key);
@@ -91,16 +100,19 @@ export class RestProviderActionHandlers implements IRestProviderActionHandlers {
         currentUrl: string,
         paginationMeta: IPaginationMeta,
         optionsList: IRestProviderOptions<any>[],
-        action: ProviderActionEnum
+        action: ProviderActionEnum,
+        useDefault?: boolean
     ) {
         let loadAllPaginationQuery;
-        optionsList.forEach(eachOptions => {
-            if (eachOptions !== undefined && eachOptions.actionOptions !== undefined &&
-                eachOptions.actionOptions.requestLoadAllPaginationQuery !== undefined) {
-                loadAllPaginationQuery = eachOptions.actionOptions.requestLoadAllPaginationQuery(currentUrl, paginationMeta, action);
-                return loadAllPaginationQuery;
-            }
-        });
+        if (useDefault !== true) {
+            optionsList.forEach(eachOptions => {
+                if (eachOptions !== undefined && eachOptions.actionOptions !== undefined &&
+                    eachOptions.actionOptions.requestLoadAllPaginationQuery !== undefined) {
+                    loadAllPaginationQuery = eachOptions.actionOptions.requestLoadAllPaginationQuery(currentUrl, paginationMeta, action);
+                    return loadAllPaginationQuery;
+                }
+            });
+        }
         if (loadAllPaginationQuery !== undefined) {
             return loadAllPaginationQuery;
         }
@@ -111,16 +123,19 @@ export class RestProviderActionHandlers implements IRestProviderActionHandlers {
         currentUrl: string,
         filter: any,
         optionsList: IRestProviderOptions<any>[],
-        action: ProviderActionEnum
+        action: ProviderActionEnum,
+        useDefault?: boolean
     ) {
         let loadAllSearchQuery;
-        optionsList.forEach(eachOptions => {
-            if (eachOptions !== undefined && eachOptions.actionOptions !== undefined &&
-                eachOptions.actionOptions.requestLoadAllSearchQuery !== undefined) {
-                loadAllSearchQuery = eachOptions.actionOptions.requestLoadAllSearchQuery(currentUrl, filter, action);
-                return loadAllSearchQuery;
-            }
-        });
+        if (useDefault !== true) {
+            optionsList.forEach(eachOptions => {
+                if (eachOptions !== undefined && eachOptions.actionOptions !== undefined &&
+                    eachOptions.actionOptions.requestLoadAllSearchQuery !== undefined) {
+                    loadAllSearchQuery = eachOptions.actionOptions.requestLoadAllSearchQuery(currentUrl, filter, action);
+                    return loadAllSearchQuery;
+                }
+            });
+        }
         if (loadAllSearchQuery !== undefined) {
             return loadAllSearchQuery;
         }
@@ -132,7 +147,8 @@ export class RestProviderActionHandlers implements IRestProviderActionHandlers {
         key: number | string,
         data: any,
         optionsList: IRestProviderOptions<any>[],
-        action: ProviderActionEnum
+        action: ProviderActionEnum,
+        useDefault?: boolean
     ) {
         let requestUrl;
         optionsList.forEach(eachOptions => {
@@ -147,14 +163,16 @@ export class RestProviderActionHandlers implements IRestProviderActionHandlers {
         }
         let apiUrl = '';
         let pluralName = '';
-        optionsList.forEach(eachOptions => {
-            if (eachOptions !== undefined && eachOptions.apiUrl !== undefined) {
-                apiUrl = eachOptions.apiUrl;
-            }
-            if (eachOptions !== undefined && eachOptions.pluralName !== undefined) {
-                pluralName = eachOptions.pluralName;
-            }
-        });
+        if (useDefault !== true) {
+            optionsList.forEach(eachOptions => {
+                if (eachOptions !== undefined && eachOptions.apiUrl !== undefined) {
+                    apiUrl = eachOptions.apiUrl;
+                }
+                if (eachOptions !== undefined && eachOptions.pluralName !== undefined) {
+                    pluralName = eachOptions.pluralName;
+                }
+            });
+        }
         if (action === ProviderActionEnum.Action) {
             return apiUrl + '/' + pluralName + '/' + key;
         }
@@ -181,7 +199,8 @@ export class RestProviderActionHandlers implements IRestProviderActionHandlers {
         key: number | string,
         data: any,
         optionsList: IRestProviderOptions<any>[],
-        action: ProviderActionEnum
+        action: ProviderActionEnum,
+        useDefault?: boolean
     ) {
         const requestOptions: {
             headers?: HttpHeaders | {
@@ -197,44 +216,49 @@ export class RestProviderActionHandlers implements IRestProviderActionHandlers {
         } = {
                 observe: 'response'
             };
-        optionsList.reverse().forEach(eachOptions => {
-            if (eachOptions !== undefined && eachOptions.actionOptions !== undefined &&
-                eachOptions.actionOptions.requestOptions !== undefined) {
-                const actionOptionsRequestOptions = eachOptions.actionOptions.requestOptions(key, data, action);
-                if (actionOptionsRequestOptions.headers !== undefined) {
-                    requestOptions.headers = actionOptionsRequestOptions.headers;
+        if (useDefault !== true) {
+            optionsList.reverse().forEach(eachOptions => {
+                if (eachOptions !== undefined && eachOptions.actionOptions !== undefined &&
+                    eachOptions.actionOptions.requestOptions !== undefined) {
+                    const actionOptionsRequestOptions = eachOptions.actionOptions.requestOptions(key, data, action);
+                    if (actionOptionsRequestOptions.headers !== undefined) {
+                        requestOptions.headers = actionOptionsRequestOptions.headers;
+                    }
+                    if (actionOptionsRequestOptions.observe !== undefined) {
+                        requestOptions.observe = actionOptionsRequestOptions.observe;
+                    }
+                    if (actionOptionsRequestOptions.params !== undefined) {
+                        requestOptions.params = actionOptionsRequestOptions.params;
+                    }
+                    if (actionOptionsRequestOptions.reportProgress !== undefined) {
+                        requestOptions.reportProgress = actionOptionsRequestOptions.reportProgress;
+                    }
+                    if (actionOptionsRequestOptions.responseType !== undefined) {
+                        requestOptions.responseType = actionOptionsRequestOptions.responseType;
+                    }
+                    if (actionOptionsRequestOptions.withCredentials !== undefined) {
+                        requestOptions.withCredentials = actionOptionsRequestOptions.withCredentials;
+                    }
                 }
-                if (actionOptionsRequestOptions.observe !== undefined) {
-                    requestOptions.observe = actionOptionsRequestOptions.observe;
-                }
-                if (actionOptionsRequestOptions.params !== undefined) {
-                    requestOptions.params = actionOptionsRequestOptions.params;
-                }
-                if (actionOptionsRequestOptions.reportProgress !== undefined) {
-                    requestOptions.reportProgress = actionOptionsRequestOptions.reportProgress;
-                }
-                if (actionOptionsRequestOptions.responseType !== undefined) {
-                    requestOptions.responseType = actionOptionsRequestOptions.responseType;
-                }
-                if (actionOptionsRequestOptions.withCredentials !== undefined) {
-                    requestOptions.withCredentials = actionOptionsRequestOptions.withCredentials;
-                }
-            }
-        });
+            });
+        }
         return requestOptions as any;
     }
     getRequestCreateType(
         optionsList: IRestProviderOptions<any>[],
-        action: ProviderActionEnum
+        action: ProviderActionEnum,
+        useDefault?: boolean
     ): 'create' | 'append' {
         let requestCreateType;
-        optionsList.forEach(eachOptions => {
-            if (eachOptions !== undefined && eachOptions.actionOptions !== undefined &&
-                eachOptions.actionOptions.requestCreateType !== undefined) {
-                requestCreateType = eachOptions.actionOptions.requestCreateType(action);
-                return requestCreateType;
-            }
-        });
+        if (useDefault !== true) {
+            optionsList.forEach(eachOptions => {
+                if (eachOptions !== undefined && eachOptions.actionOptions !== undefined &&
+                    eachOptions.actionOptions.requestCreateType !== undefined) {
+                    requestCreateType = eachOptions.actionOptions.requestCreateType(action);
+                    return requestCreateType;
+                }
+            });
+        }
         if (requestCreateType !== undefined) {
             return requestCreateType;
         }

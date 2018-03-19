@@ -22,44 +22,52 @@ export interface IRestProviderActionHandlers {
             withCredentials?: boolean
         },
         optionsList: IRestProviderOptions<any>[],
-        action: ProviderActionEnum
+        action: ProviderActionEnum,
+        useDefault?: boolean
     ): Observable<any>;
     getResponseData(
         data: any,
         optionsList: IRestProviderOptions<any>[],
-        action: ProviderActionEnum
+        action: ProviderActionEnum,
+        useDefault?: boolean
     ): any;
     getRequestUrl(
         key: number | string,
         data: any,
         optionsList: IRestProviderOptions<any>[],
-        action: ProviderActionEnum
+        action: ProviderActionEnum,
+        useDefault?: boolean
     ): string;
     getRequestOptions(
         key: number | string,
         data: any,
         optionsList: IRestProviderOptions<any>[],
-        action: ProviderActionEnum
+        action: ProviderActionEnum,
+        useDefault?: boolean
     );
     getResponseLoadAllTotalCount(
         data: any,
         optionsList: IRestProviderOptions<any>[],
-        action: ProviderActionEnum
+        action: ProviderActionEnum,
+        useDefault?: boolean
     ): number;
     getRequestLoadAllPaginationQuery(
         currentUrl: string,
         paginationMeta: IPaginationMeta,
         optionsList: IRestProviderOptions<any>[],
-        action: ProviderActionEnum
+        action: ProviderActionEnum,
+        useDefault?: boolean
     ): string;
     getRequestLoadAllSearchQuery(
         currentUrl: string,
         filter: any,
         optionsList: IRestProviderOptions<any>[],
-        action: ProviderActionEnum
+        action: ProviderActionEnum,
+        useDefault?: boolean
     ): string;
     getRequestCreateType(
         optionsList: IRestProviderOptions<any>[],
-        action: ProviderActionEnum
+        action: ProviderActionEnum,
+        useDefault?: boolean
     ): 'create' | 'append';
 }
