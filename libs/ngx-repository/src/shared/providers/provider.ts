@@ -216,8 +216,7 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
             ) ? paginationMeta.curPage : options.paginationMeta.curPage;
         paginationMeta.perPage = paginationMeta.perPage === undefined ? 10 : paginationMeta.perPage;
         paginationMeta.curPage = paginationMeta.curPage === undefined ? 1 : paginationMeta.curPage;
-        this.calcPaginationMeta(paginationMeta);
-        return this.paginationMeta$.getValue();
+        return this.calcPaginationMeta(paginationMeta);
     }
     calcPaginationMeta(newPaginationMeta: IPaginationMeta): IPaginationMeta {
         const paginationMeta = this.paginationMeta$.getValue();
@@ -227,13 +226,14 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
         if (newPaginationMeta.totalResults !== undefined) {
             paginationMeta.totalResults = newPaginationMeta.totalResults;
             paginationMeta.totalPages = Math.ceil(newPaginationMeta.totalResults / paginationMeta.perPage);
+        } else {
+            if (newPaginationMeta.totalPages !== undefined) {
+                paginationMeta.totalResults = undefined;
+                paginationMeta.totalPages = newPaginationMeta.totalPages;
+            }
         }
         if (newPaginationMeta.curPage !== undefined) {
             paginationMeta.curPage = newPaginationMeta.curPage;
-        }
-        if (newPaginationMeta.totalPages !== undefined) {
-            paginationMeta.totalResults = undefined;
-            paginationMeta.totalPages = newPaginationMeta.totalPages;
         }
         if (paginationMeta.totalPages < paginationMeta.curPage) {
             paginationMeta.curPage = paginationMeta.totalPages;

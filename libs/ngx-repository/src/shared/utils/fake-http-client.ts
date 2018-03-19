@@ -93,7 +93,7 @@ export class FakeHttpClient implements IHttpClient {
             const urlData = this.parseUrl(url);
             const data: any = {};
             let newBody: any;
-            if (urlData.key !== undefined) {
+            if (urlData.key) {
                 const foundedIndex = this.mockedItems.findIndex((item: any) =>
                     +item[this.idField] === +urlData.key || item[this.idField] as string === urlData.key as string
                 );

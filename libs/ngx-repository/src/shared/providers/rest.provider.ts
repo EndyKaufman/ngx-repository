@@ -83,6 +83,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         data?: any,
         options?: TProviderActionOptions
     ): ErrorObservable | Observable<TModel> {
+        const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
         this.actionIsActive$.next(true);
         const errors = validateSync(data,
             options && options.classValidatorOptions ?
@@ -95,19 +96,22 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         const requestUrl = this.providerActionHandlers.getRequestUrl(
             key, data,
             optionsList,
-            ProviderActionEnum.Action
+            ProviderActionEnum.Action,
+            useDefault
         );
         const requestOptions = this.providerActionHandlers.getRequestOptions(
             key, data,
             optionsList,
-            ProviderActionEnum.Action
+            ProviderActionEnum.Action,
+            useDefault
         );
         let request = this.providerActionHandlers.getRequest(
             requestUrl,
             data,
             requestOptions,
             optionsList,
-            ProviderActionEnum.Action
+            ProviderActionEnum.Action,
+            useDefault
         );
         if (!request) {
             request = this.httpClient.post<any>(
@@ -121,7 +125,8 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 this.providerActionHandlers.getResponseData(
                     responseData,
                     optionsList,
-                    ProviderActionEnum.Action
+                    ProviderActionEnum.Action,
+                    useDefault
                 )
             ),
             map(actionData => {
@@ -141,6 +146,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         model: TModel,
         options?: TProviderActionOptions
     ): ErrorObservable | Observable<TModel> {
+        const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
         model = this.plainToClass(
             model,
             ProviderActionEnum.Create,
@@ -159,7 +165,8 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
         const isCreate = this.providerActionHandlers.getRequestCreateType(
             optionsList,
-            ProviderActionEnum.Create
+            ProviderActionEnum.Create,
+            useDefault
         ) === 'create';
         let object;
 
@@ -184,19 +191,22 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
             undefined,
             object,
             optionsList,
-            isCreate ? ProviderActionEnum.Create : ProviderActionEnum.Append
+            isCreate ? ProviderActionEnum.Create : ProviderActionEnum.Append,
+            useDefault
         );
         const requestOptions = this.providerActionHandlers.getRequestOptions(
             undefined, object,
             optionsList,
-            isCreate ? ProviderActionEnum.Create : ProviderActionEnum.Append
+            isCreate ? ProviderActionEnum.Create : ProviderActionEnum.Append,
+            useDefault
         );
         let request = this.providerActionHandlers.getRequest(
             requestUrl,
             object,
             requestOptions,
             optionsList,
-            isCreate ? ProviderActionEnum.Create : ProviderActionEnum.Append
+            isCreate ? ProviderActionEnum.Create : ProviderActionEnum.Append,
+            useDefault
         );
         if (!request) {
             request = (options === undefined || options.useFakeHttpClient !== true ? this.httpClient : this.fakeHttpClient).
@@ -211,7 +221,8 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 this.providerActionHandlers.getResponseData(
                     responseData,
                     optionsList,
-                    isCreate ? ProviderActionEnum.Create : ProviderActionEnum.Append
+                    isCreate ? ProviderActionEnum.Create : ProviderActionEnum.Append,
+                    useDefault
                 )
             ),
             map(createdItem => {
@@ -252,6 +263,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         isUpdate: boolean,
         options?: TProviderActionOptions
     ): ErrorObservable | Observable<TModel> {
+        const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
         model = this.plainToClass(
             model,
             ProviderActionEnum.Update,
@@ -283,19 +295,22 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 key,
                 object,
                 optionsList,
-                ProviderActionEnum.Update
+                ProviderActionEnum.Update,
+                useDefault
             );
             const requestOptions = this.providerActionHandlers.getRequestOptions(
                 key, object,
                 optionsList,
-                ProviderActionEnum.Update
+                ProviderActionEnum.Update,
+                useDefault
             );
             request = this.providerActionHandlers.getRequest(
                 requestUrl,
                 object,
                 requestOptions,
                 optionsList,
-                ProviderActionEnum.Update
+                ProviderActionEnum.Update,
+                useDefault
             );
             if (!request) {
                 request = (options === undefined || options.useFakeHttpClient !== true ? this.httpClient : this.fakeHttpClient).
@@ -317,19 +332,22 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 key,
                 object,
                 optionsList,
-                ProviderActionEnum.Patch
+                ProviderActionEnum.Patch,
+                useDefault
             );
             const requestOptions = this.providerActionHandlers.getRequestOptions(
                 key, object,
                 optionsList,
-                ProviderActionEnum.Patch
+                ProviderActionEnum.Patch,
+                useDefault
             );
             request = this.providerActionHandlers.getRequest(
                 requestUrl,
                 object,
                 requestOptions,
                 optionsList,
-                ProviderActionEnum.Patch
+                ProviderActionEnum.Patch,
+                useDefault
             );
             if (!request) {
                 request = this.httpClient.patch<any>(
@@ -344,7 +362,8 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 this.providerActionHandlers.getResponseData(
                     responseData,
                     optionsList,
-                    isUpdate ? ProviderActionEnum.Update : ProviderActionEnum.Patch
+                    isUpdate ? ProviderActionEnum.Update : ProviderActionEnum.Patch,
+                    useDefault
                 )
             ),
             map(updatedItem => {
@@ -383,25 +402,29 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         key: number | string,
         options?: TProviderActionOptions
     ) {
+        const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
         const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
         this.loadIsActive$.next(true);
         const requestUrl = this.providerActionHandlers.getRequestUrl(
             key,
             undefined,
             optionsList,
-            ProviderActionEnum.Load
+            ProviderActionEnum.Load,
+            useDefault
         );
         const requestOptions = this.providerActionHandlers.getRequestOptions(
             key, undefined,
             optionsList,
-            ProviderActionEnum.Load
+            ProviderActionEnum.Load,
+            useDefault
         );
         let request = this.providerActionHandlers.getRequest(
             requestUrl,
             undefined,
             requestOptions,
             optionsList,
-            ProviderActionEnum.Load
+            ProviderActionEnum.Load,
+            useDefault
         );
         if (!request) {
             request = (options === undefined || options.useFakeHttpClient !== true ? this.httpClient : this.fakeHttpClient).
@@ -415,7 +438,8 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 this.providerActionHandlers.getResponseData(
                     responseData,
                     optionsList,
-                    ProviderActionEnum.Load
+                    ProviderActionEnum.Load,
+                    useDefault
                 )
             ),
             map(loadedItem => {
@@ -442,25 +466,29 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         key: number | string,
         options?: TProviderActionOptions
     ) {
+        const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
         const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
         this.deleteIsActive$.next(true);
         const requestUrl = this.providerActionHandlers.getRequestUrl(
             key,
             undefined,
             optionsList,
-            ProviderActionEnum.Delete
+            ProviderActionEnum.Delete,
+            useDefault
         );
         const requestOptions = this.providerActionHandlers.getRequestOptions(
             key, undefined,
             optionsList,
-            ProviderActionEnum.Delete
+            ProviderActionEnum.Delete,
+            useDefault
         );
         let request = this.providerActionHandlers.getRequest(
             requestUrl,
             undefined,
             requestOptions,
             optionsList,
-            ProviderActionEnum.Delete
+            ProviderActionEnum.Delete,
+            useDefault
         );
         if (!request) {
             request = (options === undefined || options.useFakeHttpClient !== true ? this.httpClient : this.fakeHttpClient).
@@ -474,7 +502,8 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 this.providerActionHandlers.getResponseData(
                     responseData,
                     optionsList,
-                    ProviderActionEnum.Delete
+                    ProviderActionEnum.Delete,
+                    useDefault
                 )
             ),
             map(deleted => {
@@ -487,9 +516,6 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                         totalResults: paginationMeta.totalResults === 0 ? 0 : paginationMeta.totalResults - 1
                     });
                     this.reconfigItems();
-                    if (this.items$.getValue().size === 0 || paginationMeta.totalPages !== newPaginationMeta.totalPages) {
-                        this.reloadAll();
-                    }
                 }
                 if (options === undefined || options.globalEventIsActive !== false) {
                     this.delete$.next(deletedModel);
@@ -506,6 +532,8 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         filter?: any,
         options?: TProviderActionOptions
     ) {
+        const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
+
         this.filter = filter;
         this.loadAllOptions = options;
         const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
@@ -514,32 +542,37 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
             undefined,
             filter,
             optionsList,
-            ProviderActionEnum.LoadAll
+            ProviderActionEnum.LoadAll,
+            useDefault
         );
         requestUrl = requestUrl + this.providerActionHandlers.getRequestLoadAllSearchQuery(
             requestUrl,
             filter,
             optionsList,
-            ProviderActionEnum.LoadAll
+            ProviderActionEnum.LoadAll,
+            useDefault
         );
         requestUrl = requestUrl + this.providerActionHandlers.getRequestLoadAllPaginationQuery(
             requestUrl,
             this.paginationMeta$.getValue(),
             optionsList,
-            ProviderActionEnum.LoadAll
+            ProviderActionEnum.LoadAll,
+            useDefault
         );
         const requestOptions = this.providerActionHandlers.getRequestOptions(
             undefined,
             filter,
             optionsList,
-            ProviderActionEnum.LoadAll
+            ProviderActionEnum.LoadAll,
+            useDefault
         );
         let request = this.providerActionHandlers.getRequest(
             requestUrl,
             undefined,
             requestOptions,
             optionsList,
-            ProviderActionEnum.LoadAll
+            ProviderActionEnum.LoadAll,
+            useDefault
         );
         if (!request) {
             request = (options === undefined || options.useFakeHttpClient !== true ? this.httpClient : this.fakeHttpClient).
@@ -553,7 +586,8 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 const responseLoadAllTotalCount = this.providerActionHandlers.getResponseLoadAllTotalCount(
                     responseData,
                     optionsList,
-                    ProviderActionEnum.LoadAll
+                    ProviderActionEnum.LoadAll,
+                    useDefault
                 );
                 this.calcPaginationMeta({
                     totalResults: isNaN(responseLoadAllTotalCount) ? 10000 : responseLoadAllTotalCount
@@ -561,7 +595,8 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 return this.providerActionHandlers.getResponseData(
                     responseData,
                     optionsList,
-                    ProviderActionEnum.LoadAll
+                    ProviderActionEnum.LoadAll,
+                    useDefault
                 );
             }),
             map(loadedItems => {
