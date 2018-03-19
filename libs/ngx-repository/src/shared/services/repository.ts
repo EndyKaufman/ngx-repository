@@ -12,8 +12,9 @@ import { Subject } from 'rxjs/Subject';
 import { takeUntil, first, map } from 'rxjs/operators';
 import { IFactoryModel } from '../interfaces/factory-model';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { IRestProviderActionOptions } from 'ngx-repository';
 import { Observable } from 'rxjs/Observable';
+import { ProviderActionEnum } from '../enums/provider-action.enum';
+import { IRestProviderActionOptions } from '../interfaces/rest-provider-action-options';
 
 export class Repository<TModel extends IModel = any> implements OnDestroy {
 
@@ -158,10 +159,18 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
     subscribeToProvider(provider: IProvider<TModel>) {
         provider.create$.pipe(takeUntil(this.destroyed$)).subscribe(item => {
             this.providers.forEach(eachProvider => {
+                const options: IRestProviderOptions<TModel> = eachProvider ? eachProvider.getOptions() : undefined;
                 if (
                     eachProvider !== undefined &&
                     eachProvider.name !== provider.name &&
-                    eachProvider.instanceofFactoryModel(item)
+                    eachProvider.instanceofFactoryModel(item) &&
+                    (
+                        options === undefined ||
+                        (
+                            options.globalEventResolver === undefined ||
+                            options.globalEventResolver(item, ProviderActionEnum.Create)
+                        )
+                    )
                 ) {
                     eachProvider.create(item,
                         { useFakeHttpClient: true, globalEventIsActive: false }
@@ -171,10 +180,18 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
         });
         provider.append$.pipe(takeUntil(this.destroyed$)).subscribe(item => {
             this.providers.forEach(eachProvider => {
+                const options: IRestProviderOptions<TModel> = eachProvider ? eachProvider.getOptions() : undefined;
                 if (
                     eachProvider !== undefined &&
                     eachProvider.name !== provider.name &&
-                    eachProvider.instanceofFactoryModel(item)
+                    eachProvider.instanceofFactoryModel(item) &&
+                    (
+                        options === undefined ||
+                        (
+                            options.globalEventResolver === undefined ||
+                            options.globalEventResolver(item, ProviderActionEnum.Create)
+                        )
+                    )
                 ) {
                     eachProvider.append(item,
                         { useFakeHttpClient: true, globalEventIsActive: false }
@@ -184,11 +201,19 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
         });
         provider.update$.pipe(takeUntil(this.destroyed$)).subscribe(item => {
             this.providers.forEach(eachProvider => {
+                const options: IRestProviderOptions<TModel> = eachProvider ? eachProvider.getOptions() : undefined;
                 if (
                     eachProvider !== undefined &&
                     eachProvider.name !== provider.name
                 ) {
-                    if (eachProvider.instanceofFactoryModel(item)) {
+                    if (eachProvider.instanceofFactoryModel(item) &&
+                        (
+                            options === undefined ||
+                            (
+                                options.globalEventResolver === undefined ||
+                                options.globalEventResolver(item, ProviderActionEnum.Update)
+                            )
+                        )) {
                         eachProvider.update(item.id, item,
                             { useFakeHttpClient: true, globalEventIsActive: false }
                         ).pipe(first()).subscribe();
@@ -201,11 +226,19 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
         });
         provider.patch$.pipe(takeUntil(this.destroyed$)).subscribe(item => {
             this.providers.forEach(eachProvider => {
+                const options: IRestProviderOptions<TModel> = eachProvider ? eachProvider.getOptions() : undefined;
                 if (
                     eachProvider !== undefined &&
                     eachProvider.name !== provider.name
                 ) {
-                    if (eachProvider.instanceofFactoryModel(item)) {
+                    if (eachProvider.instanceofFactoryModel(item) &&
+                        (
+                            options === undefined ||
+                            (
+                                options.globalEventResolver === undefined ||
+                                options.globalEventResolver(item, ProviderActionEnum.Patch)
+                            )
+                        )) {
                         eachProvider.patch(item.id, item,
                             { useFakeHttpClient: true, globalEventIsActive: false }
                         ).pipe(first()).subscribe();
@@ -215,11 +248,19 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
         });
         provider.delete$.pipe(takeUntil(this.destroyed$)).subscribe(item => {
             this.providers.forEach(eachProvider => {
+                const options: IRestProviderOptions<TModel> = eachProvider ? eachProvider.getOptions() : undefined;
                 if (
                     eachProvider !== undefined &&
                     eachProvider.name !== provider.name
                 ) {
-                    if (eachProvider.instanceofFactoryModel(item)) {
+                    if (eachProvider.instanceofFactoryModel(item) &&
+                        (
+                            options === undefined ||
+                            (
+                                options.globalEventResolver === undefined ||
+                                options.globalEventResolver(item, ProviderActionEnum.Delete)
+                            )
+                        )) {
                         eachProvider.delete(item.id,
                             { useFakeHttpClient: true, globalEventIsActive: false }
                         ).pipe(first()).subscribe();
@@ -232,10 +273,18 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
         });
         provider.load$.pipe(takeUntil(this.destroyed$)).subscribe(item => {
             this.providers.forEach(eachProvider => {
+                const options: IRestProviderOptions<TModel> = eachProvider ? eachProvider.getOptions() : undefined;
                 if (
                     eachProvider !== undefined &&
                     eachProvider.name !== provider.name &&
-                    eachProvider.instanceofFactoryModel(item)
+                    eachProvider.instanceofFactoryModel(item) &&
+                    (
+                        options === undefined ||
+                        (
+                            options.globalEventResolver === undefined ||
+                            options.globalEventResolver(item, ProviderActionEnum.Update)
+                        )
+                    )
                 ) {
                     eachProvider.update(item.id, item,
                         { useFakeHttpClient: true, globalEventIsActive: false }
@@ -246,10 +295,18 @@ export class Repository<TModel extends IModel = any> implements OnDestroy {
         provider.loadAll$.pipe(takeUntil(this.destroyed$)).subscribe(items => {
             items.forEach(item =>
                 this.providers.forEach(eachProvider => {
+                    const options: IRestProviderOptions<TModel> = eachProvider ? eachProvider.getOptions() : undefined;
                     if (
                         eachProvider !== undefined &&
                         eachProvider.name !== provider.name &&
-                        eachProvider.instanceofFactoryModel(item)
+                        eachProvider.instanceofFactoryModel(item) &&
+                        (
+                            options === undefined ||
+                            (
+                                options.globalEventResolver === undefined ||
+                                options.globalEventResolver(item, ProviderActionEnum.Update)
+                            )
+                        )
                     ) {
                         eachProvider.update(item.id, item,
                             { useFakeHttpClient: true, globalEventIsActive: false }

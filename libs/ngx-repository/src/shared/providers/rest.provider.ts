@@ -41,6 +41,9 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         this.providerActionHandlers = this.injector.get(RestProviderActionHandlers);
         this.setOptions(this.options as IRestProviderOptions<TModel>);
     }
+    getOptions(): IRestProviderOptions<TModel> {
+        return this.options;
+    }
     setOptions(options?: IRestProviderOptions<TModel>) {
         options = { ...this.options, ...options };
         const autoload = options === undefined ? undefined : options.autoload;
@@ -130,12 +133,21 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 )
             ),
             map(actionData => {
-                if (options === undefined || options.globalEventIsActive !== false) {
-                    this.action$.next({
-                        actionKey: key,
-                        requestData: data,
-                        responseData: actionData
-                    });
+                if (options === undefined ||
+                    options.globalEventIsActive !== false ||
+                    options.globalEventIsActiveResolver !== undefined) {
+                    if (options === undefined || options.globalEventIsActiveResolver === undefined ||
+                        options.globalEventIsActiveResolver({
+                            actionKey: key,
+                            requestData: data,
+                            responseData: actionData
+                        }, ProviderActionEnum.Action)) {
+                        this.action$.next({
+                            actionKey: key,
+                            requestData: data,
+                            responseData: actionData
+                        });
+                    }
                 }
                 this.actionIsActive$.next(false);
                 return actionData;
@@ -249,8 +261,15 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 const paginationMeta = this.paginationMeta$.getValue();
                 this.calcPaginationMeta({ totalResults: paginationMeta.totalResults + 1 });
                 this.reconfigItems();
-                if (options === undefined || options.globalEventIsActive !== false) {
-                    (isCreate ? this.create$ : this.append$).next(createdModel);
+                if (options === undefined ||
+                    options.globalEventIsActive !== false ||
+                    options.globalEventIsActiveResolver !== undefined) {
+                    if (options === undefined || options.globalEventIsActiveResolver === undefined ||
+                        options.globalEventIsActiveResolver(createdModel,
+                            isCreate ? ProviderActionEnum.Create : ProviderActionEnum.Append
+                        )) {
+                        (isCreate ? this.create$ : this.append$).next(createdModel);
+                    }
                 }
                 this.createIsActive$.next(false);
                 return createdModel;
@@ -376,8 +395,15 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                     this.items$.next(this.items$.getValue().set(index, updatedModel));
                     this.reconfigItems();
                 }
-                if (options === undefined || options.globalEventIsActive !== false) {
-                    (isUpdate ? this.update$ : this.patch$).next(updatedModel);
+                if (options === undefined ||
+                    options.globalEventIsActive !== false ||
+                    options.globalEventIsActiveResolver !== undefined) {
+                    if (options === undefined || options.globalEventIsActiveResolver === undefined ||
+                        options.globalEventIsActiveResolver(updatedModel,
+                            isUpdate ? ProviderActionEnum.Update : ProviderActionEnum.Patch
+                        )) {
+                        (isUpdate ? this.update$ : this.patch$).next(updatedModel);
+                    }
                 }
                 this.updateIsActive$.next(false);
                 return updatedModel;
@@ -454,8 +480,13 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 if (index !== -1) {
                     this.items$.next(this.items$.getValue().set(index, loadedModel));
                 }
-                if (options === undefined || options.globalEventIsActive !== false) {
-                    this.load$.next(loadedModel);
+                if (options === undefined ||
+                    options.globalEventIsActive !== false ||
+                    options.globalEventIsActiveResolver !== undefined) {
+                    if (options === undefined || options.globalEventIsActiveResolver === undefined ||
+                        options.globalEventIsActiveResolver(loadedModel, ProviderActionEnum.Load)) {
+                        this.load$.next(loadedModel);
+                    }
                 }
                 this.loadIsActive$.next(false);
                 return loadedModel;
@@ -517,8 +548,13 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                     });
                     this.reconfigItems();
                 }
-                if (options === undefined || options.globalEventIsActive !== false) {
-                    this.delete$.next(deletedModel);
+                if (options === undefined ||
+                    options.globalEventIsActive !== false ||
+                    options.globalEventIsActiveResolver !== undefined) {
+                    if (options === undefined || options.globalEventIsActiveResolver === undefined ||
+                        options.globalEventIsActiveResolver(deletedModel, ProviderActionEnum.Delete)) {
+                        this.delete$.next(deletedModel);
+                    }
                 }
                 this.deleteIsActive$.next(false);
                 return deletedModel;
@@ -611,8 +647,13 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 );
                 this.items$.next(List(loadedModels));
                 this.reconfigItems();
-                if (options === undefined || options.globalEventIsActive !== false) {
-                    this.loadAll$.next(loadedModels);
+                if (options === undefined ||
+                    options.globalEventIsActive !== false ||
+                    options.globalEventIsActiveResolver !== undefined) {
+                    if (options === undefined || options.globalEventIsActiveResolver === undefined ||
+                        options.globalEventIsActiveResolver(loadedModels, ProviderActionEnum.LoadAll)) {
+                        this.loadAll$.next(loadedModels);
+                    }
                 }
                 this.loadAllIsActive$.next(false);
                 return loadedModels;

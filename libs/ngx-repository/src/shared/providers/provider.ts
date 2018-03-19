@@ -247,5 +247,8 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
     reloadAll() { }
     checkFilterAndOptions() { }
     setOptions(options: IProviderOptions<TModel>) { }
+    getOptions(): IProviderOptions<TModel> {
+        return {};
+    }
     reconfigItems() { }
 }
