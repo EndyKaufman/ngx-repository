@@ -1,3 +1,13 @@
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/EndyKaufman/ngx-repository/compare/0.1.4...0.2.0) (2018-03-19)
+
+
+### Features
+
+* **options:** Add globalEventResolver and globalEventIsActiveResolver for manage start and resolve global events ([9c2515a](https://github.com/EndyKaufman/ngx-repository/commit/9c2515a))
+
+
+
 <a name="0.1.4"></a>
 ## [0.1.4](https://github.com/EndyKaufman/ngx-repository/compare/0.1.3...0.1.4) (2018-03-19)
 
