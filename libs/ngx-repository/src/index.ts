@@ -52,5 +52,7 @@ import { Repository } from './shared/services/repository';
 export { Repository } from './shared/services/repository';
 import { FakeHttpClient } from './shared/utils/fake-http-client';
 export { FakeHttpClient } from './shared/utils/fake-http-client';
+import { IFakeHttpClientOptions } from './shared/utils/fake-http-client';
+export { IFakeHttpClientOptions } from './shared/utils/fake-http-client';
 export const NgxRepositoryModules: any[] = [NgxRepositoryModule.forRoot()];
 export const NgxRepositoryShareds: any[] = [ProviderActionEnum, ProviderError, ValidatorError, Model, PaginationMeta, MockProviderActionHandlers, MockProvider, Provider, RestProviderActionHandlers, RestProvider, DynamicRepository, Repository, FakeHttpClient];
