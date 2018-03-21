@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { IPaginationMeta } from './pagination-meta';
 import { IRestProviderOptions } from './rest-provider-options';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
+import { PaginationMeta } from '../models/pagination-meta';
 
 export interface IRestProviderActionHandlers {
 
@@ -31,6 +32,13 @@ export interface IRestProviderActionHandlers {
         action: ProviderActionEnum,
         useDefault?: boolean
     ): any;
+    getRequestQuery(
+        currentUrl: string,
+        filter: any,
+        optionsList: IRestProviderOptions<any>[],
+        action: ProviderActionEnum,
+        useDefault?: boolean
+    ): string;
     getRequestUrl(
         key: number | string,
         data: any,
@@ -45,26 +53,12 @@ export interface IRestProviderActionHandlers {
         action: ProviderActionEnum,
         useDefault?: boolean
     );
-    getResponseLoadAllTotalCount(
+    getResponsePaginationMeta(
         data: any,
         optionsList: IRestProviderOptions<any>[],
         action: ProviderActionEnum,
         useDefault?: boolean
-    ): number;
-    getRequestLoadAllPaginationQuery(
-        currentUrl: string,
-        paginationMeta: IPaginationMeta,
-        optionsList: IRestProviderOptions<any>[],
-        action: ProviderActionEnum,
-        useDefault?: boolean
-    ): string;
-    getRequestLoadAllSearchQuery(
-        currentUrl: string,
-        filter: any,
-        optionsList: IRestProviderOptions<any>[],
-        action: ProviderActionEnum,
-        useDefault?: boolean
-    ): string;
+    ): PaginationMeta;
     getRequestCreateType(
         optionsList: IRestProviderOptions<any>[],
         action: ProviderActionEnum,

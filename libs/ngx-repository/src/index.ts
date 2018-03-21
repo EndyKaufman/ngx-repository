@@ -24,6 +24,8 @@ import { IProviderOptions } from './shared/interfaces/provider-options';
 export { IProviderOptions } from './shared/interfaces/provider-options';
 import { IProvider } from './shared/interfaces/provider';
 export { IProvider } from './shared/interfaces/provider';
+import { IRestOptions } from './shared/interfaces/rest-options';
+export { IRestOptions } from './shared/interfaces/rest-options';
 import { IRestProviderActionHandlers } from './shared/interfaces/rest-provider-action-handlers';
 export { IRestProviderActionHandlers } from './shared/interfaces/rest-provider-action-handlers';
 import { IRestProviderActionOptions } from './shared/interfaces/rest-provider-action-options';

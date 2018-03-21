@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { ProviderActionEnum, PaginationMeta } from 'ngx-repository';
 import { plainToClass } from 'class-transformer';
 import { Group } from '../../shared/models/group';
+import { IRestOptions } from 'ngx-repository';
+import { IRestProviderOptions } from 'ngx-repository';
 
 @Component({
   selector: 'customization-page',
@@ -24,7 +26,7 @@ export class CustomizationPageComponent {
     ts: require('!!raw-loader?lang=typescript!../../grids/groups-grid/groups-grid.component.ts')
   };
 
-  customOptions = {
+  customOptions: IRestProviderOptions<Group> = {
     pluralName: 'custom-groups',
     autoload: true,
     actionOptions: {
@@ -45,14 +47,14 @@ export class CustomizationPageComponent {
           return plainToClass(Group, data.body.group);
         }
       },
-      responseLoadAllTotalCount: (data: any, action: ProviderActionEnum) => {
-        return data && data.body.meta && data.body.meta.totalResults;
-      },
-      requestLoadAllPaginationQuery: (currentUrl: string, paginationMeta: PaginationMeta, action: ProviderActionEnum) =>
-        (currentUrl.indexOf('?') === -1 ? '?' : '&') + `cur_page=${paginationMeta.curPage}&per_page=${paginationMeta.perPage}`,
-      requestLoadAllSearchQuery: (currentUrl: string, filter: any, action: ProviderActionEnum) =>
-        (filter && filter.searchText) ?
-          ((currentUrl.indexOf('?') === -1 ? '?' : '&') + `q=${filter.searchText}`) : ''
+      responsePaginationMeta: (data: any, action: ProviderActionEnum) => {
+        return { totalResults: data && data.body.meta && data.body.meta.totalResults, perPage: undefined };
+      }
+    },
+    restOptions: {
+      limitQueryParam: 'per_page',
+      pageQueryParam: 'cur_page',
+      searchTextQueryParam: 'q'
     }
   };
 }

@@ -3,9 +3,11 @@ import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { ProviderActionEnum } from '../enums/provider-action.enum';
 import { IPaginationMeta } from './pagination-meta';
+import { PaginationMeta } from '../models/pagination-meta';
 
 export interface IRestProviderActionOptions extends IProviderActionOptions {
     request?: (url: string, body: any) => Observable<any>;
+    requestQuery?: (url: string, filter: any, action: ProviderActionEnum) => string;
     requestUrl?: (key: number | string, data: any, action: ProviderActionEnum) => string;
     requestOptions?: (key: number | string, data: any, action: ProviderActionEnum) => {
         headers?: HttpHeaders | {
@@ -19,9 +21,7 @@ export interface IRestProviderActionOptions extends IProviderActionOptions {
         responseType?: 'json';
         withCredentials?: boolean;
     };
-    requestLoadAllPaginationQuery?: (currentUrl: string, paginationMeta: IPaginationMeta, action: ProviderActionEnum) => string;
-    requestLoadAllSearchQuery?: (currentUrl: string, filter: any, action: ProviderActionEnum) => string;
     requestCreateType?: (action: ProviderActionEnum) => 'create' | 'append';
     responseData?: (data: any, action: ProviderActionEnum) => any;
-    responseLoadAllTotalCount?: (data: any, action: ProviderActionEnum) => number;
+    responsePaginationMeta?: (data: any, action: ProviderActionEnum) => PaginationMeta;
 }
