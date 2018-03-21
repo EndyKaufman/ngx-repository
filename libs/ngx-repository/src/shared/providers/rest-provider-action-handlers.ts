@@ -4,6 +4,7 @@ import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { IPaginationMeta } from '../interfaces/pagination-meta';
 import { IRestProviderActionHandlers } from '../interfaces/rest-provider-action-handlers';
 import { IRestProviderOptions } from '../interfaces/rest-provider-options';
+import { PaginationMeta } from '../models/pagination-meta';
 
 @Injectable()
 export class RestProviderActionHandlers implements IRestProviderActionHandlers {
@@ -68,80 +69,65 @@ export class RestProviderActionHandlers implements IRestProviderActionHandlers {
         }
         return data.body;
     }
-    getResponseLoadAllTotalCount(
+    getResponsePaginationMeta(
         data: any,
         optionsList: IRestProviderOptions<any>[],
         action: ProviderActionEnum,
         useDefault?: boolean
     ) {
-        let responseLoadAllTotalCount;
+        let paginationMeta: PaginationMeta;
         if (useDefault !== true) {
             optionsList.forEach(eachOptions => {
                 if (eachOptions !== undefined &&
-                    eachOptions.actionOptions !== undefined && eachOptions.actionOptions.responseLoadAllTotalCount !== undefined) {
-                    responseLoadAllTotalCount = eachOptions.actionOptions.responseLoadAllTotalCount(data, action);
-                    return responseLoadAllTotalCount;
+                    eachOptions.actionOptions !== undefined && eachOptions.actionOptions.responsePaginationMeta !== undefined) {
+                    paginationMeta = eachOptions.actionOptions.responsePaginationMeta(data, action);
+                    return paginationMeta;
                 }
             });
         }
-        if (responseLoadAllTotalCount !== undefined) {
-            return responseLoadAllTotalCount;
+        if (paginationMeta !== undefined) {
+            return paginationMeta;
         }
-        responseLoadAllTotalCount = NaN;
+        paginationMeta = new PaginationMeta();
+        let xTotalCount = NaN;
         const keys: string[] = data.headers ? (data.headers.keys ? data.headers.keys() : data.headers) : [];
         keys.forEach(key => {
             if (key.toLowerCase() === 'x-total-count') {
-                responseLoadAllTotalCount = +data.headers.get(key);
+                xTotalCount = +data.headers.get(key);
             }
         });
-        return responseLoadAllTotalCount;
+        paginationMeta.totalResults = isNaN(xTotalCount) ? 10000 : xTotalCount;
+        return paginationMeta;
     }
-    getRequestLoadAllPaginationQuery(
-        currentUrl: string,
-        paginationMeta: IPaginationMeta,
-        optionsList: IRestProviderOptions<any>[],
-        action: ProviderActionEnum,
-        useDefault?: boolean
-    ) {
-        let loadAllPaginationQuery;
-        if (useDefault !== true) {
-            optionsList.forEach(eachOptions => {
-                if (eachOptions !== undefined && eachOptions.actionOptions !== undefined &&
-                    eachOptions.actionOptions.requestLoadAllPaginationQuery !== undefined) {
-                    loadAllPaginationQuery = eachOptions.actionOptions.requestLoadAllPaginationQuery(currentUrl, paginationMeta, action);
-                    return loadAllPaginationQuery;
-                }
-            });
-        }
-        if (loadAllPaginationQuery !== undefined) {
-            return loadAllPaginationQuery;
-        }
-        return (currentUrl.indexOf('?') === -1 ? '?' : '&') +
-            `page=${paginationMeta.curPage}&limit=${paginationMeta.perPage}`;
-    }
-    getRequestLoadAllSearchQuery(
+    getRequestQuery(
         currentUrl: string,
         filter: any,
         optionsList: IRestProviderOptions<any>[],
         action: ProviderActionEnum,
         useDefault?: boolean
     ) {
-        let loadAllSearchQuery;
+        let query;
         if (useDefault !== true) {
             optionsList.forEach(eachOptions => {
                 if (eachOptions !== undefined && eachOptions.actionOptions !== undefined &&
-                    eachOptions.actionOptions.requestLoadAllSearchQuery !== undefined) {
-                    loadAllSearchQuery = eachOptions.actionOptions.requestLoadAllSearchQuery(currentUrl, filter, action);
-                    return loadAllSearchQuery;
+                    eachOptions.actionOptions.requestQuery !== undefined) {
+                    query = eachOptions.actionOptions.requestQuery(currentUrl, filter, action);
+                    return query;
                 }
             });
         }
-        if (loadAllSearchQuery !== undefined) {
-            return loadAllSearchQuery;
+        if (query !== undefined) {
+            return query;
         }
-        return (filter && filter.searchText) ?
-            ((currentUrl.indexOf('?') === -1 ? '?' : '&') + `search=${filter.searchText}`) :
-            '';
+        for (const key in filter) {
+            if (filter.hasOwnProperty(key)) {
+                const value = filter[key];
+                if (!currentUrl.includes(`?${key}=`) && !currentUrl.includes(`&${key}=`)) {
+                    currentUrl = currentUrl + ((currentUrl.indexOf('?') === -1 ? '?' : '&') + `${key}=${filter[key]}`);
+                }
+            }
+        }
+        return currentUrl;
     }
     getRequestUrl(
         key: number | string,
