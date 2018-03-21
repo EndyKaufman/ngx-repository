@@ -1,3 +1,14 @@
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/EndyKaufman/ngx-repository/compare/0.2.0...0.3.0) (2018-03-21)
+
+
+### Features
+
+* **rest-options:** Add IRestOptions for tune work with rest ([41ca3db](https://github.com/EndyKaufman/ngx-repository/commit/41ca3db))
+* **rest-provider-action-options:** Remove requestLoadAllPaginationQuery, requestLoadAllSearchQuery, requestLoadAllSearchQuery and add requestQuery and responsePaginationMeta ([393c320](https://github.com/EndyKaufman/ngx-repository/commit/393c320))
+
+
+
 <a name="0.2.0"></a>
 # [0.2.0](https://github.com/EndyKaufman/ngx-repository/compare/0.1.4...0.2.0) (2018-03-19)
 
