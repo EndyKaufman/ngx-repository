@@ -1,3 +1,13 @@
+<a name="0.3.1"></a>
+## [0.3.1](https://github.com/EndyKaufman/ngx-repository/compare/0.3.0...0.3.1) (2018-03-21)
+
+
+### Bug Fixes
+
+* Add IFakeHttpClientOptions ([c3d4d01](https://github.com/EndyKaufman/ngx-repository/commit/c3d4d01))
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/EndyKaufman/ngx-repository/compare/0.2.0...0.3.0) (2018-03-21)
 

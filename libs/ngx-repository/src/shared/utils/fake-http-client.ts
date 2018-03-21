@@ -4,9 +4,16 @@ import { Observable } from 'rxjs/Observable';
 import { List } from 'immutable';
 import * as parseImported from 'url-parse'; const parse = parseImported;
 import { IHttpClient } from '../interfaces/http-client';
+
+export interface IFakeHttpClientOptions {
+    idField?: string;
+    apiUrlPrefix?: string;
+    pageQueryParam?: string;
+    limitQueryParam?: string;
+    searchTextQueryParam?: string;
+}
 @Injectable()
 export class FakeHttpClient implements IHttpClient {
-
 
     private _idField = 'id';
     private _apiUrlPrefix = '/api/';
@@ -16,13 +23,7 @@ export class FakeHttpClient implements IHttpClient {
 
     private mockedItems: List<any>;
 
-    constructor(items?: any[], options?: {
-        idField?: string,
-        apiUrlPrefix?: string,
-        pageQueryParam?: string,
-        limitQueryParam?: string,
-        searchTextQueryParam?: string
-    }) {
+    constructor(items?: any[], options?: IFakeHttpClientOptions) {
         if (options) {
             if (options.idField !== undefined) {
                 this._idField = options.idField;
