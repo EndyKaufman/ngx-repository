@@ -30,16 +30,11 @@ this.repository.useRest({
     pluralName: 'users',
     paginationMeta: {
         perPage: 5
-    }
-    actionOptions:{
-        requestLoadAllPaginationQuery: 
-            (currentUrl, paginationMeta, action) =>
-                (currentUrl.indexOf('?') === -1 ? '?' : '&') +
-                    `cur_page=${paginationMeta.curPage}&per_page=${paginationMeta.perPage}`,
-        requestLoadAllSearchQuery: 
-            (currentUrl, filter, action) =>
-                (filter && filter.searchText) ?
-                    ((currentUrl.indexOf('?') === -1 ? '?' : '&') + `q=${filter.searchText}`) : ''
+    },
+    restOptions: {
+      limitQueryParam: 'per_page',
+      pageQueryParam: 'cur_page',
+      searchTextQueryParam: 'q'
     }
 });
 
@@ -98,9 +93,9 @@ this.repository.useRest({
     },
     actionOptions: {
         // Total count from response 
-        responseLoadAllTotalCount:
+        responsePaginationMeta:
             (data, action) =>
-                return data.body.meta.totalResults,
+                return { totalResults: data.body.meta.totalResults},
         // Entities from response 
         responseData: 
             (data, action) =>
