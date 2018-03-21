@@ -19,13 +19,15 @@ import { IFactoryModel } from '../interfaces/factory-model';
 import { ProviderError } from '../exceptions/provider.error';
 import { _throw } from 'rxjs/observable/throw';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { IRestOptions } from '../interfaces/rest-options';
 export class RestProvider<TModel extends IModel> extends Provider<TModel> {
 
     public pluralName: string;
     public name: string;
     public apiUrl: string;
     public httpClient: IHttpClient;
-    public fakeHttpClient = new FakeHttpClient();
+    public fakeHttpClient: FakeHttpClient;
+    public restOptions: IRestOptions;
     public providerActionHandlers: IRestProviderActionHandlers;
 
     constructor(
@@ -34,7 +36,22 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         protected options: IProviderOptions<TModel>
     ) {
         super(injector, factoryModel);
+        this.initFakeHttpClient();
         this.init();
+    }
+    initFakeHttpClient() {
+        const restOptions = this.options === undefined ? undefined : (this.options as IRestProviderOptions<TModel>).restOptions;
+        if (restOptions) {
+            this.restOptions = restOptions;
+        }
+        if (!this.restOptions) {
+            this.restOptions = {};
+            this.restOptions.idField = 'id';
+            this.restOptions.pageQueryParam = 'page';
+            this.restOptions.limitQueryParam = 'limit';
+            this.restOptions.searchTextQueryParam = 'search';
+        }
+        this.fakeHttpClient = new FakeHttpClient([], this.restOptions);
     }
     init() {
         this.httpClient = this.injector.get(HttpClient);
@@ -45,12 +62,15 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         return this.options;
     }
     setOptions(options?: IRestProviderOptions<TModel>) {
+        const filter = options === undefined ? undefined : options.filter;
+
         options = { ...this.options, ...options };
+
         const autoload = options === undefined ? undefined : options.autoload;
         const pluralName = options === undefined ? undefined : options.pluralName;
         const name = options === undefined ? undefined : options.name;
         const apiUrl = options === undefined ? undefined : options.apiUrl;
-        const filter = options === undefined ? undefined : options.filter;
+        const restOptions = options === undefined ? undefined : options.restOptions;
         if (autoload !== undefined) {
             this.autoload = autoload;
         }
@@ -63,9 +83,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         if (apiUrl !== undefined) {
             this.apiUrl = apiUrl;
         }
-        if (filter !== undefined) {
-            this.filter = filter;
-        }
+        this.filter = filter;
 
         options.autoload = this.autoload;
         options.pluralName = this.pluralName;
@@ -88,7 +106,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
     ): ErrorObservable | Observable<TModel> {
         const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
         this.actionIsActive$.next(true);
-        const errors = validateSync(data,
+        const errors: any = validateSync(data,
             options && options.classValidatorOptions ?
                 options.classValidatorOptions :
                 { validationError: { target: false } });
@@ -167,7 +185,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 undefined
         );
         this.createIsActive$.next(true);
-        const errors = validateSync(model,
+        const errors: any = validateSync(model,
             options && options.classValidatorOptions ?
                 options.classValidatorOptions :
                 { validationError: { target: false } });
@@ -291,7 +309,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 undefined
         );
         this.updateIsActive$.next(true);
-        const errors = validateSync(model,
+        const errors: any = validateSync(model,
             options && options.classValidatorOptions ?
                 options.classValidatorOptions :
                 { validationError: { target: false } });
@@ -570,34 +588,41 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
     ) {
         const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
 
-        this.filter = filter;
+        this.filter = filter ? filter : {};
         this.loadAllOptions = options;
         const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
         this.loadAllIsActive$.next(true);
         let requestUrl = this.providerActionHandlers.getRequestUrl(
             undefined,
-            filter,
+            this.filter,
             optionsList,
             ProviderActionEnum.LoadAll,
             useDefault
         );
-        requestUrl = requestUrl + this.providerActionHandlers.getRequestLoadAllSearchQuery(
+        const paginationMeta = this.paginationMeta$.getValue();
+        if (this.filter.searchText !== undefined) {
+            const searchText = this.filter.searchText;
+            delete this.filter.searchText;
+            this.filter[this.restOptions.searchTextQueryParam] = searchText;
+        }
+        if (this.filter[this.restOptions.pageQueryParam] === undefined) {
+            this.filter[this.restOptions.pageQueryParam] = paginationMeta.curPage;
+        }
+        if (this.filter[this.restOptions.limitQueryParam] === undefined) {
+            this.filter[this.restOptions.limitQueryParam] = paginationMeta.perPage;
+        }
+        paginationMeta.curPage = this.filter[this.restOptions.pageQueryParam];
+        paginationMeta.perPage = this.filter[this.restOptions.limitQueryParam];
+        requestUrl = this.providerActionHandlers.getRequestQuery(
             requestUrl,
-            filter,
-            optionsList,
-            ProviderActionEnum.LoadAll,
-            useDefault
-        );
-        requestUrl = requestUrl + this.providerActionHandlers.getRequestLoadAllPaginationQuery(
-            requestUrl,
-            this.paginationMeta$.getValue(),
+            this.filter,
             optionsList,
             ProviderActionEnum.LoadAll,
             useDefault
         );
         const requestOptions = this.providerActionHandlers.getRequestOptions(
             undefined,
-            filter,
+            this.filter,
             optionsList,
             ProviderActionEnum.LoadAll,
             useDefault
@@ -619,15 +644,24 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         }
         return request.pipe(
             map(responseData => {
-                const responseLoadAllTotalCount = this.providerActionHandlers.getResponseLoadAllTotalCount(
+                const responsePaginationMeta = this.providerActionHandlers.getResponsePaginationMeta(
                     responseData,
                     optionsList,
                     ProviderActionEnum.LoadAll,
                     useDefault
                 );
-                this.calcPaginationMeta({
-                    totalResults: isNaN(responseLoadAllTotalCount) ? 10000 : responseLoadAllTotalCount
-                });
+                if (responsePaginationMeta) {
+                    this.calcPaginationMeta({
+                        curPage: paginationMeta.curPage,
+                        perPage: paginationMeta.perPage,
+                        ...responsePaginationMeta
+                    });
+                } else {
+                    this.calcPaginationMeta({
+                        curPage: paginationMeta.curPage,
+                        perPage: paginationMeta.perPage
+                    });
+                }
                 return this.providerActionHandlers.getResponseData(
                     responseData,
                     optionsList,

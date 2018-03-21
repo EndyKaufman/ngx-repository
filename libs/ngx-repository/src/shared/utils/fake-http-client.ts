@@ -8,17 +8,42 @@ import { IHttpClient } from '../interfaces/http-client';
 export class FakeHttpClient implements IHttpClient {
 
 
-    public idField = 'id';
-    public apiUrlPrefix = '/api/';
-    public pageQueryParam = 'page';
-    public limitQueryParam = 'limit';
-    public searchTextQueryParam = 'search';
+    private _idField = 'id';
+    private _apiUrlPrefix = '/api/';
+    private _pageQueryParam = 'page';
+    private _limitQueryParam = 'limit';
+    private _searchTextQueryParam = 'search';
 
-    private mockedItems: List<any> = List([]);
+    private mockedItems: List<any>;
 
-    constructor(items?: any[]) {
+    constructor(items?: any[], options?: {
+        idField?: string,
+        apiUrlPrefix?: string,
+        pageQueryParam?: string,
+        limitQueryParam?: string,
+        searchTextQueryParam?: string
+    }) {
+        if (options) {
+            if (options.idField !== undefined) {
+                this._idField = options.idField;
+            }
+            if (options.apiUrlPrefix !== undefined) {
+                this._apiUrlPrefix = options.apiUrlPrefix;
+            }
+            if (options.pageQueryParam !== undefined) {
+                this._pageQueryParam = options.pageQueryParam;
+            }
+            if (options.limitQueryParam !== undefined) {
+                this._limitQueryParam = options.limitQueryParam;
+            }
+            if (options.searchTextQueryParam !== undefined) {
+                this._searchTextQueryParam = options.searchTextQueryParam;
+            }
+        }
         if (items !== undefined) {
             this.setItems(items);
+        } else {
+            this.mockedItems = List([]);
         }
     }
 
@@ -30,8 +55,8 @@ export class FakeHttpClient implements IHttpClient {
         let currentMax = 0;
         this.mockedItems.map(
             (mapItem: any) =>
-                Math.abs(mapItem[this.idField]) > currentMax ?
-                    currentMax = Math.abs(mapItem[this.idField]) :
+                Math.abs(mapItem[this._idField]) > currentMax ?
+                    currentMax = Math.abs(mapItem[this._idField]) :
                     null
         );
         return (currentMax + 1) * -1;
@@ -47,13 +72,13 @@ export class FakeHttpClient implements IHttpClient {
         searchText: string
     } {
         const uri = parse(url, true);
-        const arrWithoutApi = uri.pathname.split(this.apiUrlPrefix);
+        const arrWithoutApi = uri.pathname.split(this._apiUrlPrefix);
         const arr = arrWithoutApi[arrWithoutApi.length - 1].split('/');
         const entityName = arr.length === 2 ? arr[arr.length - 2] : arr[arr.length - 1];
         const entityKey = arr.length === 2 ? arr[arr.length - 1] : undefined;
-        const page = uri.query[this.pageQueryParam];
-        const limit = uri.query[this.limitQueryParam];
-        const searchText = uri.query[this.searchTextQueryParam];
+        const page = uri.query[this._pageQueryParam];
+        const limit = uri.query[this._limitQueryParam];
+        const searchText = uri.query[this._searchTextQueryParam];
         return {
             name: entityName,
             key: entityKey,
@@ -95,7 +120,7 @@ export class FakeHttpClient implements IHttpClient {
             let newBody: any;
             if (urlData.key) {
                 const foundedIndex = this.mockedItems.findIndex((item: any) =>
-                    +item[this.idField] === +urlData.key || item[this.idField] as string === urlData.key as string
+                    +item[this._idField] === +urlData.key || item[this._idField] as string === urlData.key as string
                 );
                 if (foundedIndex !== -1) {
                     newBody = this.mockedItems.get(foundedIndex);
@@ -140,8 +165,8 @@ export class FakeHttpClient implements IHttpClient {
         withCredentials?: boolean;
     }): Observable<any> {
         return new Observable(observer => {
-            if (!body[this.idField]) {
-                body[this.idField] = this.genId();
+            if (!body[this._idField]) {
+                body[this._idField] = this.genId();
             }
             this.mockedItems = this.mockedItems.unshift(body);
             const data = { headers: new HttpHeaders(), body: body };
@@ -164,7 +189,7 @@ export class FakeHttpClient implements IHttpClient {
         return new Observable(observer => {
             const urlData = this.parseUrl(url);
             const foundedIndex = this.mockedItems.findIndex((item: any) =>
-                +item[this.idField] === +urlData.key || item[this.idField] as string === urlData.key as string
+                +item[this._idField] === +urlData.key || item[this._idField] as string === urlData.key as string
             );
             if (foundedIndex !== -1) {
                 this.mockedItems = this.mockedItems.set(foundedIndex, body);
@@ -189,7 +214,7 @@ export class FakeHttpClient implements IHttpClient {
         return new Observable(observer => {
             const urlData = this.parseUrl(url);
             const foundedIndex = this.mockedItems.findIndex((item: any) =>
-                +item[this.idField] === +urlData.key || item[this.idField] as string === urlData.key as string
+                +item[this._idField] === +urlData.key || item[this._idField] as string === urlData.key as string
             );
             if (foundedIndex !== -1) {
                 this.mockedItems = this.mockedItems.delete(foundedIndex);
@@ -214,7 +239,7 @@ export class FakeHttpClient implements IHttpClient {
         return new Observable(observer => {
             const urlData = this.parseUrl(url);
             const foundedIndex = this.mockedItems.findIndex((item: any) =>
-                +item[this.idField] === +urlData.key || item[this.idField] as string === urlData.key as string
+                +item[this._idField] === +urlData.key || item[this._idField] as string === urlData.key as string
             );
             if (foundedIndex !== -1) {
                 const newBody = this.mockedItems.get(foundedIndex);
