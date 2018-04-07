@@ -1,25 +1,25 @@
-import { Injector } from '@angular/core';
-import { Provider } from './provider';
 import { HttpClient } from '@angular/common/http';
-import { ProviderActionEnum } from '../enums/provider-action.enum';
-import { IProviderOptions } from '../interfaces/provider-options';
-import { IRestProviderOptions } from '../interfaces/rest-provider-options';
-import { validate, validateSync } from 'class-validator';
-import { ValidatorError } from '../exceptions/validator.error';
+import { Injector } from '@angular/core';
+import { validateSync } from 'class-validator';
 import { List } from 'immutable';
-import { IModel } from '../interfaces/model';
-import { IRestProviderActionOptions } from '../interfaces/rest-provider-action-options';
-import { map, first } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
-import { IHttpClient } from '../interfaces/http-client';
-import { IRestProviderActionHandlers } from '../interfaces/rest-provider-action-handlers';
-import { RestProviderActionHandlers } from './rest-provider-action-handlers';
-import { FakeHttpClient } from '../utils/fake-http-client';
-import { IFactoryModel } from '../interfaces/factory-model';
-import { ProviderError } from '../exceptions/provider.error';
-import { _throw } from 'rxjs/observable/throw';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { _throw } from 'rxjs/observable/throw';
+import { first, map } from 'rxjs/operators';
+import { ProviderActionEnum } from '../enums/provider-action.enum';
+import { ProviderError } from '../exceptions/provider.error';
+import { ValidatorError } from '../exceptions/validator.error';
+import { IFactoryModel } from '../interfaces/factory-model';
+import { IHttpClient } from '../interfaces/http-client';
+import { IModel } from '../interfaces/model';
+import { IProviderOptions } from '../interfaces/provider-options';
 import { IRestOptions } from '../interfaces/rest-options';
+import { IRestProviderActionHandlers } from '../interfaces/rest-provider-action-handlers';
+import { IRestProviderActionOptions } from '../interfaces/rest-provider-action-options';
+import { IRestProviderOptions } from '../interfaces/rest-provider-options';
+import { FakeHttpClient } from '../utils/fake-http-client';
+import { Provider } from './provider';
+import { RestProviderActionHandlers } from './rest-provider-action-handlers';
 export class RestProvider<TModel extends IModel> extends Provider<TModel> {
 
     public pluralName: string;
@@ -83,7 +83,9 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         if (apiUrl !== undefined) {
             this.apiUrl = apiUrl;
         }
-        this.filter = filter;
+        if (filter !== undefined) {
+            this.filter = filter;
+        }
 
         options.autoload = this.autoload;
         options.pluralName = this.pluralName;
@@ -96,7 +98,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         this.calcPaginationMetaByOptions(options);
 
         if (this.autoload !== false) {
-            this.loadAll(this.filter, this.loadAllOptions).pipe(first()).subscribe();
+            this._loadAll(this.filter, this.prevOptions).pipe(first()).subscribe();
         }
     }
     action<TProviderActionOptions extends IRestProviderActionOptions>(
@@ -104,8 +106,8 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         data?: any,
         options?: TProviderActionOptions
     ): ErrorObservable | Observable<TModel> {
-        const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
         this.actionIsActive$.next(true);
+        const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
         const errors: any = validateSync(data,
             options && options.classValidatorOptions ?
                 options.classValidatorOptions :
@@ -176,6 +178,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         model: TModel,
         options?: TProviderActionOptions
     ): ErrorObservable | Observable<TModel> {
+        this.createIsActive$.next(true);
         const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
         model = this.plainToClass(
             model,
@@ -184,7 +187,6 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 options.classTransformOptions :
                 undefined
         );
-        this.createIsActive$.next(true);
         const errors: any = validateSync(model,
             options && options.classValidatorOptions ?
                 options.classValidatorOptions :
@@ -300,6 +302,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         isUpdate: boolean,
         options?: TProviderActionOptions
     ): ErrorObservable | Observable<TModel> {
+        this.updateIsActive$.next(true);
         const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
         model = this.plainToClass(
             model,
@@ -308,7 +311,6 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 options.classTransformOptions :
                 undefined
         );
-        this.updateIsActive$.next(true);
         const errors: any = validateSync(model,
             options && options.classValidatorOptions ?
                 options.classValidatorOptions :
@@ -446,9 +448,9 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         key: number | string,
         options?: TProviderActionOptions
     ) {
+        this.loadIsActive$.next(true);
         const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
         const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
-        this.loadIsActive$.next(true);
         const requestUrl = this.providerActionHandlers.getRequestUrl(
             key,
             undefined,
@@ -515,9 +517,9 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         key: number | string,
         options?: TProviderActionOptions
     ) {
+        this.deleteIsActive$.next(true);
         const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
         const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
-        this.deleteIsActive$.next(true);
         const requestUrl = this.providerActionHandlers.getRequestUrl(
             key,
             undefined,
@@ -580,18 +582,35 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         );
     }
     reloadAll() {
-        this.loadAll(this.filter, this.loadAllOptions).pipe(first()).subscribe();
+        this._loadAll(this.filter, this.prevOptions).pipe(first()).subscribe();
     }
     loadAll<TProviderActionOptions extends IRestProviderActionOptions>(
         filter?: any,
-        options?: TProviderActionOptions
+        options?: TProviderActionOptions,
     ) {
-        const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
+        const searchText = this.filter.searchText;
+        delete this.filter.searchText;
 
-        this.filter = filter ? filter : {};
-        this.loadAllOptions = options;
-        const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
+        this.calcPaginationMeta({
+            curPage: filter[this.restOptions.pageQueryParam] || filter.curPage,
+            perPage: filter[this.restOptions.limitQueryParam] || filter.perPage
+        });
+
+        if (this.filter[this.restOptions.searchTextQueryParam] === undefined && searchText) {
+            this.filter[this.restOptions.searchTextQueryParam] = searchText;
+        }
+        return this._loadAll(filter, options);
+    }
+    private _loadAll<TProviderActionOptions extends IRestProviderActionOptions>(
+        filter?: any,
+        options?: TProviderActionOptions,
+    ) {
         this.loadAllIsActive$.next(true);
+        const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
+        const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
+        const paginationMeta = this.paginationMeta$.getValue();
+        this.filter = filter ? filter : {};
+        this.prevOptions = options;
         let requestUrl = this.providerActionHandlers.getRequestUrl(
             undefined,
             this.filter,
@@ -599,20 +618,8 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
             ProviderActionEnum.LoadAll,
             useDefault
         );
-        const paginationMeta = this.paginationMeta$.getValue();
-        if (this.filter.searchText !== undefined) {
-            const searchText = this.filter.searchText;
-            delete this.filter.searchText;
-            this.filter[this.restOptions.searchTextQueryParam] = searchText;
-        }
-        if (this.filter[this.restOptions.pageQueryParam] === undefined) {
-            this.filter[this.restOptions.pageQueryParam] = paginationMeta.curPage;
-        }
-        if (this.filter[this.restOptions.limitQueryParam] === undefined) {
-            this.filter[this.restOptions.limitQueryParam] = paginationMeta.perPage;
-        }
-        paginationMeta.curPage = this.filter[this.restOptions.pageQueryParam];
-        paginationMeta.perPage = this.filter[this.restOptions.limitQueryParam];
+        this.filter[this.restOptions.pageQueryParam] = paginationMeta.curPage;
+        this.filter[this.restOptions.limitQueryParam] = paginationMeta.perPage;
         requestUrl = this.providerActionHandlers.getRequestQuery(
             requestUrl,
             this.filter,

@@ -42,7 +42,7 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
 
     paginationMeta$ = new BehaviorSubject<IPaginationMeta>(new PaginationMeta());
 
-    protected loadAllOptions?: IProviderActionOptions;
+    protected prevOptions?: IProviderActionOptions;
     protected destroy$: Subject<boolean> = new Subject();
 
     constructor(
