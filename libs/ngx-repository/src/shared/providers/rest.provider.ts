@@ -588,17 +588,18 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         filter?: any,
         options?: TProviderActionOptions,
     ) {
-        const searchText = this.filter.searchText;
-        delete this.filter.searchText;
+        const searchText = filter.searchText;
+        delete filter.searchText;
 
         this.calcPaginationMeta({
             curPage: filter[this.restOptions.pageQueryParam] || filter.curPage,
             perPage: filter[this.restOptions.limitQueryParam] || filter.perPage
         });
+        delete filter.curPage;
+        delete filter.perPage;
 
-        if (this.filter[this.restOptions.searchTextQueryParam] === undefined && searchText) {
-            this.filter[this.restOptions.searchTextQueryParam] = searchText;
-        }
+        filter[this.restOptions.searchTextQueryParam] = searchText;
+
         return this._loadAll(filter, options);
     }
     private _loadAll<TProviderActionOptions extends IRestProviderActionOptions>(
