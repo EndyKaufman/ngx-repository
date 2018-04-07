@@ -67,7 +67,9 @@ export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
     this.searchField.valueChanges.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      switchMap(value => this.repository.loadAll({ searchText: value, page: 1 }))
+      switchMap(value =>
+        this.repository.loadAll({ searchText: value, curPage: 1 })
+      )
     ).subscribe();
 
     if (this.mockedItems === undefined) {
