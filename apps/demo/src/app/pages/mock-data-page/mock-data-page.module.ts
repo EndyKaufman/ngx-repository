@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
-import { MockDataPageComponent } from './mock-data-page.component';
-import { UsersGridModule } from '../../grids/users-grid/users-grid.module';
-import { MatCardModule } from '@angular/material/card';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterModule } from '@angular/router';
-import { MockDataPageRoutes } from './mock-data-page.routes';
-import { DocsExampleModule } from '@ngx-docs/example';
+import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
+import { DocsExampleModule } from '@ngx-docs/example';
+import { UsersGridModule } from '../../grids/users-grid/users-grid.module';
 import { SourceTabsModule } from '../../others/source-tabs/source-tabs.module';
 import { SharedModule } from '../../shared/shared.module';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { MockDataPageComponent } from './mock-data-page.component';
+import { MockDataPageRoutes } from './mock-data-page.routes';
 
 @NgModule({
   imports: [

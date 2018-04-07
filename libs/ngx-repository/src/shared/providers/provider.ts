@@ -1,20 +1,20 @@
 import { Injector } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subject } from 'rxjs/Subject';
-import { plainToClassFromExist, classToPlainFromExist, classToClass, ClassTransformOptions } from 'class-transformer';
-import { ProviderActionEnum } from '../enums/provider-action.enum';
-import { IProviderOptions } from '../interfaces/provider-options';
-import { IModel } from '../interfaces/model';
-import { IPaginationMeta } from '../interfaces/pagination-meta';
-import { PaginationMeta } from '../models/pagination-meta';
-import { IProvider } from '../interfaces/provider';
+import { ClassTransformOptions, classToClass, classToPlainFromExist, plainToClassFromExist } from 'class-transformer';
 import { List } from 'immutable';
-import { IProviderActionOptions } from '../interfaces/provider-action-options';
-import { IProviderActionActionModel } from '../interfaces/provider-action-action-model';
-import { IFactoryModel } from '../interfaces/factory-model';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import { of } from 'rxjs/observable/of';
 import { delay } from 'rxjs/operators';
-import { Observable } from 'rxjs/Observable';
+import { ProviderActionEnum } from '../enums/provider-action.enum';
+import { IFactoryModel } from '../interfaces/factory-model';
+import { IModel } from '../interfaces/model';
+import { IPaginationMeta } from '../interfaces/pagination-meta';
+import { IProvider } from '../interfaces/provider';
+import { IProviderActionActionModel } from '../interfaces/provider-action-action-model';
+import { IProviderActionOptions } from '../interfaces/provider-action-options';
+import { IProviderOptions } from '../interfaces/provider-options';
+import { PaginationMeta } from '../models/pagination-meta';
 export class Provider<TModel extends IModel = any> implements IProvider<TModel> {
 
     filter?: any;

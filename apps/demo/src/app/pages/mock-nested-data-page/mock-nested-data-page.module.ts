@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
-import { MockNestedDataPageComponent } from './mock-nested-data-page.component';
-import { UsersWithGroupsGridModule } from '../../grids/users-with-groups-grid/users-with-groups-grid.module';
-import { MatCardModule } from '@angular/material/card';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterModule } from '@angular/router';
-import { MockNestedDataPageRoutes } from './mock-nested-data-page.routes';
-import { DocsExampleModule } from '@ngx-docs/example';
+import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
+import { DocsExampleModule } from '@ngx-docs/example';
+import { GroupsGridModule } from '../../grids/groups-grid/groups-grid.module';
+import { UsersWithGroupsGridModule } from '../../grids/users-with-groups-grid/users-with-groups-grid.module';
 import { SourceTabsModule } from '../../others/source-tabs/source-tabs.module';
 import { SharedModule } from '../../shared/shared.module';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { GroupsGridModule } from '../../grids/groups-grid/groups-grid.module';
+import { MockNestedDataPageComponent } from './mock-nested-data-page.component';
+import { MockNestedDataPageRoutes } from './mock-nested-data-page.routes';
 
 @NgModule({
   imports: [

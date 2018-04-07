@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { AppRoutes } from './app.routes';
 import { MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
+import { AppRoutes } from './app.routes';
 
 @Component({
   selector: 'app-root',

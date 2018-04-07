@@ -1,7 +1,7 @@
 import { Transform, plainToClassFromExist } from 'class-transformer';
-import { IsNotEmpty, IsEmail, IsOptional } from 'class-validator';
-import { transformStringToDate, transformDateToString } from '../utils/custom-transforms';
+import { IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
 import { IModel } from 'ngx-repository';
+import { transformDateToString, transformStringToDate } from '../utils/custom-transforms';
 
 export class User implements IModel {
     static strings = {

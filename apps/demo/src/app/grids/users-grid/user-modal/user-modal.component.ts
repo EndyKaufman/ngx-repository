@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter, Inject, ChangeDetectorRef } from '@angular/core';
-import { DynamicFormGroup, DynamicFormBuilder } from 'ngx-dynamic-form-builder';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { DynamicFormBuilder, DynamicFormGroup } from 'ngx-dynamic-form-builder';
 import { User } from '../../../shared/models/user';
 
 @Component({

@@ -1,13 +1,13 @@
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { IPaginationMeta } from './pagination-meta';
-import { ProviderActionEnum } from '../enums/provider-action.enum';
-import { IProviderOptions } from './provider-options';
-import { Subject } from 'rxjs/Subject';
-import { List } from 'immutable';
-import { IProviderActionOptions } from './provider-action-options';
-import { IProviderActionActionModel } from './provider-action-action-model';
-import { Observable } from 'rxjs/Observable';
 import { ClassTransformOptions } from 'class-transformer';
+import { List } from 'immutable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import { ProviderActionEnum } from '../enums/provider-action.enum';
+import { IPaginationMeta } from './pagination-meta';
+import { IProviderActionActionModel } from './provider-action-action-model';
+import { IProviderActionOptions } from './provider-action-options';
+import { IProviderOptions } from './provider-options';
 
 export interface IProvider<TModel> {
     name: string;

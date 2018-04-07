@@ -1,9 +1,8 @@
-import { ProviderActionEnum } from '../enums/provider-action.enum';
-import { Observable } from 'rxjs/Observable';
-import { IPaginationMeta } from './pagination-meta';
-import { IRestProviderOptions } from './rest-provider-options';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+import { ProviderActionEnum } from '../enums/provider-action.enum';
 import { PaginationMeta } from '../models/pagination-meta';
+import { IRestProviderOptions } from './rest-provider-options';
 
 export interface IRestProviderActionHandlers {
 

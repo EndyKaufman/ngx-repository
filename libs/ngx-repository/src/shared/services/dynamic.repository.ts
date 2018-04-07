@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
-import { Repository } from './repository';
 import { Model } from '../models/model';
+import { Repository } from './repository';
 
 @Injectable()
 export class DynamicRepository extends Repository<Model> {

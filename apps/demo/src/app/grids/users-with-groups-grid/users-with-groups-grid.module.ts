@@ -1,19 +1,19 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
-import { UsersWithGroupsGridComponent } from './users-with-groups-grid.component';
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { UserWithGroupsModalComponent } from './user-with-groups-modal/user-with-groups-modal.component';
-import { MatDialogModule } from '@angular/material/dialog';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ModuleWithProviders, NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
 import { NgxRepositoryModules } from 'ngx-repository';
 import { SharedModule } from '../../shared/shared.module';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { GroupsGridModule } from '../groups-grid/groups-grid.module';
 import { UserWithGroupsGroupsGridComponent } from './user-with-groups-modal/user-with-groups-groups-grid/user-with-groups-groups-grid.component';
+import { UserWithGroupsModalComponent } from './user-with-groups-modal/user-with-groups-modal.component';
+import { UsersWithGroupsGridComponent } from './users-with-groups-grid.component';
 
 @NgModule({
   imports: [

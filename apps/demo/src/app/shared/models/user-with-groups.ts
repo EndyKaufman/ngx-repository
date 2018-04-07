@@ -1,7 +1,7 @@
 import { Transform, Type, plainToClassFromExist } from 'class-transformer';
-import { IsNotEmpty, IsEmail, ValidateNested, IsOptional } from 'class-validator';
-import { transformStringToDate, transformDateToString, serializeModel } from '../utils/custom-transforms';
+import { IsEmail, IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
 import { IModel } from 'ngx-repository';
+import { serializeModel, transformDateToString, transformStringToDate } from '../utils/custom-transforms';
 import { Group } from './group';
 
 export class UserWithGroups implements IModel {

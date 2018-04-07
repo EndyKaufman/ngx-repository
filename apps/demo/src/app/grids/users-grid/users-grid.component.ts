@@ -1,20 +1,18 @@
-import { Component, OnDestroy, OnInit, ChangeDetectorRef, Input, ViewChild } from '@angular/core';
-import { UserModalComponent } from './user-modal/user-modal.component';
-import { MatTableDataSource } from '@angular/material/table';
-import { User } from '../../shared/models/user';
-import { PageEvent, MatDialog } from '@angular/material';
-import { Repository, DynamicRepository } from 'ngx-repository';
-import { Subject } from 'rxjs/Subject';
-import { takeUntil, debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
-import { plainToClass } from 'class-transformer';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ViewContainerRef } from '@angular/core';
-import { MessageBoxService } from '../../others/message-box/message-box.service';
-import { of } from 'rxjs/observable/of';
-import { Observable } from 'rxjs/Observable';
-import { ValidatorError } from 'ngx-repository';
+import { MatDialog, PageEvent } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
+import { plainToClass } from 'class-transformer';
 import { ValidationError } from 'class-validator';
+import { IShortValidationErrors } from 'ngx-dynamic-form-builder';
+import { DynamicRepository, Repository, ValidatorError } from 'ngx-repository';
+import { Subject } from 'rxjs/Subject';
+import { of } from 'rxjs/observable/of';
+import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
+import { MessageBoxService } from '../../others/message-box/message-box.service';
+import { User } from '../../shared/models/user';
+import { UserModalComponent } from './user-modal/user-modal.component';
 
 @Component({
   selector: 'users-grid',
@@ -77,7 +75,7 @@ export class UsersGridComponent implements OnInit, OnDestroy {
     this.searchField.valueChanges.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      switchMap(value => this.repository.loadAll({ searchText: value, page: 1 }))
+      switchMap(value => this.repository.loadAll({ search: value, page: 1 }))
     ).subscribe();
 
     if (this.mockedItems === undefined) {
@@ -143,14 +141,14 @@ export class UsersGridComponent implements OnInit, OnDestroy {
         }
       }, error => {
         if (error instanceof ValidatorError) {
-          const otherErrors = error.errors as ValidationError[];
-          otherErrors.map(err => {
+          const externalErrors: IShortValidationErrors = {};
+          (error.errors as ValidationError[]).map(err => {
             Object.keys(err.constraints).forEach(cons => {
-              err.constraints[cons] = 'custom error:' + err.constraints[cons];
+              externalErrors[cons] = ['custom error:' + err.constraints[cons]];
             });
             return err;
           });
-          modal.form.validate(otherErrors);
+          modal.form.validate(externalErrors);
           modal.form.validateAllFormFields();
         } else {
           this.messageBoxService.error(error).subscribe();

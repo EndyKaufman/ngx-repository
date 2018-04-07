@@ -1,5 +1,5 @@
-import { IPaginationMeta } from '../interfaces/pagination-meta';
 import { plainToClassFromExist } from 'class-transformer';
+import { IPaginationMeta } from '../interfaces/pagination-meta';
 
 export class PaginationMeta implements IPaginationMeta {
 
