@@ -1,3 +1,25 @@
+<a name="0.3.2"></a>
+## [0.3.2](https://github.com/EndyKaufman/ngx-repository/compare/0.3.1...0.3.2) (2018-04-08)
+
+
+### Bug Fixes
+
+* **rest-provider:** Fix up reset filters on loadAll ([d2263b8](https://github.com/EndyKaufman/ngx-repository/commit/d2263b8))
+* **rest-provider:** Support filter varibales curPage, perPage, searchText ([ac900c9](https://github.com/EndyKaufman/ngx-repository/commit/ac900c9))
+
+
+
+<a name="0.3.2"></a>
+## [0.3.2](https://github.com/EndyKaufman/ngx-repository/compare/0.3.1...0.3.2) (2018-04-07)
+
+
+### Bug Fixes
+
+* **rest-provider:** Fix up reset filters on loadAll ([d2263b8](https://github.com/EndyKaufman/ngx-repository/commit/d2263b8))
+* **rest-provider:** Support filter varibales curPage, perPage, searchText ([ac900c9](https://github.com/EndyKaufman/ngx-repository/commit/ac900c9))
+
+
+
 <a name="0.3.1"></a>
 ## [0.3.1](https://github.com/EndyKaufman/ngx-repository/compare/0.3.0...0.3.1) (2018-03-21)
 
