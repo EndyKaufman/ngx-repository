@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
-import { ProviderActionEnum, PaginationMeta } from 'ngx-repository';
 import { plainToClass } from 'class-transformer';
+import { IRestProviderOptions, ProviderActionEnum } from 'ngx-repository';
 import { Group } from '../../shared/models/group';
-import { IRestOptions } from 'ngx-repository';
-import { IRestProviderOptions } from 'ngx-repository';
 
 @Component({
   selector: 'customization-page',

@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
+import { CustomizationPageRoutes } from './pages/customization-page/customization-page.routes';
 import { HomePageRoutes } from './pages/home-page/home-page.routes';
 import { MockDataPageRoutes } from './pages/mock-data-page/mock-data-page.routes';
-import { RestDataPageRoutes } from './pages/rest-data-page/rest-data-page.routes';
 import { MockNestedDataPageRoutes } from './pages/mock-nested-data-page/mock-nested-data-page.routes';
+import { RestDataPageRoutes } from './pages/rest-data-page/rest-data-page.routes';
 import { RestNestedDataPageRoutes } from './pages/rest-nested-data-page/rest-nested-data-page.routes';
-import { CustomizationPageRoutes } from './pages/customization-page/customization-page.routes';
 
 export const AppRoutes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },

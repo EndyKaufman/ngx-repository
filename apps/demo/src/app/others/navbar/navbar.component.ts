@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Routes, Router } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+import { Router, Routes } from '@angular/router';
 
 @Component({
   // tslint:disable-next-line:component-selector

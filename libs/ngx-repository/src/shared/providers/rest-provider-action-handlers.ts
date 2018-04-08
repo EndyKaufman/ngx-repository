@@ -1,7 +1,6 @@
+import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ProviderActionEnum } from '../enums/provider-action.enum';
-import { HttpHeaders, HttpParams } from '@angular/common/http';
-import { IPaginationMeta } from '../interfaces/pagination-meta';
 import { IRestProviderActionHandlers } from '../interfaces/rest-provider-action-handlers';
 import { IRestProviderOptions } from '../interfaces/rest-provider-options';
 import { PaginationMeta } from '../models/pagination-meta';

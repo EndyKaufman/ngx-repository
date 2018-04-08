@@ -1,11 +1,11 @@
 import { Injector } from '@angular/core';
-import { IProviderOptions } from '../interfaces/provider-options';
+import { IFactoryModel } from '../interfaces/factory-model';
 import { IMockProviderOptions } from '../interfaces/mock-provider-options';
 import { IModel } from '../interfaces/model';
-import { RestProvider } from './rest.provider';
+import { IProviderOptions } from '../interfaces/provider-options';
 import { FakeHttpClient } from '../utils/fake-http-client';
 import { MockProviderActionHandlers } from './mock-provider-action-handlers';
-import { IFactoryModel } from '../interfaces/factory-model';
+import { RestProvider } from './rest.provider';
 
 export class MockProvider<TModel extends IModel> extends RestProvider<TModel> {
 

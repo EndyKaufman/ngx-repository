@@ -1,17 +1,18 @@
-import { Component, OnDestroy, OnInit, ChangeDetectorRef, Input } from '@angular/core';
-import { UserWithGroupsModalComponent } from './user-with-groups-modal/user-with-groups-modal.component';
-import { MatTableDataSource } from '@angular/material/table';
-import { UserWithGroups } from '../../shared/models/user-with-groups';
-import { PageEvent, MatDialog } from '@angular/material';
-import { Repository, DynamicRepository, ValidatorError } from 'ngx-repository';
-import { Subject } from 'rxjs/Subject';
-import { takeUntil, debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
-import { plainToClass } from 'class-transformer';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Group } from '../../shared/models/group';
+import { MatDialog, PageEvent } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
+import { plainToClass } from 'class-transformer';
 import { ValidationError } from 'class-validator';
+import { IShortValidationErrors } from 'ngx-dynamic-form-builder';
+import { DynamicRepository, Repository, ValidatorError } from 'ngx-repository';
+import { Subject } from 'rxjs/Subject';
+import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { MessageBoxService } from '../../others/message-box/message-box.service';
+import { Group } from '../../shared/models/group';
+import { UserWithGroups } from '../../shared/models/user-with-groups';
+import { UserWithGroupsModalComponent } from './user-with-groups-modal/user-with-groups-modal.component';
 
 @Component({
   selector: 'users-with-groups-grid',
@@ -67,7 +68,9 @@ export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
     this.searchField.valueChanges.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      switchMap(value => this.repository.loadAll({ searchText: value, page: 1 }))
+      switchMap(value =>
+        this.repository.loadAll({ searchText: value, curPage: 1 })
+      )
     ).subscribe();
 
     if (this.mockedItems === undefined) {
@@ -133,14 +136,14 @@ export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
         }
       }, error => {
         if (error instanceof ValidatorError) {
-          const otherErrors = error.errors as ValidationError[];
-          otherErrors.map(err => {
+          const externalErrors: IShortValidationErrors = {};
+          (error.errors as ValidationError[]).map(err => {
             Object.keys(err.constraints).forEach(cons => {
-              err.constraints[cons] = 'custom error:' + err.constraints[cons];
+              externalErrors[cons] = ['custom error:' + err.constraints[cons]];
             });
             return err;
           });
-          modal.form.validate(otherErrors);
+          modal.form.validate(externalErrors);
           modal.form.validateAllFormFields();
         } else {
           this.messageBoxService.error(error).subscribe();

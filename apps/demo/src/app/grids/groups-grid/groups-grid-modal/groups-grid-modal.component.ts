@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter, Inject, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { DynamicFormBuilder } from 'ngx-dynamic-form-builder';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { DynamicFormBuilder } from 'ngx-dynamic-form-builder';
 import { Group } from '../../../shared/models/group';
 import { GroupsGridComponent } from '../groups-grid.component';
 

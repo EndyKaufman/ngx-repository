@@ -1,17 +1,16 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { AppComponent } from './app.component';
-import { ErrorHandler } from '@angular/core';
-import { CustomErrorHandler } from './shared/exceptions/error.handler';
 import { HttpClientModule } from '@angular/common/http';
-import { NavbarModule } from './others/navbar/navbar.module';
-import { MAT_DIALOG_DEFAULT_OPTIONS, ErrorStateMatcher } from '@angular/material';
-import { MyErrorStateMatcher } from './shared/utils/my-error-state-matcher';
-import { RouterModule, PreloadAllModules } from '@angular/router';
-import { AppRoutes } from './app.routes';
+import { ErrorHandler, NgModule } from '@angular/core';
+import { ErrorStateMatcher, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SharedModule } from './shared/shared.module';
+import { PreloadAllModules, RouterModule } from '@angular/router';
+import { AppComponent } from './app.component';
+import { AppRoutes } from './app.routes';
 import { MessageBoxModule } from './others/message-box/message-box.module';
+import { NavbarModule } from './others/navbar/navbar.module';
+import { CustomErrorHandler } from './shared/exceptions/error.handler';
+import { SharedModule } from './shared/shared.module';
+import { MyErrorStateMatcher } from './shared/utils/my-error-state-matcher';
 
 
 @NgModule({

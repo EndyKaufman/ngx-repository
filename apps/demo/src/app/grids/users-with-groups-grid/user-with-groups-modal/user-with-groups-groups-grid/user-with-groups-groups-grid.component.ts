@@ -1,16 +1,16 @@
-import { Component, OnDestroy, OnInit, ChangeDetectorRef, Input, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { MatDialog, PageEvent } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
-import { PageEvent, MatDialog } from '@angular/material';
-import { Repository, DynamicRepository, ProviderActionEnum } from 'ngx-repository';
+import { DynamicRepository, ProviderActionEnum, Repository } from 'ngx-repository';
 import { Subject } from 'rxjs/Subject';
-import { takeUntil, map } from 'rxjs/operators';
-import { GroupModalComponent } from '../../../groups-grid/group-modal/group-modal.component';
-import { Group } from '../../../../shared/models/group';
-import { environment } from '../../../../../environments/environment';
-import { GroupsGridModalComponent } from '../../../groups-grid/groups-grid-modal/groups-grid-modal.component';
-import { UserWithGroups } from '../../../../shared/models/user-with-groups';
 import { forkJoin } from 'rxjs/observable/forkJoin';
+import { takeUntil } from 'rxjs/operators';
+import { environment } from '../../../../../environments/environment';
 import { MessageBoxService } from '../../../../others/message-box/message-box.service';
+import { Group } from '../../../../shared/models/group';
+import { UserWithGroups } from '../../../../shared/models/user-with-groups';
+import { GroupModalComponent } from '../../../groups-grid/group-modal/group-modal.component';
+import { GroupsGridModalComponent } from '../../../groups-grid/groups-grid-modal/groups-grid-modal.component';
 
 @Component({
   selector: 'user-with-groups-groups-grid',

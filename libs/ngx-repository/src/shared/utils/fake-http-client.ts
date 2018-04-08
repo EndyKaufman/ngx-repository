@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
 import { List } from 'immutable';
-import * as parseImported from 'url-parse'; const parse = parseImported;
+import { Observable } from 'rxjs/Observable';
+import * as parseImported from 'url-parse';
 import { IHttpClient } from '../interfaces/http-client';
+ const parse = parseImported;
 
 export interface IFakeHttpClientOptions {
     idField?: string;

@@ -1,5 +1,5 @@
-import { IPaginationMeta } from './pagination-meta';
 import { ProviderActionEnum } from '../enums/provider-action.enum';
+import { IPaginationMeta } from './pagination-meta';
 import { IProviderActionOptions } from './provider-action-options';
 
 export interface IProviderOptions<TModel> {

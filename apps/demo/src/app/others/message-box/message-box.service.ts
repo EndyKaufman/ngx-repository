@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { MessageBoxComponent } from './message-box.component';
 import { Observable } from 'rxjs/Observable';
 import { first } from 'rxjs/operators';
+import { MessageBoxComponent } from './message-box.component';
 
 @Injectable()
 export class MessageBoxService {

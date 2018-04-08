@@ -1,9 +1,8 @@
-import { IProviderActionOptions } from './provider-action-options';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { ProviderActionEnum } from '../enums/provider-action.enum';
-import { IPaginationMeta } from './pagination-meta';
 import { PaginationMeta } from '../models/pagination-meta';
+import { IProviderActionOptions } from './provider-action-options';
 
 export interface IRestProviderActionOptions extends IProviderActionOptions {
     request?: (url: string, body: any) => Observable<any>;

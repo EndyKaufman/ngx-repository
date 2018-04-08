@@ -1,4 +1,4 @@
-import { ErrorHandler, Injector, Injectable, NgZone } from '@angular/core';
+import { ErrorHandler, Injectable, Injector, NgZone } from '@angular/core';
 import { MessageBoxService } from '../../others/message-box/message-box.service';
 @Injectable()
 export class CustomErrorHandler implements ErrorHandler {

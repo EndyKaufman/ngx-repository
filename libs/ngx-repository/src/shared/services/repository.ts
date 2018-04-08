@@ -1,20 +1,19 @@
-import { OnDestroy } from '@angular/core';
-import { MockProvider } from '../providers/mock.provider';
-import { RestProvider } from '../providers/rest.provider';
-import { Provider } from '../providers/provider';
-import { Injector } from '@angular/core';
-import { IModel } from '../interfaces/model';
-import { IMockProviderOptions } from '../interfaces/mock-provider-options';
-import { IRestProviderOptions } from '../interfaces/rest-provider-options';
-import { IProviderOptions } from '../interfaces/provider-options';
-import { IProvider } from '../interfaces/provider';
-import { Subject } from 'rxjs/Subject';
-import { takeUntil, first, map } from 'rxjs/operators';
-import { IFactoryModel } from '../interfaces/factory-model';
+import { Injector, OnDestroy } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import { first, map, takeUntil } from 'rxjs/operators';
 import { ProviderActionEnum } from '../enums/provider-action.enum';
+import { IFactoryModel } from '../interfaces/factory-model';
+import { IMockProviderOptions } from '../interfaces/mock-provider-options';
+import { IModel } from '../interfaces/model';
+import { IProvider } from '../interfaces/provider';
+import { IProviderOptions } from '../interfaces/provider-options';
 import { IRestProviderActionOptions } from '../interfaces/rest-provider-action-options';
+import { IRestProviderOptions } from '../interfaces/rest-provider-options';
+import { MockProvider } from '../providers/mock.provider';
+import { Provider } from '../providers/provider';
+import { RestProvider } from '../providers/rest.provider';
 
 export class Repository<TModel extends IModel = any> implements OnDestroy {
 
