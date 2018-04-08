@@ -179,7 +179,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         options?: TProviderActionOptions
     ): ErrorObservable | Observable<TModel> {
         this.createIsActive$.next(true);
-        const useDefault = false; // (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
+        const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
         model = this.plainToClass(
             model,
             ProviderActionEnum.Create,
@@ -303,7 +303,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         options?: TProviderActionOptions
     ): ErrorObservable | Observable<TModel> {
         this.updateIsActive$.next(true);
-        const useDefault = false; // (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
+        const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
         model = this.plainToClass(
             model,
             ProviderActionEnum.Update,
@@ -449,7 +449,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         options?: TProviderActionOptions
     ) {
         this.loadIsActive$.next(true);
-        const useDefault = false; // (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
+        const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
         const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
         const requestUrl = this.providerActionHandlers.getRequestUrl(
             key,
@@ -518,7 +518,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         options?: TProviderActionOptions
     ) {
         this.deleteIsActive$.next(true);
-        const useDefault = false; // (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
+        const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
         const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
         const requestUrl = this.providerActionHandlers.getRequestUrl(
             key,
@@ -607,7 +607,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         options?: TProviderActionOptions,
     ) {
         this.loadAllIsActive$.next(true);
-        const useDefault = false; // (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
+        const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
         const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
         const paginationMeta = this.paginationMeta$.getValue();
         this.filter = filter ? filter : {};
