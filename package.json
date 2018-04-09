@@ -78,7 +78,7 @@
     "@types/url-parse": "1.1.0",
     "class-transformer": "0.1.9",
     "class-validator": "0.8.5",
-    "core-js": "2.5.4",
+    "core-js": "2.5.5",
     "hammerjs": "2.0.8",
     "immutable": "3.8.2",
     "lodash-es": "4.17.8",
