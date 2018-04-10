@@ -1,3 +1,13 @@
+<a name="0.3.4"></a>
+## [0.3.4](https://github.com/EndyKaufman/ngx-repository/compare/0.3.3...0.3.4) (2018-04-10)
+
+
+### Bug Fixes
+
+* **rest-provider:** Remove undefined or empty filters ([dabe991](https://github.com/EndyKaufman/ngx-repository/commit/dabe991))
+
+
+
 <a name="0.3.3"></a>
 ## [0.3.3](https://github.com/EndyKaufman/ngx-repository/compare/0.3.2...0.3.3) (2018-04-08)
 
