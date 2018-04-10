@@ -611,6 +611,11 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
         const paginationMeta = this.paginationMeta$.getValue();
         this.filter = filter ? filter : {};
+        for (const key in this.filter) {
+            if (this.filter.hasOwnProperty(key) && !this.filter[key]) {
+                delete this.filter[key];
+            }
+        }
         this.prevOptions = options;
         let requestUrl = this.providerActionHandlers.getRequestUrl(
             undefined,
