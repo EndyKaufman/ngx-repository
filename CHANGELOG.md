@@ -1,3 +1,14 @@
+<a name="0.3.5"></a>
+## [0.3.5](https://github.com/EndyKaufman/ngx-repository/compare/0.3.4...0.3.5) (2018-04-14)
+
+
+### Bug Fixes
+
+* **fake-http-client:** Remove no used @Injectable() decorator ([62cb552](https://github.com/EndyKaufman/ngx-repository/commit/62cb552))
+* **module:** Remove import HttpClientModule from module, for correct work on ssr ([49f36dd](https://github.com/EndyKaufman/ngx-repository/commit/49f36dd))
+
+
+
 <a name="0.3.4"></a>
 ## [0.3.4](https://github.com/EndyKaufman/ngx-repository/compare/0.3.3...0.3.4) (2018-04-10)
 
