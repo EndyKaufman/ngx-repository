@@ -13,7 +13,6 @@ export interface IFakeHttpClientOptions {
     limitQueryParam?: string;
     searchTextQueryParam?: string;
 }
-@Injectable()
 export class FakeHttpClient implements IHttpClient {
 
     private _idField = 'id';
