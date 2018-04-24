@@ -81,7 +81,7 @@
     "core-js": "2.5.5",
     "hammerjs": "2.0.8",
     "immutable": "3.8.2",
-    "lodash-es": "4.17.8",
+    "lodash-es": "4.17.10",
     "ngx-dynamic-form-builder": "0.3.2",
     "prismjs": "1.14.0",
     "reflect-metadata": "0.1.12",
