@@ -84,14 +84,14 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
             this.apiUrl = apiUrl;
         }
         if (filter !== undefined) {
-            this.filter = filter;
+            this.filter = { ...filter };
         }
 
         options.autoload = this.autoload;
         options.pluralName = this.pluralName;
         options.name = this.name;
         options.apiUrl = this.apiUrl;
-        options.filter = this.filter;
+        options.filter = { ...this.filter };
 
         this.options = options;
 
@@ -588,6 +588,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         filter?: any,
         options?: TProviderActionOptions,
     ) {
+        filter = { ...filter };
         const searchText = filter[this.restOptions.searchTextQueryParam] || filter.searchText;
         delete filter.searchText;
 
@@ -610,7 +611,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
         const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
         const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
         const paginationMeta = this.paginationMeta$.getValue();
-        this.filter = filter ? filter : {};
+        this.filter = filter ? { ...filter } : {};
         for (const key in this.filter) {
             if (this.filter.hasOwnProperty(key) && !this.filter[key]) {
                 delete this.filter[key];
