@@ -1,3 +1,13 @@
+<a name="0.3.6"></a>
+## [0.3.6](https://github.com/EndyKaufman/ngx-repository/compare/0.3.5...0.3.6) (2018-04-25)
+
+
+### Bug Fixes
+
+* **rest-provider:** Change to work with clonned filter, for remove link to original filter variable ([c004323](https://github.com/EndyKaufman/ngx-repository/commit/c004323))
+
+
+
 <a name="0.3.5"></a>
 ## [0.3.5](https://github.com/EndyKaufman/ngx-repository/compare/0.3.4...0.3.5) (2018-04-14)
 
