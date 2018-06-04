@@ -1,2 +1,2 @@
 #!/bin/bash
-npm publish ./libs/ngx-repository/dist
+npm publish ./dist/ngx-repository

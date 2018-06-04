@@ -32,6 +32,11 @@ html, body {
     }
 }
 
+// todo: wrong height
+.mat-dialog-container.mat-dialog-container {
+    height: auto !important;
+}
+
 .ngx-docs-example {
     .ngx-docs-example-body {
         padding-top: 10px

@@ -1,67 +1,97 @@
 <div class="users-grid">
 
-  <div class="filter-header">
-    <form>
-      <mat-form-field>
-        <input matInput placeholder="Filter" [formControl]="searchField">
-      </mat-form-field>
-    </form>
-  </div>
-
-  <mat-table #table [dataSource]="dataSource">
-
-    <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef> {{strings.id}} </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="username">
-      <mat-header-cell *matHeaderCellDef> {{strings.username}} </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.username}} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="email">
-      <mat-header-cell *matHeaderCellDef> {{strings.email}} </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="dateOfBirth">
-      <mat-header-cell *matHeaderCellDef> {{strings.dateOfBirth}} </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.dateOfBirth}} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="roles">
-      <mat-header-cell *matHeaderCellDef> {{strings.roles}} </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.rolesToString()}} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="action">
-      <mat-header-cell *matHeaderCellDef>
-        <button mat-raised-button color="primary" (click)="showModal()">
-          <mat-icon>add</mat-icon> Add
-        </button>
-      </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <div class="button-row">
-          <button mat-icon-button (click)="showModal(element)">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button (click)="showRemoveModal(element)">
-            <mat-icon>close</mat-icon>
-          </button>
-        </div>
-      </mat-cell>
-    </ng-container>
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
-  <div fxLayout="row" fxLayoutAlign="space-between center">
-    <div class="button-row custom-buttons">
-      <button mat-raised-button color="accent" (click)="customAction()">Custom action</button>
-      <button mat-raised-button color="warn" (click)="errorAction()">Error action</button>
+    <div class="filter-header">
+        <form>
+            <mat-form-field>
+                <input
+                    matInput
+                    placeholder="Filter"
+                    [formControl]="searchField">
+            </mat-form-field>
+        </form>
     </div>
-    <mat-paginator [length]="pageEvent.length" [pageIndex]="pageEvent.pageIndex" [pageSize]="pageEvent.pageSize" [pageSizeOptions]="[1, 2, 5, 10, 25, 100]"
-      (page)="setPageEvent($event)" #paginator>
-    </mat-paginator>
-  </div>
+
+    <mat-table
+        #table
+        [dataSource]="dataSource">
+
+        <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef>{{strings.id}}</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.id}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="username">
+            <mat-header-cell *matHeaderCellDef>{{strings.username}}</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.username}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+            <mat-header-cell *matHeaderCellDef>{{strings.email}}</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.email}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="dateOfBirth">
+            <mat-header-cell *matHeaderCellDef>{{strings.dateOfBirth}}</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.dateOfBirth}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="roles">
+            <mat-header-cell *matHeaderCellDef>{{strings.roles}}</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.rolesToString()}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+            <mat-header-cell *matHeaderCellDef>
+                <button
+                    mat-raised-button
+                    color="primary"
+                    (click)="showModal()">
+                    <mat-icon>add</mat-icon>
+                    Add
+                </button>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <div class="button-row">
+                    <button
+                        mat-icon-button
+                        (click)="showModal(element)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button
+                        mat-icon-button
+                        (click)="showRemoveModal(element)">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+            </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <div
+        fxLayout="row"
+        fxLayoutAlign="space-between center">
+        <div class="button-row custom-buttons">
+            <button
+                mat-raised-button
+                color="accent"
+                (click)="customAction()">
+                Custom action
+            </button>
+            <button
+                mat-raised-button
+                color="warn"
+                (click)="errorAction()">
+                Error action
+            </button>
+        </div>
+        <mat-paginator
+            [length]="pageEvent.length"
+            [pageIndex]="pageEvent.pageIndex"
+            [pageSize]="pageEvent.pageSize"
+            [pageSizeOptions]="[1, 2, 5, 10, 25, 100]"
+            (page)="setPageEvent($event)"
+            #paginator>
+        </mat-paginator>
+    </div>
 </div>

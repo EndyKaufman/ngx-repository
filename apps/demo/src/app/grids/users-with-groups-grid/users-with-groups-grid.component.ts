@@ -6,7 +6,7 @@ import { plainToClass } from 'class-transformer';
 import { ValidationError } from 'class-validator';
 import { IShortValidationErrors } from 'ngx-dynamic-form-builder';
 import { DynamicRepository, Repository, ValidatorError } from 'ngx-repository';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { MessageBoxService } from '../../others/message-box/message-box.service';

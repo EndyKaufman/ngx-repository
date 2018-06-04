@@ -2,8 +2,8 @@ import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, O
 import { MatDialog, PageEvent } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { DynamicRepository, ProviderActionEnum, Repository } from 'ngx-repository';
-import { Subject } from 'rxjs/Subject';
-import { forkJoin } from 'rxjs/observable/forkJoin';
+import { Subject } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../../environments/environment';
 import { MessageBoxService } from '../../../../others/message-box/message-box.service';

@@ -8,7 +8,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { NgxRepositoryModules } from 'ngx-repository';
+import { NgxRepositoryModule } from 'ngx-repository';
 import { SharedModule } from '../../shared/shared.module';
 import { GroupsGridModule } from '../groups-grid/groups-grid.module';
 import { UserWithGroupsGroupsGridComponent } from './user-with-groups-modal/user-with-groups-groups-grid/user-with-groups-groups-grid.component';
@@ -18,7 +18,7 @@ import { UsersWithGroupsGridComponent } from './users-with-groups-grid.component
 @NgModule({
   imports: [
     SharedModule.forRoot(),
-    NgxRepositoryModules,
+    NgxRepositoryModule,
     MatTableModule,
     MatIconModule,
     MatButtonModule,

@@ -32,7 +32,7 @@ export class RestDataPageComponent {
     {
       name: 'model.ts',
       language: 'javascript',
-      content: require('!!raw-loader?lang=typescript!../../../../../../libs/ngx-repository/src/shared/interfaces/model.ts')
+      content: require('!!raw-loader?lang=typescript!../../../../../../libs/ngx-repository/src/lib/interfaces/model.ts')
     },
     {
       name: 'custom-transforms.ts',

@@ -1,14 +1,13 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    //"noUnusedLocals": true,
-    //"noUnusedParameters": true,
     "target": "es5",
     "typeRoots": [
       "node_modules/@types"
@@ -16,6 +15,14 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ngx-repository": [
+        "dist/ngx-repository"
+      ],
+      "ngx-repository/*": [
+        "dist/ngx-repository/*"
+      ]
+    }
   }
 }
