@@ -1,3 +1,13 @@
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/EndyKaufman/ngx-repository/compare/0.3.6...0.4.0) (2018-06-04)
+
+
+### Features
+
+* Update to Angular 6 and Rx 6 ([8b8d2dd](https://github.com/EndyKaufman/ngx-repository/commit/8b8d2dd))
+
+
+
 <a name="0.3.6"></a>
 ## [0.3.6](https://github.com/EndyKaufman/ngx-repository/compare/0.3.5...0.3.6) (2018-04-25)
 
