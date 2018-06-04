@@ -1,0 +1,99 @@
+{
+  "configVersion": 1,
+  "index": "/ngx-repository/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "urls": [
+        "/ngx-repository/1.c793e689e00631d7732c.js",
+        "/ngx-repository/10.d1afdf31e69eb4f21aec.js",
+        "/ngx-repository/11.2594b4be840e55b70c23.js",
+        "/ngx-repository/2.a3f4b613824bc6066435.js",
+        "/ngx-repository/3.30f9aa98a2cfb485c3e0.js",
+        "/ngx-repository/4.b3e5d60d1a2a992fee8c.js",
+        "/ngx-repository/5.90211cea03b5036ef4d4.js",
+        "/ngx-repository/6.f75e243e727c65848ea2.js",
+        "/ngx-repository/7.2403c80fa70369fbb9cb.js",
+        "/ngx-repository/8.fd2e42130019e3ea2287.js",
+        "/ngx-repository/9.ddab0e1e98746a45fcac.js",
+        "/ngx-repository/common.d1d7d137ac449974277b.js",
+        "/ngx-repository/favicon.ico",
+        "/ngx-repository/index.html",
+        "/ngx-repository/main.da3f8853b6ac48db02f9.js",
+        "/ngx-repository/polyfills.d5895b10224db399116f.js",
+        "/ngx-repository/runtime.701a096412856f9c1eab.js",
+        "/ngx-repository/styles.6ed8f4807cf8fc898612.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "urls": [
+        "/ngx-repository/assets/icons/icon-128x128.png",
+        "/ngx-repository/assets/icons/icon-144x144.png",
+        "/ngx-repository/assets/icons/icon-152x152.png",
+        "/ngx-repository/assets/icons/icon-192x192.png",
+        "/ngx-repository/assets/icons/icon-384x384.png",
+        "/ngx-repository/assets/icons/icon-512x512.png",
+        "/ngx-repository/assets/icons/icon-72x72.png",
+        "/ngx-repository/assets/icons/icon-96x96.png",
+        "/ngx-repository/assets/img/icons/github-circle.svg",
+        "/ngx-repository/assets/img/icons/shape-outline.svg"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/ngx-repository/1.c793e689e00631d7732c.js": "0d8efc0353bce38dc91d52da78cdde8d5cf18773",
+    "/ngx-repository/10.d1afdf31e69eb4f21aec.js": "86a6f5511dd4c29084e693c7233133dbadde1d44",
+    "/ngx-repository/11.2594b4be840e55b70c23.js": "49b9d13d5dc658327fde44c2ecfe36c33335eafa",
+    "/ngx-repository/2.a3f4b613824bc6066435.js": "8c2f7646a1d86e0c31378f633be79ab43ff91679",
+    "/ngx-repository/3.30f9aa98a2cfb485c3e0.js": "68af78a82dcb4d07573894351a1961c3fba1b436",
+    "/ngx-repository/4.b3e5d60d1a2a992fee8c.js": "a5c2c2e4149ba5e98f8f5491a030098aaf98854a",
+    "/ngx-repository/5.90211cea03b5036ef4d4.js": "d39300f6ee0e3b9d788d468d2a1ec16a0b19c42b",
+    "/ngx-repository/6.f75e243e727c65848ea2.js": "bfc6bacaf5917fd094bf271e19a9a9ea4962a9de",
+    "/ngx-repository/7.2403c80fa70369fbb9cb.js": "067ec4586654bae428c311095ebd51965d666350",
+    "/ngx-repository/8.fd2e42130019e3ea2287.js": "e2e2f32938d30de2323222c6459be72dd2f7f1c2",
+    "/ngx-repository/9.ddab0e1e98746a45fcac.js": "14d3a67d1a2be0063dfbb0a2ab6aaaed9ea432ac",
+    "/ngx-repository/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
+    "/ngx-repository/assets/icons/icon-144x144.png": "b0bd89982e08f9bd2b642928f5391915b74799a7",
+    "/ngx-repository/assets/icons/icon-152x152.png": "7479a9477815dfd9668d60f8b3b2fba709b91310",
+    "/ngx-repository/assets/icons/icon-192x192.png": "1abd80d431a237a853ce38147d8c63752f10933b",
+    "/ngx-repository/assets/icons/icon-384x384.png": "329749cd6393768d3131ed6304c136b1ca05f2fd",
+    "/ngx-repository/assets/icons/icon-512x512.png": "559d9c4318b45a1f2b10596bbb4c960fe521dbcc",
+    "/ngx-repository/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
+    "/ngx-repository/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
+    "/ngx-repository/assets/img/icons/github-circle.svg": "9a2dfab04214dc8b31f2df7baec3419e18ed166e",
+    "/ngx-repository/assets/img/icons/shape-outline.svg": "9d0f9439eb430f8282fd8cc60e674b07ec8318ac",
+    "/ngx-repository/common.d1d7d137ac449974277b.js": "0aed8f810a9c8e2bfdf67f589f456bcba0df287b",
+    "/ngx-repository/favicon.ico": "84161b857f5c547e3699ddfbffc6d8d737542e01",
+    "/ngx-repository/index.html": "7adc0efc3df3b5c9a0621b31d286067000dfbca1",
+    "/ngx-repository/main.da3f8853b6ac48db02f9.js": "f3aeba36f365fc737cdf5752f0115d0627ee1446",
+    "/ngx-repository/polyfills.d5895b10224db399116f.js": "934124d16bef01da3c0771e756feaa5b4cebd399",
+    "/ngx-repository/runtime.701a096412856f9c1eab.js": "52ed2604947332d685ae50ab53ce13b68a8ab7e3",
+    "/ngx-repository/styles.6ed8f4807cf8fc898612.css": "c017a3cc78444fedea54817c08464731c35b6f37"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^\\/]*\\.[^\\/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^\\/]*__[^\\/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^\\/]*__[^\\/]*\\/.*$"
+    }
+  ]
+}
