@@ -1,27 +1,35 @@
 <div class="user-with-groups-groups-grid">
 
-  <mat-table #table [dataSource]="dataSource">
+    <mat-table
+        #table
+        [dataSource]="dataSource">
 
-    <ng-container matColumnDef="title">
-      <mat-header-cell *matHeaderCellDef> {{strings.title}} </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
-    </ng-container>
+        <ng-container matColumnDef="title">
+            <mat-header-cell *matHeaderCellDef>{{strings.title}}</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.title}}</mat-cell>
+        </ng-container>
 
-    <ng-container matColumnDef="action">
-      <mat-header-cell *matHeaderCellDef>
-        <button mat-raised-button color="primary" (click)="showAppendModal()">
-          <mat-icon>add</mat-icon>
-        </button>
-      </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <div class="button-row">
-          <button mat-icon-button (click)="showRemoveModal(element)">
-            <mat-icon>close</mat-icon>
-          </button>
-        </div>
-      </mat-cell>
-    </ng-container>
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
+        <ng-container matColumnDef="action">
+            <mat-header-cell *matHeaderCellDef>
+                <button
+                    mat-raised-button
+                    color="primary"
+                    (click)="showAppendModal()">
+                    <mat-icon>add</mat-icon>
+                    Add
+                </button>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <div class="button-row">
+                    <button
+                        mat-icon-button
+                        (click)="showRemoveModal(element)">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+            </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
 </div>

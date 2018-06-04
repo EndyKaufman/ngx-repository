@@ -8,7 +8,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { NgxRepositoryModules } from 'ngx-repository';
+import { NgxRepositoryModule } from 'ngx-repository';
 import { MessageBoxModule } from '../../others/message-box/message-box.module';
 import { SharedModule } from '../../shared/shared.module';
 import { UserModalComponent } from './user-modal/user-modal.component';
@@ -17,7 +17,7 @@ import { UsersGridComponent } from './users-grid.component';
 @NgModule({
   imports: [
     SharedModule.forRoot(),
-    NgxRepositoryModules,
+    NgxRepositoryModule,
     MatTableModule,
     MatIconModule,
     MatButtonModule,

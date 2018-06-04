@@ -7,12 +7,12 @@ import { plainToClass } from 'class-transformer';
 import { ValidationError } from 'class-validator';
 import { IShortValidationErrors } from 'ngx-dynamic-form-builder';
 import { DynamicRepository, Repository, ValidatorError } from 'ngx-repository';
-import { Subject } from 'rxjs/Subject';
 import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { MessageBoxService } from '../../others/message-box/message-box.service';
 import { Group } from '../../shared/models/group';
 import { GroupModalComponent } from './group-modal/group-modal.component';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'groups-grid',

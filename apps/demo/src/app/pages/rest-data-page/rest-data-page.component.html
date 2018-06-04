@@ -1,79 +1,118 @@
 <div class="rest-data-page">
-  <ngx-docs-example title="Rest data page" [html]="source.html" [ts]="source.ts">
-    <div class="body" fxLayout.gt-md="row" fxLayout.lt-md="column" fxLayoutAlign="space-evenly stretch">
-      <ngx-docs-example title="Users" [html]="usersGridSource.html" [css]="usersGridSource.css" [ts]="usersGridSource.ts" fxFlex.gt-sm="50"
-        fxFlex.lt-sm="100">
-        <div class="body">
-          <users-grid #usersGrid1></users-grid>
+    <ngx-docs-example
+        title="Rest data page"
+        [html]="source.html"
+        [ts]="source.ts">
+        <div
+            class="body"
+            fxLayout.gt-md="row"
+            fxLayout.lt-md="column"
+            fxLayoutAlign="space-evenly stretch">
+            <ngx-docs-example
+                title="Users"
+                [html]="usersGridSource.html"
+                [css]="usersGridSource.css"
+                [ts]="usersGridSource.ts"
+                fxFlex.gt-sm="50"
+                fxFlex.lt-sm="100">
+                <div class="body">
+                    <users-grid #usersGrid1></users-grid>
+                </div>
+                <div class="debug">
+                    <p>
+                        <strong>Items:</strong>
+                        {{usersGrid1?.repository?.items$ | async | json}}
+                    </p>
+                    <p>
+                        <strong>customActionRequest:</strong>
+                        {{usersGrid1?.customActionRequest | json}}
+                    </p>
+                    <p>
+                        <strong>customActionResponse:</strong>
+                        {{usersGrid1?.customActionResponse | json}}
+                    </p>
+                    <p>
+                        <strong>errorActionRequest:</strong>
+                        {{usersGrid1?.errorActionRequest | json}}
+                    </p>
+                    <p>
+                        <strong>errorActionResponse:</strong>
+                        {{usersGrid1?.errorActionResponse | json}}
+                    </p>
+                </div>
+            </ngx-docs-example>
+            <ngx-docs-example
+                title="Users (copy)"
+                [html]="usersGridSource.html"
+                [css]="usersGridSource.css"
+                [ts]="usersGridSource.ts"
+                fxFlex.gt-sm="50"
+                fxFlex.lt-sm="100">
+                <div class="body">
+                    <users-grid #usersGrid2></users-grid>
+                </div>
+                <div class="debug">
+                    <p>
+                        <strong>Items:</strong>
+                        {{usersGrid2?.repository?.items$ | async | json}}
+                    </p>
+                    <p>
+                        <strong>customActionRequest:</strong>
+                        {{usersGrid2?.customActionRequest | json}}
+                    </p>
+                    <p>
+                        <strong>customActionResponse:</strong>
+                        {{usersGrid2?.customActionResponse | json}}
+                    </p>
+                    <p>
+                        <strong>errorActionRequest:</strong>
+                        {{usersGrid2?.errorActionRequest | json}}
+                    </p>
+                    <p>
+                        <strong>errorActionResponse:</strong>
+                        {{usersGrid2?.errorActionResponse | json}}
+                    </p>
+                </div>
+            </ngx-docs-example>
         </div>
-        <div class="debug">
-          <p>
-            <strong>Items:</strong>
-            {{usersGrid1?.repository?.items$ | async | json}}
-          </p>
-          <p>
-            <strong>customActionRequest:</strong>
-            {{usersGrid1?.customActionRequest | json}}
-          </p>
-          <p>
-            <strong>customActionResponse:</strong>
-            {{usersGrid1?.customActionResponse | json}}
-          </p>
-          <p>
-            <strong>errorActionRequest:</strong>
-            {{usersGrid1?.errorActionRequest | json}}
-          </p>
-          <p>
-            <strong>errorActionResponse:</strong>
-            {{usersGrid1?.errorActionResponse | json}}
-          </p>
-        </div>
-      </ngx-docs-example>
-      <ngx-docs-example title="Users (copy)" [html]="usersGridSource.html" [css]="usersGridSource.css" [ts]="usersGridSource.ts"
-        fxFlex.gt-sm="50" fxFlex.lt-sm="100">
-        <div class="body">
-          <users-grid #usersGrid2></users-grid>
-        </div>
-        <div class="debug">
-          <p>
-            <strong>Items:</strong>
-            {{usersGrid2?.repository?.items$ | async | json}}
-          </p>
-          <p>
-            <strong>customActionRequest:</strong>
-            {{usersGrid2?.customActionRequest | json}}
-          </p>
-          <p>
-            <strong>customActionResponse:</strong>
-            {{usersGrid2?.customActionResponse | json}}
-          </p>
-          <p>
-            <strong>errorActionRequest:</strong>
-            {{usersGrid2?.errorActionRequest | json}}
-          </p>
-          <p>
-            <strong>errorActionResponse:</strong>
-            {{usersGrid2?.errorActionResponse | json}}
-          </p>
-        </div>
-      </ngx-docs-example>
-    </div>
-  </ngx-docs-example>
-  <div fxLayout.gt-md="row" fxLayout.lt-md="column" fxLayoutAlign="space-evenly stretch">
-    <ngx-docs-example title="User modal" [html]="userModalSource.html" [css]="userModalSource.css" [ts]="userModalSource.ts"
-      fxFlex.gt-sm="50" fxFlex.lt-sm="100">
-      <div class="body">
-        <button mat-raised-button color="primary" (click)="usersGrid1?.showModal()">
-          <mat-icon>add</mat-icon> Add
-        </button>
-        <button mat-raised-button (click)="usersGrid1?.showModal(usersGrid1?.repository?.items[0])">
-          <mat-icon>edit</mat-icon> Edit
-        </button>
-        <button mat-raised-button (click)="usersGrid1?.showRemoveModal(usersGrid1?.repository?.items[0])">
-          <mat-icon>close</mat-icon> Delete
-        </button>
-      </div>
     </ngx-docs-example>
-    <source-tabs title="Other files" [files]="otherFiles" fxFlex.gt-sm="50" fxFlex.lt-sm="100"></source-tabs>
-  </div>
+    <div
+        fxLayout.gt-md="row"
+        fxLayout.lt-md="column"
+        fxLayoutAlign="space-evenly stretch">
+        <ngx-docs-example
+            title="User modal"
+            [html]="userModalSource.html"
+            [css]="userModalSource.css"
+            [ts]="userModalSource.ts"
+            fxFlex.gt-sm="50"
+            fxFlex.lt-sm="100">
+            <div class="body">
+                <button
+                    mat-raised-button
+                    color="primary"
+                    (click)="usersGrid1?.showModal()">
+                    <mat-icon>add</mat-icon>
+                    Add
+                </button>
+                <button
+                    mat-raised-button
+                    (click)="usersGrid1?.showModal(usersGrid1?.repository?.items[0])">
+                    <mat-icon>edit</mat-icon>
+                    Edit
+                </button>
+                <button
+                    mat-raised-button
+                    (click)="usersGrid1?.showRemoveModal(usersGrid1?.repository?.items[0])">
+                    <mat-icon>close</mat-icon>
+                    Delete
+                </button>
+            </div>
+        </ngx-docs-example>
+        <source-tabs
+            title="Other files"
+            [files]="otherFiles"
+            fxFlex.gt-sm="50"
+            fxFlex.lt-sm="100"></source-tabs>
+    </div>
 </div>
