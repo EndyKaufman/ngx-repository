@@ -36,7 +36,9 @@
         "@angular/common": "^6.0.3",
         "@angular/compiler": "^6.0.3",
         "@angular/core": "^6.0.3",
-        "rxjs": "^6.0.0",
+        "rxjs": "^6.0.0"
+    },
+    "dependencies": {
         "@types/url-parse": "^1.1.0",
         "class-transformer": "^0.1.9",
         "class-validator": "^0.8.5",
