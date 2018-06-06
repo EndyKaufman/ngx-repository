@@ -1,3 +1,13 @@
+<a name="0.4.1"></a>
+## [0.4.1](https://github.com/EndyKaufman/ngx-repository/compare/0.4.0...0.4.1) (2018-06-06)
+
+
+### Bug Fixes
+
+* Add whitelistedNonPeerDependencies in ng-package.json ([00e7b05](https://github.com/EndyKaufman/ngx-repository/commit/00e7b05))
+
+
+
 <a name="0.4.0"></a>
 # [0.4.0](https://github.com/EndyKaufman/ngx-repository/compare/0.3.6...0.4.0) (2018-06-04)
 
