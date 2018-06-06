@@ -12,7 +12,7 @@ Custom repository service for Angular6+, for easy work with the REST backend, wi
 ## Installation
 
 ```bash
-npm install --save ngx-repository class-validator class-transformer
+npm i --save ngx-repository
 ```
 
 ## Links
