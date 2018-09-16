@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { GROUPS_MOCKS } from '../../shared/mocks/groups.mock';
 import { USERS_WITH_GROUPS_MOCKS } from '../../shared/mocks/users-with-groups.mock';
 
 @Component({
   selector: 'mock-nested-data-page',
-  templateUrl: './mock-nested-data-page.component.html'
+  templateUrl: './mock-nested-data-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MockNestedDataPageComponent {
 

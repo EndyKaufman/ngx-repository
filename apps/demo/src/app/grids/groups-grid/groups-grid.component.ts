@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, PageEvent } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
@@ -20,7 +20,8 @@ import { Subject } from 'rxjs';
   styleUrls: ['./groups-grid.component.scss'],
   entryComponents: [
     GroupModalComponent
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GroupsGridComponent implements OnInit, OnDestroy {
 
@@ -168,8 +169,9 @@ export class GroupsGridComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.message = this.strings.deleteMessage.
       replace('{data.id}', item.id.toString());
     dialogRef.componentInstance.yes.subscribe((modal: GroupModalComponent) =>
-      this.repository.delete(item.id).subscribe(modalItem =>
-        dialogRef.close(),
+      this.repository.delete(item.id).subscribe(modalItem => {
+        dialogRef.close();
+      },
         error =>
           this.messageBoxService.error(error).subscribe()
       )

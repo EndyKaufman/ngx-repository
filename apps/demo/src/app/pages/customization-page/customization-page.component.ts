@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { plainToClass } from 'class-transformer';
 import { IRestProviderOptions, ProviderActionEnum } from 'ngx-repository';
 import { Group } from '../../shared/models/group';
 
 @Component({
   selector: 'customization-page',
-  templateUrl: './customization-page.component.html'
+  templateUrl: './customization-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomizationPageComponent {
 

@@ -12,7 +12,7 @@ Custom repository service for Angular6+, for easy work with the REST backend, wi
 ## Installation
 
 ```bash
-npm install --save ngx-repository class-validator class-transformer
+npm i --save ngx-repository
 ```
 
 ## Links
@@ -25,13 +25,13 @@ npm install --save ngx-repository class-validator class-transformer
 
 app.module.ts
 ```js 
-import { NgxRepositoryModules } from 'ngx-repository';
+import { NgxRepositoryModule } from 'ngx-repository';
 import { UsersGridComponent } from './users-grid.component';
 
 @NgModule({
   imports: [
     ...
-    NgxRepositoryModules,
+    NgxRepositoryModule,
     ...
   ],
   declarations: [
@@ -67,13 +67,14 @@ users-grid.component.ts
 import { Component, OnInit } from '@angular/core';
 import { DynamicRepository, Repository } from 'ngx-repository';
 import { UserModel } from './user-model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'users-grid',
   template: `
 <button (click)="create()"> Create </button>
 <ul>
-  <li *ngFor="let item of repository.items$ | async">
+  <li *ngFor="let item of items$ | async">
     <span *ngIf="editedUser?.id!==item?.id">
       {{item.username}}
       <button (click)="startEdit(item)"> Edit </button>
@@ -91,6 +92,7 @@ import { UserModel } from './user-model';
 export class UsersGridComponent implements OnInit {
   public editedUser: UserModel;
   public repository: Repository<UserModel>;
+  public items$: Observable<UserModel[]>
   private mockedItems = [
     {
         'username': 'user1',
@@ -129,6 +131,7 @@ export class UsersGridComponent implements OnInit {
         perPage: 2
       }
     });*/
+    this.items$ = this.repository.items$;
   }
   startEdit(user: UserModel) {
     this.editedUser = this.repository.clone(user);

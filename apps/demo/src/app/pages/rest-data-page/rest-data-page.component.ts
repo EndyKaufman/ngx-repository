@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'rest-data-page',
-  templateUrl: './rest-data-page.component.html'
+  templateUrl: './rest-data-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RestDataPageComponent {
 
