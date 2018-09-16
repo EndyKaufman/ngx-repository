@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { DynamicFormBuilder, DynamicFormGroup } from 'ngx-dynamic-form-builder';
 import { User } from '../../../shared/models/user';
@@ -6,7 +6,8 @@ import { User } from '../../../shared/models/user';
 @Component({
   selector: 'user-modal',
   templateUrl: './user-modal.component.html',
-  styleUrls: ['./user-modal.component.scss']
+  styleUrls: ['./user-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserModalComponent implements OnInit {
 

@@ -1,9 +1,8 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog, PageEvent } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { DynamicRepository, ProviderActionEnum, Repository } from 'ngx-repository';
-import { Subject } from 'rxjs';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../../environments/environment';
 import { MessageBoxService } from '../../../../others/message-box/message-box.service';
@@ -18,7 +17,8 @@ import { GroupsGridModalComponent } from '../../../groups-grid/groups-grid-modal
   styleUrls: ['./user-with-groups-groups-grid.component.scss'],
   entryComponents: [
     GroupModalComponent, GroupsGridModalComponent
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
 

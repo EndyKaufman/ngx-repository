@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, PageEvent } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
@@ -20,7 +20,8 @@ import { UserWithGroupsModalComponent } from './user-with-groups-modal/user-with
   styleUrls: ['./users-with-groups-grid.component.scss'],
   entryComponents: [
     UserWithGroupsModalComponent
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
 
@@ -163,8 +164,9 @@ export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.exampleGroupMockedItems = this.exampleGroupMockedItems;
     dialogRef.componentInstance.exampleUseNestedGroupsFromRest = this.exampleUseNestedGroupsFromRest;
     dialogRef.componentInstance.yes.subscribe((modal: UserWithGroupsModalComponent) =>
-      this.repository.delete(item.id).subscribe(modalItem =>
-        dialogRef.close(),
+      this.repository.delete(item.id).subscribe(modalItem => {
+        dialogRef.close();
+      },
         error =>
           this.messageBoxService.error(error).subscribe()
       )

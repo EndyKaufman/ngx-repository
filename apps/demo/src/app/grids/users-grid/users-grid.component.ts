@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, PageEvent } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
@@ -20,7 +20,8 @@ import { UserModalComponent } from './user-modal/user-modal.component';
   styleUrls: ['./users-grid.component.scss'],
   entryComponents: [
     UserModalComponent
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsersGridComponent implements OnInit, OnDestroy {
 
@@ -166,8 +167,9 @@ export class UsersGridComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.message = this.strings.deleteMessage.
       replace('{data.id}', item.id.toString());
     dialogRef.componentInstance.yes.subscribe((modal: UserModalComponent) =>
-      this.repository.delete(item.id).subscribe(modalItem =>
-        dialogRef.close(),
+      this.repository.delete(item.id).subscribe(modalItem => {
+        dialogRef.close();
+      },
         error =>
           this.messageBoxService.error(error).subscribe()
       )

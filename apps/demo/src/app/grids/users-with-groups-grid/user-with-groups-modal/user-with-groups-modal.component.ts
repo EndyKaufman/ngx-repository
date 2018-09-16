@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DynamicFormBuilder, DynamicFormGroup } from 'ngx-dynamic-form-builder';
 import { Group } from '../../../shared/models/group';
 import { UserWithGroups } from '../../../shared/models/user-with-groups';
@@ -8,7 +8,8 @@ import { UserWithGroupsGroupsGridComponent } from './user-with-groups-groups-gri
 @Component({
   selector: 'user-with-groups-modal',
   templateUrl: './user-with-groups-modal.component.html',
-  styleUrls: ['./user-with-groups-modal.component.scss']
+  styleUrls: ['./user-with-groups-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserWithGroupsModalComponent implements OnInit {
 

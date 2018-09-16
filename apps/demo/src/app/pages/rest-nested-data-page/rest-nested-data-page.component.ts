@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'rest-nested-data-page',
-  templateUrl: './rest-nested-data-page.component.html'
+  templateUrl: './rest-nested-data-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RestNestedDataPageComponent {
 

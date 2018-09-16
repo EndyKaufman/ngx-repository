@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { USERS_MOCKS } from '../../shared/mocks/users.mock';
 
 @Component({
   selector: 'mock-data-page',
-  templateUrl: './mock-data-page.component.html'
+  templateUrl: './mock-data-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MockDataPageComponent {
 

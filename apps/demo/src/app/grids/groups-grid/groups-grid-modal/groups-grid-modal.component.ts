@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { DynamicFormBuilder } from 'ngx-dynamic-form-builder';
 import { Group } from '../../../shared/models/group';
@@ -7,7 +7,8 @@ import { GroupsGridComponent } from '../groups-grid.component';
 @Component({
   selector: 'groups-grid-modal',
   templateUrl: './groups-grid-modal.component.html',
-  styleUrls: ['./groups-grid-modal.component.scss']
+  styleUrls: ['./groups-grid-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GroupsGridModalComponent implements OnInit {
 
