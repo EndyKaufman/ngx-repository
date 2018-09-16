@@ -72,7 +72,7 @@ export class FakeHttpClient implements IHttpClient {
         limit: string | number,
         searchText: string
     } {
-        const uri = parse(url, true);
+        const uri = parse(url, {}, true);
         const arrWithoutApi = uri.pathname.split(this._apiUrlPrefix);
         const arr = arrWithoutApi[arrWithoutApi.length - 1].split('/');
         const entityName = arr.length === 2 ? arr[arr.length - 2] : arr[arr.length - 1];

@@ -1,3 +1,13 @@
+<a name="0.4.2"></a>
+## [0.4.2](https://github.com/EndyKaufman/ngx-repository/compare/0.4.1...0.4.2) (2018-09-16)
+
+
+### Bug Fixes
+
+* **deps:** Update dependencies ([c0ba0d4](https://github.com/EndyKaufman/ngx-repository/commit/c0ba0d4))
+
+
+
 <a name="0.4.1"></a>
 ## [0.4.1](https://github.com/EndyKaufman/ngx-repository/compare/0.4.0...0.4.1) (2018-06-06)
 
