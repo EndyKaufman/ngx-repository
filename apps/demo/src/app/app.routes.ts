@@ -5,6 +5,7 @@ import { MockDataPageRoutes } from './pages/mock-data-page/mock-data-page.routes
 import { MockNestedDataPageRoutes } from './pages/mock-nested-data-page/mock-nested-data-page.routes';
 import { RestDataPageRoutes } from './pages/rest-data-page/rest-data-page.routes';
 import { RestNestedDataPageRoutes } from './pages/rest-nested-data-page/rest-nested-data-page.routes';
+import { RestInfinityDataPageRoutes } from './pages/rest-infinity-data-page/rest-infinity-data-page.routes';
 
 export const AppRoutes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -32,6 +33,11 @@ export const AppRoutes: Routes = [
         path: 'rest-nested-data',
         loadChildren: './pages/rest-nested-data-page/rest-nested-data-page.module#RestNestedDataPageModule',
         data: RestNestedDataPageRoutes[0].data
+    },
+    {
+        path: 'rest-infinity-data',
+        loadChildren: './pages/rest-infinity-data-page/rest-infinity-data-page.module#RestInfinityDataPageModule',
+        data: RestInfinityDataPageRoutes[0].data
     },
     {
         path: 'customization',

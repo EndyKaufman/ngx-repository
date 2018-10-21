@@ -1,0 +1,12 @@
+import { Component, OnInit } from '@angular/core';
+import { USERS_MOCKS } from '../../shared/rests/users.rest';
+
+@Component({
+  selector: 'rest-infinity-data-page',
+  templateUrl: './rest-infinity-data-page.component.html'
+})
+export class RestInfinityDataPageComponent {
+  
+  mockedItems = USERS_MOCKS;
+
+}

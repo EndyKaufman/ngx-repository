@@ -1,5 +1,4 @@
 import { HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
 import { List } from 'immutable';
 import { Observable } from 'rxjs';
 import * as parseImported from 'url-parse';

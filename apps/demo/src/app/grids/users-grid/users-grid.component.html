@@ -85,12 +85,19 @@
                 Error action
             </button>
         </div>
+        <button
+            *ngIf="infinity"
+            (click)="onInfinityPage()"
+            mat-button>
+            Next infinity page
+        </button>
         <mat-paginator
             [length]="pageEvent.length"
             [pageIndex]="pageEvent.pageIndex"
             [pageSize]="pageEvent.pageSize"
             [pageSizeOptions]="[1, 2, 5, 10, 25, 100]"
             (page)="setPageEvent($event)"
+            *ngIf="!infinity"
             #paginator>
         </mat-paginator>
     </div>

@@ -4,6 +4,7 @@ import { IProviderActionOptions } from './provider-action-options';
 
 export interface IProviderOptions<TModel> {
     autoload?: boolean;
+    infinity?: boolean;
     delay?: number;
     pluralName?: string;
     name?: string;
