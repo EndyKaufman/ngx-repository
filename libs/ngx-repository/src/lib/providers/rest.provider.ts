@@ -411,8 +411,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 );
                 const index = this.items$.getValue().findIndex(eachModel => eachModel.id === key);
                 if (index !== -1) {
-                    this.items$.next(this.items$.getValue().set(index, updatedModel));
-                    this.reconfigItems();
+                    this.reconfigItems(this.items$.getValue().set(index, updatedModel));
                 }
                 if (options === undefined ||
                     options.globalEventIsActive !== false ||
@@ -683,7 +682,8 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                 );
             }),
             map(loadedItems => {
-                const loadedModels = loadedItems === undefined ? [] : loadedItems.map(loadedItem =>
+                const newPaginationMeta = this.paginationMeta$.getValue();
+                let loadedModels = loadedItems === undefined ? [] : loadedItems.map(loadedItem =>
                     this.plainToClass(
                         loadedItem,
                         ProviderActionEnum.LoadAll,
@@ -692,8 +692,11 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
                             undefined
                     )
                 );
-                this.items$.next(List(loadedModels));
-                this.reconfigItems();
+                if (this.options.infinity && newPaginationMeta.curPage > 1) {
+                    const items = this.items$.getValue().toArray();
+                    loadedModels = [...items, ...loadedModels];
+                }
+                this.reconfigItems(List(loadedModels));
                 if (options === undefined ||
                     options.globalEventIsActive !== false ||
                     options.globalEventIsActiveResolver !== undefined) {
@@ -707,12 +710,24 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
             })
         );
     }
-    reconfigItems() {
-        const paginationMeta = this.paginationMeta$.getValue();
+    reconfigItems(items?: List<TModel>) {
+        const newPaginationMeta = this.paginationMeta$.getValue();
 
-        if (paginationMeta.perPage === undefined) {
+        if (newPaginationMeta.perPage === undefined) {
             throw new ProviderError('Not set perPage count');
         }
-        this.items$.next(List(this.items$.getValue().take(paginationMeta.perPage)));
+        if (this.options.infinity && newPaginationMeta.curPage > 1) {
+            if (items) {
+                this.items$.next(items);
+            } else {
+                this.items$.next(this.items$.getValue());
+            }
+        } else {
+            if (items) {
+                this.items$.next(List(items.take(newPaginationMeta.perPage)));
+            } else {
+                this.items$.next(List(this.items$.getValue().take(newPaginationMeta.perPage)));
+            }
+        }
     }
 }

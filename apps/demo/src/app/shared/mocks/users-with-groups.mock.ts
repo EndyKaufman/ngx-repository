@@ -42,7 +42,7 @@ export const USERS_WITH_GROUPS_MOCKS =
         }
         ]
     }, {
-        'username': 'user2',
+        'username': 'user3',
         'firstName': '',
         'lastName': '',
         'isStaff': false,
@@ -52,7 +52,7 @@ export const USERS_WITH_GROUPS_MOCKS =
         'dateOfBirth': '1985-05-11T01:00:00Z',
         'lastLogin': null,
         'password': null,
-        'email': 'user2@site15.ru',
+        'email': 'user3@site15.ru',
         'dateJoined': '2017-07-26T10:14:23.342000Z',
         'groups': [
             {
@@ -62,7 +62,7 @@ export const USERS_WITH_GROUPS_MOCKS =
             }
         ]
     }, {
-        'username': 'user3',
+        'username': 'user4',
         'firstName': '',
         'lastName': '',
         'isStaff': false,
@@ -85,7 +85,7 @@ export const USERS_WITH_GROUPS_MOCKS =
         }
         ]
     }, {
-        'username': 'user4',
+        'username': 'user5',
         'firstName': '',
         'lastName': '',
         'isStaff': true,
@@ -95,7 +95,7 @@ export const USERS_WITH_GROUPS_MOCKS =
         'dateOfBirth': '1985-05-11T01:00:00Z',
         'lastLogin': null,
         'password': null,
-        'email': 'user4@site15.ru',
+        'email': 'user5@site15.ru',
         'dateJoined': '2017-07-26T10:14:23.342000Z',
         'groups': [
             {
@@ -109,7 +109,7 @@ export const USERS_WITH_GROUPS_MOCKS =
             }
         ]
     }, {
-        'username': 'user5',
+        'username': 'user6',
         'firstName': '',
         'lastName': '',
         'isStaff': false,
@@ -119,7 +119,7 @@ export const USERS_WITH_GROUPS_MOCKS =
         'dateOfBirth': '1985-05-11T01:00:00Z',
         'lastLogin': null,
         'password': null,
-        'email': 'user5@site15.ru',
+        'email': 'user6@site15.ru',
         'dateJoined': '2017-07-26T10:14:23.342000Z',
         'groups': [
             {

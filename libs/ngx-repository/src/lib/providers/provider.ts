@@ -235,9 +235,6 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
         if (newPaginationMeta.curPage !== undefined) {
             paginationMeta.curPage = newPaginationMeta.curPage;
         }
-        if (paginationMeta.totalPages < paginationMeta.curPage) {
-            paginationMeta.curPage = paginationMeta.totalPages;
-        }
         if (paginationMeta.curPage === 0) {
             paginationMeta.curPage = 1;
         }
@@ -250,5 +247,5 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
     getOptions(): IProviderOptions<TModel> {
         return {};
     }
-    reconfigItems() { }
+    reconfigItems(items?: List<TModel>) { }
 }

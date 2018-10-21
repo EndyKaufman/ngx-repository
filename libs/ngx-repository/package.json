@@ -33,10 +33,10 @@
     }
   ],
   "peerDependencies": {
-    "@angular/common": "^6.1.7",
-    "@angular/compiler": "^6.1.7",
-    "@angular/core": "^6.1.7",
-    "rxjs": "^6.3.2"
+    "@angular/common": "^6.1.10",
+    "@angular/compiler": "^6.1.10",
+    "@angular/core": "^6.1.10",
+    "rxjs": "^6.3.3"
   },
   "dependencies": {
     "@types/url-parse": "^1.4.1",

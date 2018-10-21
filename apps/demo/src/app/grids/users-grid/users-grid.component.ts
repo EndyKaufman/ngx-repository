@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, PageEvent } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
@@ -6,8 +6,7 @@ import { plainToClass } from 'class-transformer';
 import { ValidationError } from 'class-validator';
 import { IShortValidationErrors } from 'ngx-dynamic-form-builder';
 import { DynamicRepository, Repository, ValidatorError } from 'ngx-repository';
-import { Subject } from 'rxjs';
-import { of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { MessageBoxService } from '../../others/message-box/message-box.service';
@@ -31,6 +30,9 @@ export class UsersGridComponent implements OnInit, OnDestroy {
   // todo: used only as sample, you must remove it on you project
   @Input()
   exampleCustomOptions = {};
+
+  @Input()
+  infinity: boolean;
 
   @Input()
   mockedItems?: User[];
@@ -87,6 +89,7 @@ export class UsersGridComponent implements OnInit, OnDestroy {
           paginationMeta: {
             perPage: 5
           },
+          infinity: this.infinity,
           ...this.exampleCustomOptions
         }
       });
@@ -98,7 +101,8 @@ export class UsersGridComponent implements OnInit, OnDestroy {
           items: this.mockedItems,
           paginationMeta: {
             perPage: 5
-          }
+          },
+          infinity: this.infinity,
         },
         ...this.exampleCustomOptions
       });
@@ -107,6 +111,7 @@ export class UsersGridComponent implements OnInit, OnDestroy {
     this.repository.items$.
       pipe(takeUntil(this.destroyed$)).
       subscribe(items => {
+        console.log(this.dataSource, items);
         this.dataSource.data = items;
       });
 
@@ -119,6 +124,14 @@ export class UsersGridComponent implements OnInit, OnDestroy {
           length: paginationMeta.totalResults,
         } : {});
       });
+  }
+  onInfinityPage() {
+    const paginationMeta = this.repository.paginationMeta$.getValue();
+    this.repository.setOptions({
+      paginationMeta: {
+        curPage: paginationMeta.curPage + 1
+      }
+    });
   }
   ngOnDestroy() {
     this.destroyed$.next(true);

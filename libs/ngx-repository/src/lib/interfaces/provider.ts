@@ -78,5 +78,5 @@ export interface IProvider<TModel> {
     calcPaginationMeta(newPaginationMeta: IPaginationMeta): IPaginationMeta;
     setOptions(options: IProviderOptions<TModel>);
     getOptions(): IProviderOptions<TModel>;
-    reconfigItems();
+    reconfigItems(items?: List<TModel>);
 }
