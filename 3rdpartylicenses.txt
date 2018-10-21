@@ -48,7 +48,7 @@ maintained libraries used by this software which have their own
 licenses; we recommend you read them, as their terms may differ from the
 terms above.
 
-rxjs@6.3.2
+rxjs@6.3.3
 Apache-2.0
 Apache License
                          Version 2.0, January 2004
@@ -348,7 +348,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-webpack@4.19.0
+webpack@4.21.0
 MIT
 Copyright JS Foundation and other contributors
 
@@ -419,7 +419,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-@angular/forms@6.1.7
+@angular/forms@6.1.10
 MIT
 MIT
 
@@ -874,15 +874,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-@angular/common@6.1.7
+@angular/common@6.1.10
 MIT
 MIT
 
-@angular/core@6.1.7
+@angular/core@6.1.10
 MIT
 MIT
 
-@angular/animations@6.1.7
+@angular/animations@6.1.10
 MIT
 MIT
 
@@ -910,11 +910,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-@angular/platform-browser@6.1.7
+@angular/platform-browser@6.1.10
 MIT
 MIT
 
-@angular/router@6.1.7
+@angular/router@6.1.10
 MIT
 MIT
 
