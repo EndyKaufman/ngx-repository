@@ -1,3 +1,13 @@
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/EndyKaufman/ngx-repository/compare/0.4.2...0.5.0) (2018-10-21)
+
+
+### Features
+
+* **inifinity-pagination:** Add support infinity page switching ([2a21654](https://github.com/EndyKaufman/ngx-repository/commit/2a21654))
+
+
+
 <a name="0.4.2"></a>
 ## [0.4.2](https://github.com/EndyKaufman/ngx-repository/compare/0.4.1...0.4.2) (2018-09-16)
 
