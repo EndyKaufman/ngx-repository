@@ -1,3 +1,12 @@
+# [0.6.0](https://github.com/EndyKaufman/ngx-repository/compare/0.5.0...0.6.0) (2018-11-17)
+
+
+### Features
+
+* **deps:** Update dependencies ([91f19e1](https://github.com/EndyKaufman/ngx-repository/commit/91f19e1))
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/EndyKaufman/ngx-repository/compare/0.4.2...0.5.0) (2018-10-21)
 
