@@ -8,14 +8,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { SourceTabsComponent } from './source-tabs.component';
 
 @NgModule({
-  imports: [
-    SharedModule.forRoot(),
-    PrismModule,
-    MatTabsModule,
-    MatIconModule,
-    MatButtonModule,
-    FlexLayoutModule
-  ],
+  imports: [SharedModule.forRoot(), PrismModule, MatTabsModule, MatIconModule, MatButtonModule, FlexLayoutModule],
   entryComponents: [SourceTabsComponent],
   exports: [SourceTabsComponent],
   declarations: [SourceTabsComponent]

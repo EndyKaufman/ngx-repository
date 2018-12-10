@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, PageEvent } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
@@ -17,13 +26,10 @@ import { UserModalComponent } from './user-modal/user-modal.component';
   selector: 'users-grid',
   templateUrl: './users-grid.component.html',
   styleUrls: ['./users-grid.component.scss'],
-  entryComponents: [
-    UserModalComponent
-  ],
+  entryComponents: [UserModalComponent],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsersGridComponent implements OnInit, OnDestroy {
-
   @ViewChild('table')
   usersGrid: UsersGridComponent;
 
@@ -75,11 +81,13 @@ export class UsersGridComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.searchField = new FormControl();
 
-    this.searchField.valueChanges.pipe(
-      debounceTime(400),
-      distinctUntilChanged(),
-      switchMap(value => this.repository.loadAll({ search: value, page: 1 }))
-    ).subscribe();
+    this.searchField.valueChanges
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        switchMap(value => this.repository.loadAll({ search: value, page: 1 }))
+      )
+      .subscribe();
 
     if (this.mockedItems === undefined) {
       this.repository.useRest({
@@ -102,28 +110,29 @@ export class UsersGridComponent implements OnInit, OnDestroy {
           paginationMeta: {
             perPage: 5
           },
-          infinity: this.infinity,
+          infinity: this.infinity
         },
         ...this.exampleCustomOptions
       });
     }
 
-    this.repository.items$.
-      pipe(takeUntil(this.destroyed$)).
-      subscribe(items => {
-        console.log(this.dataSource, items);
-        this.dataSource.data = items;
-      });
+    this.repository.items$.pipe(takeUntil(this.destroyed$)).subscribe(items => {
+      console.log(this.dataSource, items);
+      this.dataSource.data = items;
+    });
 
-    this.repository.paginationMeta$.
-      pipe(takeUntil(this.destroyed$)).
-      subscribe(paginationMeta => {
-        this.pageEvent = plainToClass(PageEvent, paginationMeta ? {
-          pageIndex: paginationMeta.curPage - 1,
-          pageSize: paginationMeta.perPage,
-          length: paginationMeta.totalResults,
-        } : {});
-      });
+    this.repository.paginationMeta$.pipe(takeUntil(this.destroyed$)).subscribe(paginationMeta => {
+      this.pageEvent = plainToClass(
+        PageEvent,
+        paginationMeta
+          ? {
+              pageIndex: paginationMeta.curPage - 1,
+              pageSize: paginationMeta.perPage,
+              length: paginationMeta.totalResults
+            }
+          : {}
+      );
+    });
   }
   onInfinityPage() {
     const paginationMeta = this.repository.paginationMeta$.getValue();
@@ -146,28 +155,33 @@ export class UsersGridComponent implements OnInit, OnDestroy {
       data: item
     });
     dialogRef.componentInstance.yesWithoutFormValidationTitle = yesWithoutFormValidationTitle;
-    dialogRef.componentInstance.title = (item.id && !isNaN(+item.id) ? this.strings.updateTitle : this.strings.createTitle).
-      replace('{data.id}', item.id ? item.id.toString() : '');
+    dialogRef.componentInstance.title = (item.id && !isNaN(+item.id)
+      ? this.strings.updateTitle
+      : this.strings.createTitle
+    ).replace('{data.id}', item.id ? item.id.toString() : '');
     dialogRef.componentInstance.yes.subscribe((modal: UserModalComponent) =>
-      this.repository.save(modal.data).subscribe(modalItem => {
-        if (modal.data !== undefined) {
-          dialogRef.close();
-        }
-      }, error => {
-        if (error instanceof ValidatorError) {
-          const externalErrors: IShortValidationErrors = {};
-          (error.errors as ValidationError[]).map(err => {
-            Object.keys(err.constraints).forEach(cons => {
-              externalErrors[cons] = ['custom error:' + err.constraints[cons]];
+      this.repository.save(modal.data).subscribe(
+        modalItem => {
+          if (modal.data !== undefined) {
+            dialogRef.close();
+          }
+        },
+        error => {
+          if (error instanceof ValidatorError) {
+            const externalErrors: IShortValidationErrors = {};
+            (error.errors as ValidationError[]).map(err => {
+              Object.keys(err.constraints).forEach(cons => {
+                externalErrors[cons] = ['custom error:' + err.constraints[cons]];
+              });
+              return err;
             });
-            return err;
-          });
-          modal.form.validate(externalErrors);
-          modal.form.validateAllFormFields();
-        } else {
-          this.messageBoxService.error(error).subscribe();
+            modal.form.validate(externalErrors);
+            modal.form.validateAllFormFields();
+          } else {
+            this.messageBoxService.error(error).subscribe();
+          }
         }
-      })
+      )
     );
   }
   showRemoveModal(item: User): void {
@@ -175,51 +189,47 @@ export class UsersGridComponent implements OnInit, OnDestroy {
       width: '300px',
       data: null
     });
-    dialogRef.componentInstance.title = this.strings.deleteTitle.
-      replace('{data.id}', item.id.toString());
-    dialogRef.componentInstance.message = this.strings.deleteMessage.
-      replace('{data.id}', item.id.toString());
+    dialogRef.componentInstance.title = this.strings.deleteTitle.replace('{data.id}', item.id.toString());
+    dialogRef.componentInstance.message = this.strings.deleteMessage.replace('{data.id}', item.id.toString());
     dialogRef.componentInstance.yes.subscribe((modal: UserModalComponent) =>
-      this.repository.delete(item.id).subscribe(modalItem => {
-        dialogRef.close();
-      },
-        error =>
-          this.messageBoxService.error(error).subscribe()
+      this.repository.delete(item.id).subscribe(
+        modalItem => {
+          dialogRef.close();
+        },
+        error => this.messageBoxService.error(error).subscribe()
       )
     );
   }
   customAction() {
     this.customActionRequest = { question: 'How are you?' };
-    const actionRequestOptions = this.mockedItems ? {
-      request: (url: string, body: any) => {
-        const data = { headers: {}, body: { answer: 'All is well!' } };
-        return of(data);
-      }
-    } : undefined;
+    const actionRequestOptions = this.mockedItems
+      ? {
+          request: (url: string, body: any) => {
+            const data = { headers: {}, body: { answer: 'All is well!' } };
+            return of(data);
+          }
+        }
+      : undefined;
     const firstUser = this.repository.items[0];
-    this.repository.action(
-      firstUser.id + '/custom-action',
-      this.customActionRequest,
-      actionRequestOptions
-    ).subscribe(result => {
-      this.customActionResponse = result;
-      this.messageBoxService.info(result.answer).subscribe();
-    });
+    this.repository
+      .action(firstUser.id + '/custom-action', this.customActionRequest, actionRequestOptions)
+      .subscribe(result => {
+        this.customActionResponse = result;
+        this.messageBoxService.info(result.answer).subscribe();
+      });
   }
   errorAction() {
     this.errorActionRequest = { question: 'How are you?' };
-    const actionRequestOptions = this.mockedItems ? {
-      request: (url: string, body: any) => {
-        // const data = { headers: {}, body: { answer: 'All is well!' } };
-        throw new Error('Big problem');
-      }
-    } : undefined;
-    this.repository.action(
-      'error-action',
-      this.errorActionRequest,
-      actionRequestOptions
-    ).subscribe(result =>
-      this.errorActionResponse = result
-    );
+    const actionRequestOptions = this.mockedItems
+      ? {
+          request: (url: string, body: any) => {
+            // const data = { headers: {}, body: { answer: 'All is well!' } };
+            throw new Error('Big problem');
+          }
+        }
+      : undefined;
+    this.repository
+      .action('error-action', this.errorActionRequest, actionRequestOptions)
+      .subscribe(result => (this.errorActionResponse = result));
   }
 }

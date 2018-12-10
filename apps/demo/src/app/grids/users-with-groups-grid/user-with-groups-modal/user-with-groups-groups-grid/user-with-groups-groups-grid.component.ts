@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
 import { MatDialog, PageEvent } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { DynamicRepository, ProviderActionEnum, Repository } from 'ngx-repository';
@@ -15,13 +24,10 @@ import { GroupsGridModalComponent } from '../../../groups-grid/groups-grid-modal
   selector: 'user-with-groups-groups-grid',
   templateUrl: './user-with-groups-groups-grid.component.html',
   styleUrls: ['./user-with-groups-groups-grid.component.scss'],
-  entryComponents: [
-    GroupModalComponent, GroupsGridModalComponent
-  ],
+  entryComponents: [GroupModalComponent, GroupsGridModalComponent],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
-
   @Input()
   user: UserWithGroups;
   @Output()
@@ -84,11 +90,9 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
       });
     }
 
-    this.repository.items$.
-      pipe(takeUntil(this.destroyed$)).
-      subscribe(items => {
-        this.dataSource.data = items;
-      });
+    this.repository.items$.pipe(takeUntil(this.destroyed$)).subscribe(items => {
+      this.dataSource.data = items;
+    });
   }
   ngOnDestroy() {
     this.destroyed$.next(true);
@@ -99,19 +103,21 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
       width: '400px',
       data: null
     });
-    dialogRef.componentInstance.title = this.strings.deleteFromUserTitle.
-      replace('{data.title}', item.title.toString());
-    dialogRef.componentInstance.message = this.strings.deleteFromUserMessage.
-      replace('{data.title}', item.title.toString());
+    dialogRef.componentInstance.title = this.strings.deleteFromUserTitle.replace('{data.title}', item.title.toString());
+    dialogRef.componentInstance.message = this.strings.deleteFromUserMessage.replace(
+      '{data.title}',
+      item.title.toString()
+    );
     dialogRef.componentInstance.yes.subscribe((modal: GroupModalComponent) =>
-      this.repository.delete(item.id, { globalEventIsActive: false }).subscribe(modalItem => {
-        const filtred = this.user.groups.filter(eachItem => eachItem.id !== modalItem.id);
-        this.user.groups = filtred;
-        this.userChange.emit(this.user);
-        dialogRef.close();
-      },
-        error =>
-          this.messageBoxService.error(error).subscribe())
+      this.repository.delete(item.id, { globalEventIsActive: false }).subscribe(
+        modalItem => {
+          const filtred = this.user.groups.filter(eachItem => eachItem.id !== modalItem.id);
+          this.user.groups = filtred;
+          this.userChange.emit(this.user);
+          dialogRef.close();
+        },
+        error => this.messageBoxService.error(error).subscribe()
+      )
     );
   }
   showAppendModal(): void {
@@ -135,12 +141,8 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
         }
       });
       if (observables.length) {
-        forkJoin(
-          ...observables
-        ).subscribe((modalItems: Group[]) => {
-          modalItems.forEach(modalItem =>
-            this.user.groups.unshift(modalItem)
-          );
+        forkJoin(...observables).subscribe((modalItems: Group[]) => {
+          modalItems.forEach(modalItem => this.user.groups.unshift(modalItem));
           this.userChange.emit(this.user);
           dialogRef.close();
         });

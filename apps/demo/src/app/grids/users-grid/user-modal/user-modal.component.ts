@@ -1,4 +1,13 @@
-import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { DynamicFormBuilder, DynamicFormGroup } from 'ngx-dynamic-form-builder';
 import { User } from '../../../shared/models/user';
@@ -10,7 +19,6 @@ import { User } from '../../../shared/models/user';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserModalComponent implements OnInit {
-
   // todo: used only as sample, you must remove it on you project
   @Input()
   yesWithoutFormValidationTitle?: string;

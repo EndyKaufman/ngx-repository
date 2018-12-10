@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DynamicFormBuilder, DynamicFormGroup } from 'ngx-dynamic-form-builder';
 import { Group } from '../../../shared/models/group';
@@ -12,7 +22,6 @@ import { UserWithGroupsGroupsGridComponent } from './user-with-groups-groups-gri
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserWithGroupsModalComponent implements OnInit {
-
   @ViewChild('groupsGrid')
   groupsGrid: UserWithGroupsGroupsGridComponent;
   // todo: used only as sample, you must remove it on you project

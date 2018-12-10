@@ -14,13 +14,8 @@ import { CustomErrorHandler } from './shared/exceptions/error.handler';
 import { SharedModule } from './shared/shared.module';
 import { MyErrorStateMatcher } from './shared/utils/my-error-state-matcher';
 
-
-
-
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     SharedModule.forRoot(),
     MessageBoxModule.forRoot(),
@@ -38,4 +33,4 @@ import { MyErrorStateMatcher } from './shared/utils/my-error-state-matcher';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

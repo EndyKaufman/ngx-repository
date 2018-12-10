@@ -1,4 +1,14 @@
-import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { DynamicFormBuilder } from 'ngx-dynamic-form-builder';
 import { Group } from '../../../shared/models/group';
@@ -11,7 +21,6 @@ import { GroupsGridComponent } from '../groups-grid.component';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GroupsGridModalComponent implements OnInit {
-
   @ViewChild('groupsGrid')
   groupsGrid: GroupsGridComponent;
 
@@ -43,8 +52,7 @@ export class GroupsGridModalComponent implements OnInit {
     public dialogRef: MatDialogRef<GroupsGridModalComponent>,
     public changeDetectorRef: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) public data?: any
-  ) {
-  }
+  ) {}
   ngOnInit() {
     this.changeDetectorRef.detectChanges();
   }

@@ -1,6 +1,6 @@
 export interface IRestOptions {
-    idField?: string;
-    pageQueryParam?: string;
-    limitQueryParam?: string;
-    searchTextQueryParam?: string;
+  idField?: string;
+  pageQueryParam?: string;
+  limitQueryParam?: string;
+  searchTextQueryParam?: string;
 }

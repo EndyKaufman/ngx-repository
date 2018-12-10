@@ -31,21 +31,9 @@ import { UsersWithGroupsGridComponent } from './users-with-groups-grid.component
     FlexLayoutModule,
     GroupsGridModule.forRoot()
   ],
-  entryComponents: [
-    UsersWithGroupsGridComponent,
-    UserWithGroupsModalComponent,
-    UserWithGroupsGroupsGridComponent
-  ],
-  exports: [
-    UsersWithGroupsGridComponent,
-    UserWithGroupsModalComponent,
-    UserWithGroupsGroupsGridComponent
-  ],
-  declarations: [
-    UsersWithGroupsGridComponent,
-    UserWithGroupsModalComponent,
-    UserWithGroupsGroupsGridComponent
-  ]
+  entryComponents: [UsersWithGroupsGridComponent, UserWithGroupsModalComponent, UserWithGroupsGroupsGridComponent],
+  exports: [UsersWithGroupsGridComponent, UserWithGroupsModalComponent, UserWithGroupsGroupsGridComponent],
+  declarations: [UsersWithGroupsGridComponent, UserWithGroupsModalComponent, UserWithGroupsGroupsGridComponent]
 })
 export class UsersWithGroupsGridModule {
   static forRoot(): ModuleWithProviders {

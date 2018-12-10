@@ -29,21 +29,9 @@ import { GroupsGridComponent } from './groups-grid.component';
     FormsModule,
     FlexLayoutModule
   ],
-  entryComponents: [
-    GroupsGridComponent,
-    GroupModalComponent,
-    GroupsGridModalComponent
-  ],
-  exports: [
-    GroupsGridComponent,
-    GroupModalComponent,
-    GroupsGridModalComponent
-  ],
-  declarations: [
-    GroupsGridComponent,
-    GroupModalComponent,
-    GroupsGridModalComponent
-  ]
+  entryComponents: [GroupsGridComponent, GroupModalComponent, GroupsGridModalComponent],
+  exports: [GroupsGridComponent, GroupModalComponent, GroupsGridModalComponent],
+  declarations: [GroupsGridComponent, GroupModalComponent, GroupsGridModalComponent]
 })
 export class GroupsGridModule {
   static forRoot(): ModuleWithProviders {

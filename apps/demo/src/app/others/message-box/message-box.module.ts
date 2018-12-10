@@ -8,34 +8,17 @@ import { MatButtonModule, MatInputModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
-  imports: [
-    SharedModule.forRoot(),
-    MatDialogModule,
-    MatIconModule,
-    MatButtonModule,
-    MatInputModule,
-    FlexLayoutModule
-  ],
-  providers: [
-    MessageBoxService
-  ],
-  entryComponents: [
-    MessageBoxComponent
-  ],
-  exports: [
-    MessageBoxComponent
-  ],
-  declarations: [
-    MessageBoxComponent
-  ]
+  imports: [SharedModule.forRoot(), MatDialogModule, MatIconModule, MatButtonModule, MatInputModule, FlexLayoutModule],
+  providers: [MessageBoxService],
+  entryComponents: [MessageBoxComponent],
+  exports: [MessageBoxComponent],
+  declarations: [MessageBoxComponent]
 })
 export class MessageBoxModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: MessageBoxModule,
-      providers: [
-        MessageBoxService
-      ]
+      providers: [MessageBoxService]
     };
   }
 }

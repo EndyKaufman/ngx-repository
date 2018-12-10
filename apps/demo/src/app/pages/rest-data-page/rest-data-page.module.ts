@@ -27,4 +27,4 @@ import { RestDataPageRoutes } from './rest-data-page.routes';
   exports: [RestDataPageComponent],
   declarations: [RestDataPageComponent]
 })
-export class RestDataPageModule { }
+export class RestDataPageModule {}

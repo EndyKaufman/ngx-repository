@@ -6,7 +6,6 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RestDataPageComponent {
-
   source = {
     html: require('!!raw-loader?lang=html!./rest-data-page.component.html.txt'),
     ts: require('!!raw-loader?lang=typescript!./rest-data-page.component.ts.txt')
@@ -24,7 +23,7 @@ export class RestDataPageComponent {
     ts: require('!!raw-loader?lang=typescript!../../grids/users-grid/user-modal/user-modal.component.ts')
   };
 
-  otherFiles: { name: string, language: string, content: string }[] = [
+  otherFiles: { name: string; language: string; content: string }[] = [
     {
       name: 'user.ts',
       language: 'javascript',
@@ -46,5 +45,4 @@ export class RestDataPageComponent {
       content: require('!!raw-loader?lang=typescript!../../../environments/environment.ts')
     }
   ];
-
 }

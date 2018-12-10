@@ -7,7 +7,6 @@ import { USERS_MOCKS } from '../../shared/mocks/users.mock';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RestInfinityDataPageComponent {
-
   mockedItems = USERS_MOCKS;
 
   source = {
@@ -27,7 +26,7 @@ export class RestInfinityDataPageComponent {
     ts: require('!!raw-loader?lang=typescript!../../grids/users-grid/user-modal/user-modal.component.ts')
   };
 
-  otherFiles: { name: string, language: string, content: string }[] = [
+  otherFiles: { name: string; language: string; content: string }[] = [
     {
       name: 'user.ts',
       language: 'javascript',
@@ -49,5 +48,4 @@ export class RestInfinityDataPageComponent {
       content: require('!!raw-loader?lang=typescript!../../../environments/environment.ts')
     }
   ];
-
 }

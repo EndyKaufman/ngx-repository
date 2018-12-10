@@ -29,4 +29,4 @@ import { MockNestedDataPageRoutes } from './mock-nested-data-page.routes';
   exports: [MockNestedDataPageComponent],
   declarations: [MockNestedDataPageComponent]
 })
-export class MockNestedDataPageModule { }
+export class MockNestedDataPageModule {}
