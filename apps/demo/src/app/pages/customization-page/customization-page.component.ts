@@ -9,10 +9,10 @@ import { Group } from '../../shared/models/group';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomizationPageComponent {
-
-  customization =
-    require('html-loader!markdown-loader!../../../../../../CUSTOMIZATION.md').
-      replace('<h1 id="customization">customization</h1>', '');
+  customization = require('html-loader!markdown-loader!../../../../../../CUSTOMIZATION.md').replace(
+    '<h1 id="customization">customization</h1>',
+    ''
+  );
 
   source = {
     html: require('!!raw-loader?lang=html!./customization-page.component.html.txt'),
@@ -32,7 +32,7 @@ export class CustomizationPageComponent {
       requestOptions: (key: number | string, data: any, action: ProviderActionEnum) => {
         const headers = {
           'Content-Type': 'application/json',
-          'access_token': 'JWT fake-access-token'
+          access_token: 'JWT fake-access-token'
         };
         return {
           headers: headers,

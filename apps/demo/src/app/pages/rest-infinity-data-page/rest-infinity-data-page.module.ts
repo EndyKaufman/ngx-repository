@@ -27,4 +27,4 @@ import { RestInfinityDataPageRoutes } from './rest-infinity-data-page.routes';
   exports: [RestInfinityDataPageComponent],
   declarations: [RestInfinityDataPageComponent]
 })
-export class RestInfinityDataPageModule { }
+export class RestInfinityDataPageModule {}

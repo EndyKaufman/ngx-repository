@@ -6,7 +6,6 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RestNestedDataPageComponent {
-
   source = {
     html: require('!!raw-loader?lang=html!./rest-nested-data-page.component.html.txt'),
     ts: require('!!raw-loader?lang=typescript!./rest-nested-data-page.component.ts.txt')
@@ -47,7 +46,7 @@ export class RestNestedDataPageComponent {
     ts: require('!!raw-loader?lang=typescript!../../grids/groups-grid/groups-grid-modal/groups-grid-modal.component.ts')
   };
 
-  otherFiles: { name: string, language: string, content: string }[] = [
+  otherFiles: { name: string; language: string; content: string }[] = [
     {
       name: 'user-with-groups.ts',
       language: 'javascript',
@@ -79,5 +78,4 @@ export class RestNestedDataPageComponent {
       content: require('!!raw-loader?lang=typescript!../../shared/mocks/groups.mock.ts')
     }
   ];
-
 }

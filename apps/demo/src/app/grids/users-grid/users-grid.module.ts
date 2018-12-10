@@ -30,18 +30,9 @@ import { UsersGridComponent } from './users-grid.component';
     FlexLayoutModule,
     MessageBoxModule.forRoot()
   ],
-  entryComponents: [
-    UsersGridComponent,
-    UserModalComponent
-  ],
-  exports: [
-    UsersGridComponent,
-    UserModalComponent
-  ],
-  declarations: [
-    UsersGridComponent,
-    UserModalComponent
-  ]
+  entryComponents: [UsersGridComponent, UserModalComponent],
+  exports: [UsersGridComponent, UserModalComponent],
+  declarations: [UsersGridComponent, UserModalComponent]
 })
 export class UsersGridModule {
   static forRoot(): ModuleWithProviders {

@@ -5,20 +5,14 @@ import { RestProviderActionHandlers } from './providers/rest-provider-action-han
 import { DynamicRepository } from './services/dynamic.repository';
 
 @NgModule({
-    imports: [
-        CommonModule
-    ],
-    providers: [
-        RestProviderActionHandlers,
-        MockProviderActionHandlers,
-        DynamicRepository
-    ],
+  imports: [CommonModule],
+  providers: [RestProviderActionHandlers, MockProviderActionHandlers, DynamicRepository]
 })
 export class NgxRepositoryModule {
-    static forRoot(): ModuleWithProviders {
-        return {
-            ngModule: NgxRepositoryModule,
-            providers: []
-        };
-    }
+  static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: NgxRepositoryModule,
+      providers: []
+    };
+  }
 }

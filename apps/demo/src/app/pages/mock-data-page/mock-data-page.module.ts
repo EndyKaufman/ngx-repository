@@ -27,4 +27,4 @@ import { MockDataPageRoutes } from './mock-data-page.routes';
   exports: [MockDataPageComponent],
   declarations: [MockDataPageComponent]
 })
-export class MockDataPageModule { }
+export class MockDataPageModule {}

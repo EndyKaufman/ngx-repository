@@ -8,7 +8,6 @@ import { USERS_WITH_GROUPS_MOCKS } from '../../shared/mocks/users-with-groups.mo
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MockNestedDataPageComponent {
-
   mockedItems = USERS_WITH_GROUPS_MOCKS;
   // todo: used only as sample, you must remove it on you project
   exampleGroupMockedItems = GROUPS_MOCKS;
@@ -53,7 +52,7 @@ export class MockNestedDataPageComponent {
     ts: require('!!raw-loader?lang=typescript!../../grids/groups-grid/groups-grid-modal/groups-grid-modal.component.ts')
   };
 
-  otherFiles: { name: string, language: string, content: string }[] = [
+  otherFiles: { name: string; language: string; content: string }[] = [
     {
       name: 'user-with-groups.ts',
       language: 'javascript',
@@ -85,5 +84,4 @@ export class MockNestedDataPageComponent {
       content: require('!!raw-loader?lang=typescript!../../shared/mocks/groups.mock.ts')
     }
   ];
-
 }

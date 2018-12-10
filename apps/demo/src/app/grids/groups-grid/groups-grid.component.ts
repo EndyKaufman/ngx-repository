@@ -18,13 +18,10 @@ import { Subject } from 'rxjs';
   selector: 'groups-grid',
   templateUrl: './groups-grid.component.html',
   styleUrls: ['./groups-grid.component.scss'],
-  entryComponents: [
-    GroupModalComponent
-  ],
+  entryComponents: [GroupModalComponent],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GroupsGridComponent implements OnInit, OnDestroy {
-
   @Input()
   mockedItems?: Group[];
 
@@ -64,13 +61,13 @@ export class GroupsGridComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.searchField = new FormControl();
 
-    this.searchField.valueChanges.pipe(
-      debounceTime(400),
-      distinctUntilChanged(),
-      switchMap(value =>
-        this.repository.loadAll({ searchText: value, curPage: 1 })
+    this.searchField.valueChanges
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        switchMap(value => this.repository.loadAll({ searchText: value, curPage: 1 }))
       )
-    ).subscribe();
+      .subscribe();
 
     if (this.mockedItems === undefined) {
       this.repository.useRest({
@@ -97,21 +94,22 @@ export class GroupsGridComponent implements OnInit, OnDestroy {
       });
     }
 
-    this.repository.items$.
-      pipe(takeUntil(this.destroyed$)).
-      subscribe(items => {
-        this.dataSource.data = items;
-      });
+    this.repository.items$.pipe(takeUntil(this.destroyed$)).subscribe(items => {
+      this.dataSource.data = items;
+    });
 
-    this.repository.paginationMeta$.
-      pipe(takeUntil(this.destroyed$)).
-      subscribe(paginationMeta => {
-        this.pageEvent = plainToClass(PageEvent, paginationMeta ? {
-          pageIndex: paginationMeta.curPage - 1,
-          pageSize: paginationMeta.perPage,
-          length: paginationMeta.totalResults,
-        } : {});
-      });
+    this.repository.paginationMeta$.pipe(takeUntil(this.destroyed$)).subscribe(paginationMeta => {
+      this.pageEvent = plainToClass(
+        PageEvent,
+        paginationMeta
+          ? {
+              pageIndex: paginationMeta.curPage - 1,
+              pageSize: paginationMeta.perPage,
+              length: paginationMeta.totalResults
+            }
+          : {}
+      );
+    });
   }
   ngOnDestroy() {
     this.destroyed$.next(true);
@@ -123,9 +121,7 @@ export class GroupsGridComponent implements OnInit, OnDestroy {
     return numSelected === numRows;
   }
   masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
+    this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach(row => this.selection.select(row));
   }
   showModal(item?: Group): void {
     if (item === undefined) {
@@ -135,28 +131,33 @@ export class GroupsGridComponent implements OnInit, OnDestroy {
       width: '400px',
       data: item
     });
-    dialogRef.componentInstance.title = (item.id && !isNaN(+item.id) ? this.strings.updateTitle : this.strings.createTitle).
-      replace('{data.id}', item.id ? item.id.toString() : '');
+    dialogRef.componentInstance.title = (item.id && !isNaN(+item.id)
+      ? this.strings.updateTitle
+      : this.strings.createTitle
+    ).replace('{data.id}', item.id ? item.id.toString() : '');
     dialogRef.componentInstance.yes.subscribe((modal: GroupModalComponent) =>
-      this.repository.save(modal.data).subscribe(modalItem => {
-        if (modal.data !== undefined) {
-          dialogRef.close();
-        }
-      }, error => {
-        if (error instanceof ValidatorError) {
-          const externalErrors: IShortValidationErrors = {};
-          (error.errors as ValidationError[]).map(err => {
-            Object.keys(err.constraints).forEach(cons => {
-              externalErrors[cons] = ['custom error:' + err.constraints[cons]];
+      this.repository.save(modal.data).subscribe(
+        modalItem => {
+          if (modal.data !== undefined) {
+            dialogRef.close();
+          }
+        },
+        error => {
+          if (error instanceof ValidatorError) {
+            const externalErrors: IShortValidationErrors = {};
+            (error.errors as ValidationError[]).map(err => {
+              Object.keys(err.constraints).forEach(cons => {
+                externalErrors[cons] = ['custom error:' + err.constraints[cons]];
+              });
+              return err;
             });
-            return err;
-          });
-          modal.form.validate(externalErrors);
-          modal.form.validateAllFormFields();
-        } else {
-          this.messageBoxService.error(error).subscribe();
+            modal.form.validate(externalErrors);
+            modal.form.validateAllFormFields();
+          } else {
+            this.messageBoxService.error(error).subscribe();
+          }
         }
-      })
+      )
     );
   }
   showRemoveModal(item: Group): void {
@@ -164,16 +165,14 @@ export class GroupsGridComponent implements OnInit, OnDestroy {
       width: '300px',
       data: null
     });
-    dialogRef.componentInstance.title = this.strings.deleteTitle.
-      replace('{data.id}', item.id.toString());
-    dialogRef.componentInstance.message = this.strings.deleteMessage.
-      replace('{data.id}', item.id.toString());
+    dialogRef.componentInstance.title = this.strings.deleteTitle.replace('{data.id}', item.id.toString());
+    dialogRef.componentInstance.message = this.strings.deleteMessage.replace('{data.id}', item.id.toString());
     dialogRef.componentInstance.yes.subscribe((modal: GroupModalComponent) =>
-      this.repository.delete(item.id).subscribe(modalItem => {
-        dialogRef.close();
-      },
-        error =>
-          this.messageBoxService.error(error).subscribe()
+      this.repository.delete(item.id).subscribe(
+        modalItem => {
+          dialogRef.close();
+        },
+        error => this.messageBoxService.error(error).subscribe()
       )
     );
   }

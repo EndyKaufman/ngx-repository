@@ -1,69 +1,106 @@
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 export interface IHttpClient {
-
-    get<T = any>(url: string, options?: {
-        headers?: HttpHeaders | {
+  get<T = any>(
+    url: string,
+    options?: {
+      headers?:
+        | HttpHeaders
+        | {
             [header: string]: string | string[];
-        };
-        observe?: 'response';
-        params?: HttpParams | {
+          };
+      observe?: 'response';
+      params?:
+        | HttpParams
+        | {
             [param: string]: string | string[];
-        };
-        reportProgress?: boolean;
-        responseType?: 'json';
-        withCredentials?: boolean;
-    }): Observable<any>;
+          };
+      reportProgress?: boolean;
+      responseType?: 'json';
+      withCredentials?: boolean;
+    }
+  ): Observable<any>;
 
-    post<T = any>(url: string, body: any, options?: {
-        headers?: HttpHeaders | {
+  post<T = any>(
+    url: string,
+    body: any,
+    options?: {
+      headers?:
+        | HttpHeaders
+        | {
             [header: string]: string | string[];
-        };
-        observe?: 'response';
-        params?: HttpParams | {
+          };
+      observe?: 'response';
+      params?:
+        | HttpParams
+        | {
             [param: string]: string | string[];
-        };
-        reportProgress?: boolean;
-        responseType?: 'json';
-        withCredentials?: boolean;
-    }): Observable<any>;
+          };
+      reportProgress?: boolean;
+      responseType?: 'json';
+      withCredentials?: boolean;
+    }
+  ): Observable<any>;
 
-    put<T = any>(url: string, body: any, options?: {
-        headers?: HttpHeaders | {
+  put<T = any>(
+    url: string,
+    body: any,
+    options?: {
+      headers?:
+        | HttpHeaders
+        | {
             [header: string]: string | string[];
-        };
-        observe?: 'body';
-        params?: HttpParams | {
+          };
+      observe?: 'body';
+      params?:
+        | HttpParams
+        | {
             [param: string]: string | string[];
-        };
-        reportProgress?: boolean;
-        responseType?: 'json';
-        withCredentials?: boolean;
-    }): Observable<any>;
+          };
+      reportProgress?: boolean;
+      responseType?: 'json';
+      withCredentials?: boolean;
+    }
+  ): Observable<any>;
 
-    delete<T = any>(url: string, options?: {
-        headers?: HttpHeaders | {
+  delete<T = any>(
+    url: string,
+    options?: {
+      headers?:
+        | HttpHeaders
+        | {
             [header: string]: string | string[];
-        };
-        observe?: 'response';
-        params?: HttpParams | {
+          };
+      observe?: 'response';
+      params?:
+        | HttpParams
+        | {
             [param: string]: string | string[];
-        };
-        reportProgress?: boolean;
-        responseType?: 'json';
-        withCredentials?: boolean;
-    }): Observable<any>;
+          };
+      reportProgress?: boolean;
+      responseType?: 'json';
+      withCredentials?: boolean;
+    }
+  ): Observable<any>;
 
-    patch<T = any>(url: string, body: any, options?: {
-        headers?: HttpHeaders | {
+  patch<T = any>(
+    url: string,
+    body: any,
+    options?: {
+      headers?:
+        | HttpHeaders
+        | {
             [header: string]: string | string[];
-        };
-        observe?: 'response';
-        params?: HttpParams | {
+          };
+      observe?: 'response';
+      params?:
+        | HttpParams
+        | {
             [param: string]: string | string[];
-        };
-        reportProgress?: boolean;
-        responseType?: 'json';
-        withCredentials?: boolean;
-    }): Observable<any>;
+          };
+      reportProgress?: boolean;
+      responseType?: 'json';
+      withCredentials?: boolean;
+    }
+  ): Observable<any>;
 }

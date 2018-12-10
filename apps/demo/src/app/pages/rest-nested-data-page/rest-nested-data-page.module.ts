@@ -29,4 +29,4 @@ import { RestNestedDataPageRoutes } from './rest-nested-data-page.routes';
   exports: [RestNestedDataPageComponent],
   declarations: [RestNestedDataPageComponent]
 })
-export class RestNestedDataPageModule { }
+export class RestNestedDataPageModule {}

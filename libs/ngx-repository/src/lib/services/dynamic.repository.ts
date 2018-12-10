@@ -4,9 +4,7 @@ import { Repository } from './repository';
 
 @Injectable()
 export class DynamicRepository extends Repository<Model> {
-    constructor(
-        protected injector: Injector
-    ) {
-        super(injector, Model);
-    }
+  constructor(protected injector: Injector) {
+    super(injector, Model);
+  }
 }

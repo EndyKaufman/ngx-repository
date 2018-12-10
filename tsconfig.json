@@ -18,10 +18,10 @@
     ],
     "paths": {
       "ngx-repository": [
-        "dist/ngx-repository"
+        "libs/ngx-repository/src"
       ],
       "ngx-repository/*": [
-        "dist/ngx-repository/*"
+        "libs/ngx-repository/src/*"
       ]
     }
   }
