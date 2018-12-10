@@ -11,6 +11,7 @@ export * from './lib/interfaces/provider-action-action-model';
 export * from './lib/interfaces/provider-action-options';
 export * from './lib/interfaces/provider-options';
 export * from './lib/interfaces/provider';
+export * from './lib/interfaces/repository';
 export * from './lib/interfaces/rest-options';
 export * from './lib/interfaces/rest-provider-action-handlers';
 export * from './lib/interfaces/rest-provider-action-options';
