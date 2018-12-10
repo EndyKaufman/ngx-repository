@@ -1,7 +1,5 @@
 import { Injector, OnDestroy } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Observable } from 'rxjs';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { first, map, takeUntil } from 'rxjs/operators';
 import { ProviderActionEnum } from '../enums/provider-action.enum';
 import { IFactoryModel } from '../interfaces/factory-model';
@@ -9,13 +7,14 @@ import { IMockProviderOptions } from '../interfaces/mock-provider-options';
 import { IModel } from '../interfaces/model';
 import { IProvider } from '../interfaces/provider';
 import { IProviderOptions } from '../interfaces/provider-options';
+import { IRepository } from '../interfaces/repository';
 import { IRestProviderActionOptions } from '../interfaces/rest-provider-action-options';
 import { IRestProviderOptions } from '../interfaces/rest-provider-options';
 import { MockProvider } from '../providers/mock.provider';
 import { Provider } from '../providers/provider';
 import { RestProvider } from '../providers/rest.provider';
 
-export class Repository<TModel extends IModel = any> implements OnDestroy {
+export class Repository<TModel extends IModel = any> implements IRepository<TModel>, OnDestroy {
 
     mockProvider?: IProvider<TModel>;
     restProvider?: IProvider<TModel>;
