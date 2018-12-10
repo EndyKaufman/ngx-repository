@@ -1,3 +1,13 @@
+## [0.6.1](https://github.com/EndyKaufman/ngx-repository/compare/0.6.0...0.6.1) (2018-12-10)
+
+
+### Bug Fixes
+
+* Add interface and implements from it ([#87](https://github.com/EndyKaufman/ngx-repository/issues/87)) ([4c72cde](https://github.com/EndyKaufman/ngx-repository/commit/4c72cde))
+* Update dependencies and format sources ([b7a3e88](https://github.com/EndyKaufman/ngx-repository/commit/b7a3e88))
+
+
+
 # [0.6.0](https://github.com/EndyKaufman/ngx-repository/compare/0.5.0...0.6.0) (2018-11-17)
 
 
