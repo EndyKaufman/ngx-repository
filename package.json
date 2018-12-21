@@ -82,7 +82,7 @@
     "core-js": "^2.6.0",
     "immutable": "^4.0.0-rc.12",
     "lodash-es": "^4.17.11",
-    "ngx-dynamic-form-builder": "^0.5.1",
+    "ngx-dynamic-form-builder": "^0.6.0",
     "prismjs": "^1.15.0",
     "rxjs": "^6.3.3",
     "url-parse": "^1.4.4",
