@@ -30,7 +30,6 @@ export interface IProvider<TModel> {
   instanceofFactoryModel(data: any): boolean;
   instanceofNestedFactoryModel(data: any): boolean;
   updateNestedFactoryModel(data: any): void;
-  deleteNestedFactoryModel(data: any): void;
   classToClass(model: TModel, classTransformOptions?: ClassTransformOptions);
   plainToClass(data: any, action: ProviderActionEnum, classTransformOptions?: ClassTransformOptions);
   classToPlain(model: TModel, action: ProviderActionEnum, classTransformOptions?: ClassTransformOptions);

@@ -52,12 +52,12 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
     protected injector: Injector,
     protected factoryModel?: IFactoryModel<TModel>,
     protected factoryMockProvider?: {
-      new (injector: Injector, factoryModel: IFactoryModel<TModel>, options: IMockProviderOptions<IModel>): IProvider<
+      new(injector: Injector, factoryModel: IFactoryModel<TModel>, options: IMockProviderOptions<IModel>): IProvider<
         IModel
       >;
     },
     protected factoryRestProvider?: {
-      new (injector: Injector, factoryModel: IFactoryModel<TModel>, options: IRestProviderOptions<IModel>): IProvider<
+      new(injector: Injector, factoryModel: IFactoryModel<TModel>, options: IRestProviderOptions<IModel>): IProvider<
         IModel
       >;
     }
@@ -71,14 +71,14 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
   fork<TNewModel extends IModel = TModel>(
     newFactoryModel?: IFactoryModel<TNewModel>,
     newFactoryMockProvider?: {
-      new (
+      new(
         injector: Injector,
         factoryModel: IFactoryModel<TNewModel>,
         options: IMockProviderOptions<IModel>
       ): IProvider<IModel>;
     },
     newFactoryRestProvider?: {
-      new (
+      new(
         injector: Injector,
         factoryModel: IFactoryModel<TNewModel>,
         options: IRestProviderOptions<IModel>
@@ -222,9 +222,6 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
               .delete(item.id, { useFakeHttpClient: true, globalEventIsActive: false })
               .pipe(first())
               .subscribe();
-          }
-          if (eachProvider.instanceofNestedFactoryModel(item)) {
-            eachProvider.deleteNestedFactoryModel(item);
           }
         }
       });
