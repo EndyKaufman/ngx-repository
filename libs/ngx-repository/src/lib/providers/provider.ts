@@ -44,7 +44,7 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
   protected prevOptions?: IProviderActionOptions;
   protected destroy$: Subject<boolean> = new Subject();
 
-  constructor(protected injector: Injector, protected factoryModel: IFactoryModel<TModel>) {}
+  constructor(protected injector: Injector, protected factoryModel: IFactoryModel<TModel>) { }
   instanceofFactoryModel(data: any) {
     return data instanceof this.factoryModel;
   }
@@ -70,26 +70,6 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
                 });
               } else {
                 item[key] = data;
-              }
-              this.update(item.id, item, { globalEventIsActive: false });
-            }
-            return item;
-          })
-          .toList()
-      )
-    );
-  }
-  deleteNestedFactoryModel(data: any) {
-    Object.keys(this.factoryModel.nested).forEach(key =>
-      this.items$.next(
-        this.items$
-          .getValue()
-          .map(item => {
-            if (item[key]) {
-              if (Array.isArray(item[key])) {
-                item[key] = item[key].filter(eachItem => eachItem.id !== data.id);
-              } else {
-                item[key] = undefined;
               }
               this.update(item.id, item, { globalEventIsActive: false });
             }
@@ -233,11 +213,11 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
     this.paginationMeta$.next(paginationMeta);
     return this.paginationMeta$.getValue();
   }
-  reloadAll() {}
-  checkFilterAndOptions() {}
-  setOptions(options: IProviderOptions<TModel>) {}
+  reloadAll() { }
+  checkFilterAndOptions() { }
+  setOptions(options: IProviderOptions<TModel>) { }
   getOptions(): IProviderOptions<TModel> {
     return {};
   }
-  reconfigItems(items?: List<TModel>) {}
+  reconfigItems(items?: List<TModel>) { }
 }

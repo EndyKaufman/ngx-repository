@@ -109,7 +109,7 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
       item.title.toString()
     );
     dialogRef.componentInstance.yes.subscribe((modal: GroupModalComponent) =>
-      this.repository.delete(item.id, { globalEventIsActive: false }).subscribe(
+      this.repository.delete(item.id).subscribe(
         modalItem => {
           const filtred = this.user.groups.filter(eachItem => eachItem.id !== modalItem.id);
           this.user.groups = filtred;
@@ -137,7 +137,7 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
       (modal.data as Group[]).forEach(group => {
         const foundedGroup = this.user.groups.find(item => item.id === group.id);
         if (!foundedGroup) {
-          observables.push(this.repository.create(group, { globalEventIsActive: false }));
+          observables.push(this.repository.create(group));
         }
       });
       if (observables.length) {
