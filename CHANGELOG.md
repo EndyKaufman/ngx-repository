@@ -1,3 +1,12 @@
+## [0.6.2](https://github.com/EndyKaufman/ngx-repository/compare/0.6.1...0.6.2) (2018-12-30)
+
+
+### Bug Fixes
+
+* Remove deleteNestedFactoryModel from globalEventResolver ([72d95b9](https://github.com/EndyKaufman/ngx-repository/commit/72d95b9))
+
+
+
 ## [0.6.1](https://github.com/EndyKaufman/ngx-repository/compare/0.6.0...0.6.1) (2018-12-10)
 
 
