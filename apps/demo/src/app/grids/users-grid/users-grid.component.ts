@@ -13,7 +13,7 @@ import { MatDialog, PageEvent } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { plainToClass } from 'class-transformer';
 import { ValidationError } from 'class-validator';
-import { IShortValidationErrors } from 'ngx-dynamic-form-builder';
+import { ShortValidationErrors } from 'ngx-dynamic-form-builder';
 import { DynamicRepository, Repository, ValidatorError } from 'ngx-repository';
 import { of, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
@@ -117,7 +117,6 @@ export class UsersGridComponent implements OnInit, OnDestroy {
     }
 
     this.repository.items$.pipe(takeUntil(this.destroyed$)).subscribe(items => {
-      console.log(this.dataSource, items);
       this.dataSource.data = items;
     });
 
@@ -168,7 +167,7 @@ export class UsersGridComponent implements OnInit, OnDestroy {
         },
         error => {
           if (error instanceof ValidatorError) {
-            const externalErrors: IShortValidationErrors = {};
+            const externalErrors: ShortValidationErrors = {};
             (error.errors as ValidationError[]).map(err => {
               Object.keys(err.constraints).forEach(cons => {
                 externalErrors[cons] = ['custom error:' + err.constraints[cons]];

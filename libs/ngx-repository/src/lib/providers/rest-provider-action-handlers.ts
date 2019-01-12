@@ -146,31 +146,31 @@ export class RestProviderActionHandlers implements IRestProviderActionHandlers {
     useDefault?: boolean
   ) {
     let requestUrl;
-    optionsList.forEach(eachOptions => {
-      if (
-        eachOptions !== undefined &&
-        eachOptions.actionOptions !== undefined &&
-        eachOptions.actionOptions.requestUrl !== undefined
-      ) {
-        requestUrl = eachOptions.actionOptions.requestUrl(key, data, action);
+    if (useDefault === true) {
+      optionsList.forEach(eachOptions => {
+        if (
+          eachOptions !== undefined &&
+          eachOptions.actionOptions !== undefined &&
+          eachOptions.actionOptions.requestUrl !== undefined
+        ) {
+          requestUrl = eachOptions.actionOptions.requestUrl(key, data, action);
+          return requestUrl;
+        }
+      });
+      if (requestUrl !== undefined) {
         return requestUrl;
       }
-    });
-    if (requestUrl !== undefined) {
-      return requestUrl;
     }
     let apiUrl = '';
     let pluralName = '';
-    if (useDefault !== true) {
-      optionsList.forEach(eachOptions => {
-        if (eachOptions !== undefined && eachOptions.apiUrl !== undefined) {
-          apiUrl = eachOptions.apiUrl;
-        }
-        if (eachOptions !== undefined && eachOptions.pluralName !== undefined) {
-          pluralName = eachOptions.pluralName;
-        }
-      });
-    }
+    optionsList.forEach(eachOptions => {
+      if (eachOptions !== undefined && eachOptions.apiUrl !== undefined) {
+        apiUrl = eachOptions.apiUrl;
+      }
+      if (eachOptions !== undefined && eachOptions.pluralName !== undefined) {
+        pluralName = eachOptions.pluralName;
+      }
+    });
     if (action === ProviderActionEnum.Action) {
       return apiUrl + '/' + pluralName + '/' + key;
     }

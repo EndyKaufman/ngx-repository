@@ -21,14 +21,14 @@ export class MockProvider<TModel extends IModel> extends RestProvider<TModel> {
     this.setOptions(this.options as IMockProviderOptions<TModel>);
   }
   setOptions(options?: IMockProviderOptions<TModel>) {
-    if (this.apiUrl === undefined) {
+    if (!this.apiUrl) {
       this.apiUrl = 'http://fake/api';
     }
-    if (this.pluralName === undefined) {
-      this.pluralName = 'entities';
+    if (!this.options.pluralName) {
+      this.options.pluralName = 'entities';
     }
-    if (this.name === undefined) {
-      this.name = 'entity';
+    if (!this.options.name) {
+      this.options.name = 'entity';
     }
     if (options && options.items) {
       (this.httpClient as FakeHttpClient).setItems(options.items);

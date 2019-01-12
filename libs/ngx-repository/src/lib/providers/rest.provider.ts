@@ -20,13 +20,14 @@ import { Provider } from './provider';
 import { RestProviderActionHandlers } from './rest-provider-action-handlers';
 
 export class RestProvider<TModel extends IModel> extends Provider<TModel> {
-  public pluralName: string;
-  public name: string;
   public apiUrl: string;
   public httpClient: IHttpClient;
   public fakeHttpClient: FakeHttpClient;
   public restOptions: IRestOptions;
   public providerActionHandlers: IRestProviderActionHandlers;
+
+  private _pluralName: string;
+  private _name: string;
 
   constructor(
     protected injector: Injector,
@@ -69,15 +70,15 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
     const pluralName = options === undefined ? undefined : options.pluralName;
     const name = options === undefined ? undefined : options.name;
     const apiUrl = options === undefined ? undefined : options.apiUrl;
-    const restOptions = options === undefined ? undefined : options.restOptions;
+
     if (autoload !== undefined) {
       this.autoload = autoload;
     }
     if (pluralName !== undefined) {
-      this.pluralName = pluralName;
+      this._pluralName = pluralName;
     }
     if (name !== undefined) {
-      this.name = name;
+      this._name = name;
     }
     if (apiUrl !== undefined) {
       this.apiUrl = apiUrl;
@@ -87,8 +88,8 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
     }
 
     options.autoload = this.autoload;
-    options.pluralName = this.pluralName;
-    options.name = this.name;
+    options.pluralName = this._pluralName;
+    options.name = this._name;
     options.apiUrl = this.apiUrl;
     options.filter = { ...this.filter };
 
@@ -108,7 +109,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
     options?: TProviderActionOptions
   ): Observable<TModel> {
     this.actionIsActive$.next(true);
-    const useDefault = false; // (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
+    const useDefault = (options && options.useFakeHttpClient === true) || this.httpClient instanceof FakeHttpClient;
     const errors: any = validateSync(
       data,
       options && options.classValidatorOptions ? options.classValidatorOptions : { validationError: { target: false } }
@@ -311,7 +312,7 @@ export class RestProvider<TModel extends IModel> extends Provider<TModel> {
       return throwError(new ValidatorError(errors));
     }
     let object;
-    const optionsList = [{ actionOptions: options }, this.options as IRestProviderOptions<TModel>];
+    const optionsList = [{ actionOptions: options }, { ...this.options, apiUrl: this.apiUrl }];
 
     let request;
     if (isUpdate === true) {

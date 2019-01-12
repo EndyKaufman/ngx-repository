@@ -1,10 +1,10 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, PageEvent } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { plainToClass } from 'class-transformer';
 import { ValidationError } from 'class-validator';
-import { IShortValidationErrors } from 'ngx-dynamic-form-builder';
+import { ShortValidationErrors } from 'ngx-dynamic-form-builder';
 import { DynamicRepository, Repository, ValidatorError } from 'ngx-repository';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
@@ -139,7 +139,7 @@ export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
         },
         error => {
           if (error instanceof ValidatorError) {
-            const externalErrors: IShortValidationErrors = {};
+            const externalErrors: ShortValidationErrors = {};
             (error.errors as ValidationError[]).map(err => {
               Object.keys(err.constraints).forEach(cons => {
                 externalErrors[cons] = ['custom error:' + err.constraints[cons]];

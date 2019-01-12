@@ -52,14 +52,10 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
     protected injector: Injector,
     protected factoryModel?: IFactoryModel<TModel>,
     protected factoryMockProvider?: {
-      new(injector: Injector, factoryModel: IFactoryModel<TModel>, options: IMockProviderOptions<IModel>): IProvider<
-        IModel
-      >;
+      new (injector: Injector, factoryModel: IFactoryModel<TModel>, options: IMockProviderOptions<IModel>);
     },
     protected factoryRestProvider?: {
-      new(injector: Injector, factoryModel: IFactoryModel<TModel>, options: IRestProviderOptions<IModel>): IProvider<
-        IModel
-      >;
+      new (injector: Injector, factoryModel: IFactoryModel<TModel>, options: IRestProviderOptions<IModel>);
     }
   ) {
     this.destroyed$ = new Subject<boolean>();
@@ -71,18 +67,10 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
   fork<TNewModel extends IModel = TModel>(
     newFactoryModel?: IFactoryModel<TNewModel>,
     newFactoryMockProvider?: {
-      new(
-        injector: Injector,
-        factoryModel: IFactoryModel<TNewModel>,
-        options: IMockProviderOptions<IModel>
-      ): IProvider<IModel>;
+      new (injector: Injector, factoryModel: IFactoryModel<TNewModel>, options: IMockProviderOptions<IModel>);
     },
     newFactoryRestProvider?: {
-      new(
-        injector: Injector,
-        factoryModel: IFactoryModel<TNewModel>,
-        options: IRestProviderOptions<IModel>
-      ): IProvider<IModel>;
+      new (injector: Injector, factoryModel: IFactoryModel<TNewModel>, options: IRestProviderOptions<IModel>);
     }
   ) {
     if (this.root !== undefined) {
@@ -104,13 +92,13 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
       this.mockProvider = (this.factoryMockProvider
         ? new this.factoryMockProvider(this.injector, this.factoryModel, options)
         : new MockProvider(this.injector, this.factoryModel, options)) as IProvider<TModel>;
-      this.mockProvider.name = 'Mock#' + this.root.mockProviders.length.toString();
+      this.mockProvider.providerName = 'Mock#' + this.root.mockProviders.length.toString();
       if (this.root !== undefined) {
         this.root.subscribeToProvider(this.mockProvider);
         this.root.mockProviders.push(this.mockProvider);
       }
     } else {
-      this.mockProvider.name = 'Mock#root';
+      this.mockProvider.providerName = 'Mock#root';
       this.mockProvider.setOptions(options);
       this.subscribeToProvider(this.mockProvider);
     }
@@ -123,13 +111,13 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
       this.restProvider = (this.factoryRestProvider
         ? new this.factoryRestProvider(this.injector, this.factoryModel, options)
         : new RestProvider(this.injector, this.factoryModel, options)) as IProvider<TModel>;
-      this.restProvider.name = 'Rest#' + this.root.restProviders.length.toString();
+      this.restProvider.providerName = 'Rest#' + this.root.restProviders.length.toString();
       if (this.root !== undefined) {
         this.root.subscribeToProvider(this.restProvider);
         this.root.restProviders.push(this.restProvider);
       }
     } else {
-      this.restProvider.name = 'Rest#root';
+      this.restProvider.providerName = 'Rest#root';
       this.restProvider.setOptions(options);
       this.subscribeToProvider(this.restProvider);
     }
@@ -140,7 +128,7 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
         const options: IRestProviderOptions<TModel> = eachProvider ? eachProvider.getOptions() : undefined;
         if (
           eachProvider !== undefined &&
-          eachProvider.name !== provider.name &&
+          eachProvider.providerName !== provider.providerName &&
           eachProvider.instanceofFactoryModel(item) &&
           (options === undefined ||
             (options.globalEventResolver === undefined || options.globalEventResolver(item, ProviderActionEnum.Create)))
@@ -157,7 +145,7 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
         const options: IRestProviderOptions<TModel> = eachProvider ? eachProvider.getOptions() : undefined;
         if (
           eachProvider !== undefined &&
-          eachProvider.name !== provider.name &&
+          eachProvider.providerName !== provider.providerName &&
           eachProvider.instanceofFactoryModel(item) &&
           (options === undefined ||
             (options.globalEventResolver === undefined || options.globalEventResolver(item, ProviderActionEnum.Create)))
@@ -172,7 +160,7 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
     provider.update$.pipe(takeUntil(this.destroyed$)).subscribe(item => {
       this.providers.forEach(eachProvider => {
         const options: IRestProviderOptions<TModel> = eachProvider ? eachProvider.getOptions() : undefined;
-        if (eachProvider !== undefined && eachProvider.name !== provider.name) {
+        if (eachProvider !== undefined && eachProvider.providerName !== provider.providerName) {
           if (
             eachProvider.instanceofFactoryModel(item) &&
             (options === undefined ||
@@ -193,7 +181,7 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
     provider.patch$.pipe(takeUntil(this.destroyed$)).subscribe(item => {
       this.providers.forEach(eachProvider => {
         const options: IRestProviderOptions<TModel> = eachProvider ? eachProvider.getOptions() : undefined;
-        if (eachProvider !== undefined && eachProvider.name !== provider.name) {
+        if (eachProvider !== undefined && eachProvider.providerName !== provider.providerName) {
           if (
             eachProvider.instanceofFactoryModel(item) &&
             (options === undefined ||
@@ -211,7 +199,7 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
     provider.delete$.pipe(takeUntil(this.destroyed$)).subscribe(item => {
       this.providers.forEach(eachProvider => {
         const options: IRestProviderOptions<TModel> = eachProvider ? eachProvider.getOptions() : undefined;
-        if (eachProvider !== undefined && eachProvider.name !== provider.name) {
+        if (eachProvider !== undefined && eachProvider.providerName !== provider.providerName) {
           if (
             eachProvider.instanceofFactoryModel(item) &&
             (options === undefined ||
@@ -231,7 +219,7 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
         const options: IRestProviderOptions<TModel> = eachProvider ? eachProvider.getOptions() : undefined;
         if (
           eachProvider !== undefined &&
-          eachProvider.name !== provider.name &&
+          eachProvider.providerName !== provider.providerName &&
           eachProvider.instanceofFactoryModel(item) &&
           (options === undefined ||
             (options.globalEventResolver === undefined || options.globalEventResolver(item, ProviderActionEnum.Update)))
@@ -249,7 +237,7 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
           const options: IRestProviderOptions<TModel> = eachProvider ? eachProvider.getOptions() : undefined;
           if (
             eachProvider !== undefined &&
-            eachProvider.name !== provider.name &&
+            eachProvider.providerName !== provider.providerName &&
             eachProvider.instanceofFactoryModel(item) &&
             (options === undefined ||
               (options.globalEventResolver === undefined ||

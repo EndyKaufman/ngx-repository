@@ -1,3 +1,12 @@
+## [0.6.3](https://github.com/EndyKaufman/ngx-repository/compare/0.6.2...0.6.3) (2019-01-12)
+
+
+### Bug Fixes
+
+* Fix error detect url for work with mockdata over fakehttpclient ([e64a7b2](https://github.com/EndyKaufman/ngx-repository/commit/e64a7b2))
+
+
+
 ## [0.6.2](https://github.com/EndyKaufman/ngx-repository/compare/0.6.1...0.6.2) (2018-12-30)
 
 
