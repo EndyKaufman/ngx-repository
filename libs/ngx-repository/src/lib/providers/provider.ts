@@ -19,7 +19,7 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
   filter?: any;
   autoload?: boolean;
   delay = 0;
-  name: string;
+  providerName: string;
 
   items$ = new BehaviorSubject<List<TModel>>(List([]));
 
@@ -44,7 +44,7 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
   protected prevOptions?: IProviderActionOptions;
   protected destroy$: Subject<boolean> = new Subject();
 
-  constructor(protected injector: Injector, protected factoryModel: IFactoryModel<TModel>) { }
+  constructor(protected injector: Injector, protected factoryModel: IFactoryModel<TModel>) {}
   instanceofFactoryModel(data: any) {
     return data instanceof this.factoryModel;
   }
@@ -213,11 +213,11 @@ export class Provider<TModel extends IModel = any> implements IProvider<TModel> 
     this.paginationMeta$.next(paginationMeta);
     return this.paginationMeta$.getValue();
   }
-  reloadAll() { }
-  checkFilterAndOptions() { }
-  setOptions(options: IProviderOptions<TModel>) { }
+  reloadAll() {}
+  checkFilterAndOptions() {}
+  setOptions(options: IProviderOptions<TModel>) {}
   getOptions(): IProviderOptions<TModel> {
     return {};
   }
-  reconfigItems(items?: List<TModel>) { }
+  reconfigItems(items?: List<TModel>) {}
 }

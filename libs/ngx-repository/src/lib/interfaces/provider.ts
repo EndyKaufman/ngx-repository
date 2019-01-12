@@ -10,7 +10,7 @@ import { IProviderActionOptions } from './provider-action-options';
 import { IProviderOptions } from './provider-options';
 
 export interface IProvider<TModel> {
-  name: string;
+  providerName: string;
   items$: BehaviorSubject<List<TModel>>;
   action$: Subject<IProviderActionActionModel>;
   create$: Subject<TModel>;
