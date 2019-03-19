@@ -78,7 +78,7 @@
     "@types/url-parse": "^1.4.2",
     "class-transformer": "^0.2.0",
     "class-validator": "^0.9.1",
-    "core-js": "^2.6.2",
+    "core-js": "^3.0.0",
     "immutable": "^4.0.0-rc.12",
     "lodash-es": "^4.17.11",
     "ngx-dynamic-form-builder": "^0.8.1",
