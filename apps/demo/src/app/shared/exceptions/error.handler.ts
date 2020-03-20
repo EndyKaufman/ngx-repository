@@ -4,9 +4,10 @@ import { MessageBoxService } from '../../others/message-box/message-box.service'
 export class CustomErrorHandler implements ErrorHandler {
   constructor(private _injector: Injector, private _ngZone: NgZone) {}
   handleError(error) {
+    console.error(error);
     this._ngZone.run(() => {
       const messageBoxService = this._injector.get(MessageBoxService);
-      messageBoxService.error(error).then();
+      messageBoxService.error(String(error.message || error)).then();
     });
   }
 }

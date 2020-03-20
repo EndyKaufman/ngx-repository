@@ -1,3 +1,12 @@
+# [0.7.0](https://github.com/EndyKaufman/ngx-repository/compare/0.6.3...0.7.0) (2020-03-20)
+
+
+### Features
+
+* update deps, update to Angular 9 ([4d78fb1](https://github.com/EndyKaufman/ngx-repository/commit/4d78fb199fb8f63306a066c0602f0d7127c407a6))
+
+
+
 ## [0.6.3](https://github.com/EndyKaufman/ngx-repository/compare/0.6.2...0.6.3) (2019-01-12)
 
 

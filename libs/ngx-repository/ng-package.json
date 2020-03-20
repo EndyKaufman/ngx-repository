@@ -3,7 +3,13 @@
   "dest": "../../dist/ngx-repository",
   "deleteDestPath": false,
   "lib": {
-    "entryFile": "src/public_api.ts"
+    "entryFile": "src/public_api.ts",
+    "umdModuleIds": {
+      "class-transformer": "class-transformer",
+      "class-validator": "class-validator",
+      "url-parse": "url-parse",
+      "immutable": "immutable"
+    }
   },
   "whitelistedNonPeerDependencies": [
     "."
