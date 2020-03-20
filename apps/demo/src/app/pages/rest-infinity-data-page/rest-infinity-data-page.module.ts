@@ -4,12 +4,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
-import { DocsExampleModule } from '@ngx-docs/example';
 import { UsersGridModule } from '../../grids/users-grid/users-grid.module';
 import { SourceTabsModule } from '../../others/source-tabs/source-tabs.module';
 import { SharedModule } from '../../shared/shared.module';
 import { RestInfinityDataPageComponent } from './rest-infinity-data-page.component';
 import { RestInfinityDataPageRoutes } from './rest-infinity-data-page.routes';
+import { DocsExampleModule } from '../../others/docs-example/docs-example.module';
 
 @NgModule({
   imports: [

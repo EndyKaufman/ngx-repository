@@ -1,13 +1,13 @@
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
   OnInit,
-  Output,
-  ChangeDetectionStrategy
+  Output
 } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'message-box',
@@ -18,22 +18,31 @@ import { MatDialogRef } from '@angular/material';
 export class MessageBoxComponent implements OnInit {
   @Input()
   isInfo?: boolean;
+
   @Input()
   isError?: boolean;
+
   @Input()
   hideOnNo = true;
+
   @Input()
   hideOnYes = false;
+
   @Input()
   title: string;
+
   @Input()
   message: string;
+
   @Input()
   noTitle = 'Cancel';
+
   @Input()
   yesTitle = 'OK';
+
   @Output()
   no = new EventEmitter<MessageBoxComponent>();
+
   @Output()
   yes = new EventEmitter<MessageBoxComponent>();
 

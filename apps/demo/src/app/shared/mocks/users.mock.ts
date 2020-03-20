@@ -1,4 +1,6 @@
-export const USERS_MOCKS = [
+import { User } from '../models/user';
+
+export const USERS_MOCKS: Partial<User>[] = [
   {
     username: 'user1',
     firstName: '',

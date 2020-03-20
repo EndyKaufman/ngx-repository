@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialog, PageEvent } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { plainToClass } from 'class-transformer';
 import { ValidationError } from 'class-validator';
@@ -23,7 +24,7 @@ import { UserWithGroupsModalComponent } from './user-with-groups-modal/user-with
 })
 export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
   @Input()
-  mockedItems?: UserWithGroups[];
+  mockedItems?: Partial<UserWithGroups>[];
 
   // todo: used only as sample, you must remove it on you project
   @Input()
@@ -149,7 +150,7 @@ export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
             modal.form.validate(externalErrors);
             modal.form.validateAllFormFields();
           } else {
-            this.messageBoxService.error(error).subscribe();
+            this.messageBoxService.error(error).then();
           }
         }
       )
@@ -169,7 +170,7 @@ export class UsersWithGroupsGridComponent implements OnInit, OnDestroy {
         modalItem => {
           dialogRef.close();
         },
-        error => this.messageBoxService.error(error).subscribe()
+        error => this.messageBoxService.error(error).then()
       )
     );
   }

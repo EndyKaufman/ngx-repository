@@ -1,4 +1,7 @@
-export const USERS_WITH_GROUPS_MOCKS = [
+import { User } from '../models/user';
+import { UserWithGroups } from '../models/user-with-groups';
+
+export const USERS_WITH_GROUPS_MOCKS: Partial<UserWithGroups>[] = [
   {
     username: 'user1',
     firstName: '',

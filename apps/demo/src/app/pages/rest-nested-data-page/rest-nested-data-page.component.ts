@@ -1,4 +1,5 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import { UserWithGroupsGroupsGridComponent } from '../../grids/users-with-groups-grid/user-with-groups-modal/user-with-groups-groups-grid/user-with-groups-groups-grid.component';
 
 @Component({
   selector: 'rest-nested-data-page',
@@ -6,76 +7,85 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RestNestedDataPageComponent {
+  @ViewChild('groupsGrid2')
+  groupsGrid2: UserWithGroupsGroupsGridComponent;
+
   source = {
-    html: require('!!raw-loader?lang=html!./rest-nested-data-page.component.html.txt'),
-    ts: require('!!raw-loader?lang=typescript!./rest-nested-data-page.component.ts.txt')
+    html: require('!!raw-loader!./rest-nested-data-page.component.html.txt').default,
+    ts: require('!!raw-loader!./rest-nested-data-page.component.ts.txt').default
   };
 
   usersGridSource = {
-    html: require('!!raw-loader?lang=html!../../grids/users-with-groups-grid/users-with-groups-grid.component.html'),
-    css: require('!!raw-loader?lang=scss!../../grids/users-with-groups-grid/users-with-groups-grid.component.scss'),
-    ts: require('!!raw-loader?lang=typescript!../../grids/users-with-groups-grid/users-with-groups-grid.component.ts')
+    html: require('!!raw-loader!../../grids/users-with-groups-grid/users-with-groups-grid.component.html').default,
+    css: require('!!raw-loader!../../grids/users-with-groups-grid/users-with-groups-grid.component.scss').default,
+    ts: require('!!raw-loader!../../grids/users-with-groups-grid/users-with-groups-grid.component.ts').default
   };
 
   userModalSource = {
-    html: require('!!raw-loader?lang=html!../../grids/users-with-groups-grid/user-with-groups-modal/user-with-groups-modal.component.html'),
-    css: require('!!raw-loader?lang=scss!../../grids/users-with-groups-grid/user-with-groups-modal/user-with-groups-modal.component.scss'),
-    ts: require('!!raw-loader?lang=typescript!../../grids/users-with-groups-grid/user-with-groups-modal/user-with-groups-modal.component.ts')
+    html: require('!!raw-loader!../../grids/users-with-groups-grid/user-with-groups-modal/user-with-groups-modal.component.html')
+      .default,
+    css: require('!!raw-loader!../../grids/users-with-groups-grid/user-with-groups-modal/user-with-groups-modal.component.scss')
+      .default,
+    ts: require('!!raw-loader!../../grids/users-with-groups-grid/user-with-groups-modal/user-with-groups-modal.component.ts')
+      .default
   };
 
   groupsGridSource = {
-    html: require('!!raw-loader?lang=html!../../grids/groups-grid/groups-grid.component.html'),
-    css: require('!!raw-loader?lang=scss!../../grids/groups-grid/groups-grid.component.scss'),
-    ts: require('!!raw-loader?lang=typescript!../../grids/groups-grid/groups-grid.component.ts')
+    html: require('!!raw-loader!../../grids/groups-grid/groups-grid.component.html').default,
+    css: require('!!raw-loader!../../grids/groups-grid/groups-grid.component.scss').default,
+    ts: require('!!raw-loader!../../grids/groups-grid/groups-grid.component.ts').default
   };
 
   userGroupsGridSource = {
-    html: require('!!raw-loader?lang=html!../../grids/users-with-groups-grid/user-with-groups-modal/user-with-groups-groups-grid/user-with-groups-groups-grid.component.html'),
-    css: require('!!raw-loader?lang=scss!../../grids/users-with-groups-grid/user-with-groups-modal/user-with-groups-groups-grid/user-with-groups-groups-grid.component.scss'),
-    ts: require('!!raw-loader?lang=typescript!../../grids/users-with-groups-grid/user-with-groups-modal/user-with-groups-groups-grid/user-with-groups-groups-grid.component.ts')
+    html: require('!!raw-loader!../../grids/users-with-groups-grid/user-with-groups-modal/user-with-groups-groups-grid/user-with-groups-groups-grid.component.html')
+      .default,
+    css: require('!!raw-loader!../../grids/users-with-groups-grid/user-with-groups-modal/user-with-groups-groups-grid/user-with-groups-groups-grid.component.scss')
+      .default,
+    ts: require('!!raw-loader!../../grids/users-with-groups-grid/user-with-groups-modal/user-with-groups-groups-grid/user-with-groups-groups-grid.component.ts')
+      .default
   };
 
   groupModalSource = {
-    html: require('!!raw-loader?lang=html!../../grids/groups-grid/group-modal/group-modal.component.html'),
-    css: require('!!raw-loader?lang=scss!../../grids/groups-grid/group-modal/group-modal.component.scss'),
-    ts: require('!!raw-loader?lang=typescript!../../grids/groups-grid/group-modal/group-modal.component.ts')
+    html: require('!!raw-loader!../../grids/groups-grid/group-modal/group-modal.component.html').default,
+    css: require('!!raw-loader!../../grids/groups-grid/group-modal/group-modal.component.scss').default,
+    ts: require('!!raw-loader!../../grids/groups-grid/group-modal/group-modal.component.ts').default
   };
   groupsGridModalSource = {
-    html: require('!!raw-loader?lang=html!../../grids/groups-grid/groups-grid-modal/groups-grid-modal.component.html'),
-    css: require('!!raw-loader?lang=scss!../../grids/groups-grid/groups-grid-modal/groups-grid-modal.component.scss'),
-    ts: require('!!raw-loader?lang=typescript!../../grids/groups-grid/groups-grid-modal/groups-grid-modal.component.ts')
+    html: require('!!raw-loader!../../grids/groups-grid/groups-grid-modal/groups-grid-modal.component.html').default,
+    css: require('!!raw-loader!../../grids/groups-grid/groups-grid-modal/groups-grid-modal.component.scss').default,
+    ts: require('!!raw-loader!../../grids/groups-grid/groups-grid-modal/groups-grid-modal.component.ts').default
   };
 
   otherFiles: { name: string; language: string; content: string }[] = [
     {
       name: 'user-with-groups.ts',
       language: 'javascript',
-      content: require('!!raw-loader?lang=typescript!../../shared/models/user-with-groups.ts')
+      content: require('!!raw-loader!../../shared/models/user-with-groups.ts').default
     },
     {
       name: 'group.ts',
       language: 'javascript',
-      content: require('!!raw-loader?lang=typescript!../../shared/models/group.ts')
+      content: require('!!raw-loader!../../shared/models/group.ts').default
     },
     {
       name: 'model.ts',
       language: 'javascript',
-      content: require('!!raw-loader?lang=typescript!../../../../../../libs/ngx-repository/src/lib/interfaces/model.ts')
+      content: require('!!raw-loader!../../../../../../libs/ngx-repository/src/lib/interfaces/model.ts').default
     },
     {
       name: 'custom-transforms.ts',
       language: 'javascript',
-      content: require('!!raw-loader?lang=typescript!../../shared/utils/custom-transforms.ts')
+      content: require('!!raw-loader!../../shared/utils/custom-transforms.ts').default
     },
     {
       name: 'users-with-groups.mock.ts',
       language: 'javascript',
-      content: require('!!raw-loader?lang=typescript!../../shared/mocks/users-with-groups.mock.ts')
+      content: require('!!raw-loader!../../shared/mocks/users-with-groups.mock.ts').default
     },
     {
       name: 'groups.mock.ts',
       language: 'javascript',
-      content: require('!!raw-loader?lang=typescript!../../shared/mocks/groups.mock.ts')
+      content: require('!!raw-loader!../../shared/mocks/groups.mock.ts').default
     }
   ];
 }

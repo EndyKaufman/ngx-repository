@@ -1,4 +1,3 @@
-export * from './app.component.spec';
 export * from './app.component';
 export * from './app.module';
 export * from './app.routes';
@@ -13,6 +12,12 @@ export * from './grids/users-with-groups-grid/users-with-groups-grid.component';
 export * from './grids/users-with-groups-grid/users-with-groups-grid.module';
 export * from './grids/users-with-groups-grid/user-with-groups-modal/user-with-groups-modal.component';
 export * from './grids/users-with-groups-grid/user-with-groups-modal/user-with-groups-groups-grid/user-with-groups-groups-grid.component';
+export * from './others/docs-example/docs-example.class';
+export * from './others/docs-example/docs-example.component';
+export * from './others/docs-example/docs-example.config';
+export * from './others/docs-example/docs-example.interface';
+export * from './others/docs-example/docs-example.module';
+export * from './others/docs-example/package-config.interface';
 export * from './others/message-box/message-box.component';
 export * from './others/message-box/message-box.module';
 export * from './others/message-box/message-box.service';

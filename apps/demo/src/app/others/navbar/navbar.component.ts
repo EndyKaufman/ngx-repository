@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { Router, Routes } from '@angular/router';
 
 @Component({
@@ -10,6 +10,7 @@ import { Router, Routes } from '@angular/router';
 export class NavbarComponent implements OnInit {
   @Input()
   title: string;
+
   @Input()
   set childrenRoutes(routes: any[]) {
     this._childrenRoutes = routes.filter((item: any) => item.data);

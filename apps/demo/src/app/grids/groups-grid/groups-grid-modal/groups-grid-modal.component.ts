@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   EventEmitter,
@@ -6,10 +7,9 @@ import {
   Input,
   OnInit,
   Output,
-  ViewChild,
-  ChangeDetectionStrategy
+  ViewChild
 } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DynamicFormBuilder } from 'ngx-dynamic-form-builder';
 import { Group } from '../../../shared/models/group';
 import { GroupsGridComponent } from '../groups-grid.component';

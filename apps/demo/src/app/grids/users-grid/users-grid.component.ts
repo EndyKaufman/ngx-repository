@@ -9,7 +9,6 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialog, PageEvent } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { plainToClass } from 'class-transformer';
 import { ValidationError } from 'class-validator';
@@ -21,6 +20,8 @@ import { environment } from '../../../environments/environment';
 import { MessageBoxService } from '../../others/message-box/message-box.service';
 import { User } from '../../shared/models/user';
 import { UserModalComponent } from './user-modal/user-modal.component';
+import { PageEvent } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'users-grid',
@@ -41,7 +42,7 @@ export class UsersGridComponent implements OnInit, OnDestroy {
   infinity: boolean;
 
   @Input()
-  mockedItems?: User[];
+  mockedItems?: Partial<User>[];
 
   searchField: FormControl;
 
@@ -177,7 +178,7 @@ export class UsersGridComponent implements OnInit, OnDestroy {
             modal.form.validate(externalErrors);
             modal.form.validateAllFormFields();
           } else {
-            this.messageBoxService.error(error).subscribe();
+            this.messageBoxService.error(error).then();
           }
         }
       )
@@ -195,7 +196,7 @@ export class UsersGridComponent implements OnInit, OnDestroy {
         modalItem => {
           dialogRef.close();
         },
-        error => this.messageBoxService.error(error).subscribe()
+        error => this.messageBoxService.error(error).then()
       )
     );
   }
@@ -214,7 +215,7 @@ export class UsersGridComponent implements OnInit, OnDestroy {
       .action(firstUser.id + '/custom-action', this.customActionRequest, actionRequestOptions)
       .subscribe(result => {
         this.customActionResponse = result;
-        this.messageBoxService.info(result.answer).subscribe();
+        this.messageBoxService.info(result.answer).then();
       });
   }
   errorAction() {

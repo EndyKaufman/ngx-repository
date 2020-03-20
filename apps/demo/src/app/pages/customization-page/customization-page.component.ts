@@ -9,20 +9,20 @@ import { Group } from '../../shared/models/group';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomizationPageComponent {
-  customization = require('html-loader!markdown-loader!../../../../../../CUSTOMIZATION.md').replace(
+  customization = require('!!raw-loader!../../../../../../CUSTOMIZATION.md').default.replace(
     '<h1 id="customization">customization</h1>',
     ''
   );
 
   source = {
-    html: require('!!raw-loader?lang=html!./customization-page.component.html.txt'),
-    ts: require('!!raw-loader?lang=typescript!./customization-page.component.ts.txt')
+    html: require('!!raw-loader!./customization-page.component.html.txt').default,
+    ts: require('!!raw-loader!./customization-page.component.ts.txt').default
   };
 
   gridSource = {
-    html: require('!!raw-loader?lang=html!../../grids/groups-grid/groups-grid.component.html'),
-    css: require('!!raw-loader?lang=scss!../../grids/groups-grid/groups-grid.component.scss'),
-    ts: require('!!raw-loader?lang=typescript!../../grids/groups-grid/groups-grid.component.ts')
+    html: require('!!raw-loader!../../grids/groups-grid/groups-grid.component.html').default,
+    css: require('!!raw-loader!../../grids/groups-grid/groups-grid.component.scss').default,
+    ts: require('!!raw-loader!../../grids/groups-grid/groups-grid.component.ts').default
   };
 
   customOptions: IRestProviderOptions<Group> = {

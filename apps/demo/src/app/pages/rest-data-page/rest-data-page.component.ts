@@ -7,42 +7,42 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 })
 export class RestDataPageComponent {
   source = {
-    html: require('!!raw-loader?lang=html!./rest-data-page.component.html.txt'),
-    ts: require('!!raw-loader?lang=typescript!./rest-data-page.component.ts.txt')
+    html: require('!!raw-loader!./rest-data-page.component.html.txt').default,
+    ts: require('!!raw-loader!./rest-data-page.component.ts.txt').default
   };
 
   usersGridSource = {
-    html: require('!!raw-loader?lang=html!../../grids/users-grid/users-grid.component.html'),
-    css: require('!!raw-loader?lang=scss!../../grids/users-grid/users-grid.component.scss'),
-    ts: require('!!raw-loader?lang=typescript!../../grids/users-grid/users-grid.component.ts')
+    html: require('!!raw-loader!../../grids/users-grid/users-grid.component.html').default,
+    css: require('!!raw-loader!../../grids/users-grid/users-grid.component.scss').default,
+    ts: require('!!raw-loader!../../grids/users-grid/users-grid.component.ts').default
   };
 
   userModalSource = {
-    html: require('!!raw-loader?lang=html!../../grids/users-grid/user-modal/user-modal.component.html'),
-    css: require('!!raw-loader?lang=scss!../../grids/users-grid/user-modal/user-modal.component.scss'),
-    ts: require('!!raw-loader?lang=typescript!../../grids/users-grid/user-modal/user-modal.component.ts')
+    html: require('!!raw-loader!../../grids/users-grid/user-modal/user-modal.component.html').default,
+    css: require('!!raw-loader!../../grids/users-grid/user-modal/user-modal.component.scss').default,
+    ts: require('!!raw-loader!../../grids/users-grid/user-modal/user-modal.component.ts').default
   };
 
   otherFiles: { name: string; language: string; content: string }[] = [
     {
       name: 'user.ts',
       language: 'javascript',
-      content: require('!!raw-loader?lang=typescript!../../shared/models/user.ts')
+      content: require('!!raw-loader!../../shared/models/user.ts').default
     },
     {
       name: 'model.ts',
       language: 'javascript',
-      content: require('!!raw-loader?lang=typescript!../../../../../../libs/ngx-repository/src/lib/interfaces/model.ts')
+      content: require('!!raw-loader!../../../../../../libs/ngx-repository/src/lib/interfaces/model.ts').default
     },
     {
       name: 'custom-transforms.ts',
       language: 'javascript',
-      content: require('!!raw-loader?lang=typescript!../../shared/utils/custom-transforms.ts')
+      content: require('!!raw-loader!../../shared/utils/custom-transforms.ts').default
     },
     {
       name: 'environment.ts',
       language: 'javascript',
-      content: require('!!raw-loader?lang=typescript!../../../environments/environment.ts')
+      content: require('!!raw-loader!../../../environments/environment.ts').default
     }
   ];
 }

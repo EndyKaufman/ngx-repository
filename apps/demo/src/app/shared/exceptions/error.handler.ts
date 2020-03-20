@@ -6,7 +6,7 @@ export class CustomErrorHandler implements ErrorHandler {
   handleError(error) {
     this._ngZone.run(() => {
       const messageBoxService = this._injector.get(MessageBoxService);
-      messageBoxService.error(error).subscribe();
+      messageBoxService.error(error).then();
     });
   }
 }
