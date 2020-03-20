@@ -131,7 +131,8 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
           eachProvider.providerName !== provider.providerName &&
           eachProvider.instanceofFactoryModel(item) &&
           (options === undefined ||
-            (options.globalEventResolver === undefined || options.globalEventResolver(item, ProviderActionEnum.Create)))
+            options.globalEventResolver === undefined ||
+            options.globalEventResolver(item, ProviderActionEnum.Create))
         ) {
           eachProvider
             .create(item, { useFakeHttpClient: true, globalEventIsActive: false })
@@ -148,7 +149,8 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
           eachProvider.providerName !== provider.providerName &&
           eachProvider.instanceofFactoryModel(item) &&
           (options === undefined ||
-            (options.globalEventResolver === undefined || options.globalEventResolver(item, ProviderActionEnum.Create)))
+            options.globalEventResolver === undefined ||
+            options.globalEventResolver(item, ProviderActionEnum.Create))
         ) {
           eachProvider
             .append(item, { useFakeHttpClient: true, globalEventIsActive: false })
@@ -164,8 +166,8 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
           if (
             eachProvider.instanceofFactoryModel(item) &&
             (options === undefined ||
-              (options.globalEventResolver === undefined ||
-                options.globalEventResolver(item, ProviderActionEnum.Update)))
+              options.globalEventResolver === undefined ||
+              options.globalEventResolver(item, ProviderActionEnum.Update))
           ) {
             eachProvider
               .update(item.id, item, { useFakeHttpClient: true, globalEventIsActive: false })
@@ -185,8 +187,8 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
           if (
             eachProvider.instanceofFactoryModel(item) &&
             (options === undefined ||
-              (options.globalEventResolver === undefined ||
-                options.globalEventResolver(item, ProviderActionEnum.Patch)))
+              options.globalEventResolver === undefined ||
+              options.globalEventResolver(item, ProviderActionEnum.Patch))
           ) {
             eachProvider
               .patch(item.id, item, { useFakeHttpClient: true, globalEventIsActive: false })
@@ -203,8 +205,8 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
           if (
             eachProvider.instanceofFactoryModel(item) &&
             (options === undefined ||
-              (options.globalEventResolver === undefined ||
-                options.globalEventResolver(item, ProviderActionEnum.Delete)))
+              options.globalEventResolver === undefined ||
+              options.globalEventResolver(item, ProviderActionEnum.Delete))
           ) {
             eachProvider
               .delete(item.id, { useFakeHttpClient: true, globalEventIsActive: false })
@@ -222,7 +224,8 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
           eachProvider.providerName !== provider.providerName &&
           eachProvider.instanceofFactoryModel(item) &&
           (options === undefined ||
-            (options.globalEventResolver === undefined || options.globalEventResolver(item, ProviderActionEnum.Update)))
+            options.globalEventResolver === undefined ||
+            options.globalEventResolver(item, ProviderActionEnum.Update))
         ) {
           eachProvider
             .update(item.id, item, { useFakeHttpClient: true, globalEventIsActive: false })
@@ -240,8 +243,8 @@ export class Repository<TModel extends IModel = any> implements IRepository<TMod
             eachProvider.providerName !== provider.providerName &&
             eachProvider.instanceofFactoryModel(item) &&
             (options === undefined ||
-              (options.globalEventResolver === undefined ||
-                options.globalEventResolver(item, ProviderActionEnum.Update)))
+              options.globalEventResolver === undefined ||
+              options.globalEventResolver(item, ProviderActionEnum.Update))
           ) {
             eachProvider
               .update(item.id, item, { useFakeHttpClient: true, globalEventIsActive: false })

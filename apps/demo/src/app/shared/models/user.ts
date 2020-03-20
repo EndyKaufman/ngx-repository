@@ -46,7 +46,7 @@ export class User implements IModel {
   @IsNotEmpty()
   username: string;
   password: string;
-  rePassword: string;
+  rePassword?: string;
   firstName: string;
   lastName: string;
   @IsEmail()

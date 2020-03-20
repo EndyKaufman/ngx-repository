@@ -1,6 +1,6 @@
 <div class="customization-page">
   <ngx-docs-example title="Сustomization page" [html]="source.html" [ts]="source.ts">
-    <div class="body" [innerHtml]="customization | safeHtml"></div>
+    <div class="body" [innerHtml]="customization | markdown"></div>
   </ngx-docs-example>
   <ngx-docs-example title="Groups with customization" [html]="gridSource.html" [css]="gridSource.css" [ts]="gridSource.ts">
     <div class="body">

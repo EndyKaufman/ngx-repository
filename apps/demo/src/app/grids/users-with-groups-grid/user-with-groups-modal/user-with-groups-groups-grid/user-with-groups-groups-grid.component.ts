@@ -8,7 +8,8 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { MatDialog, PageEvent } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { DynamicRepository, ProviderActionEnum, Repository } from 'ngx-repository';
 import { forkJoin, Subject } from 'rxjs';
@@ -116,13 +117,13 @@ export class UserWithGroupsGroupsGridComponent implements OnInit, OnDestroy {
           this.userChange.emit(this.user);
           dialogRef.close();
         },
-        error => this.messageBoxService.error(error).subscribe()
+        error => this.messageBoxService.error(error).then()
       )
     );
   }
   showAppendModal(): void {
     if (this.exampleUseNestedGroupsFromRest && this.user.id === undefined) {
-      this.messageBoxService.error('Before add group you must save current user!').subscribe();
+      this.messageBoxService.error('Before add group you must save current user!').then();
       return;
     }
     const dialogRef = this.dialog.open(GroupsGridModalComponent, {

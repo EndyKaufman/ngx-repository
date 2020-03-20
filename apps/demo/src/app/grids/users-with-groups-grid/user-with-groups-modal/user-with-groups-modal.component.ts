@@ -9,7 +9,7 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DynamicFormBuilder, DynamicFormGroup } from 'ngx-dynamic-form-builder';
 import { Group } from '../../../shared/models/group';
 import { UserWithGroups } from '../../../shared/models/user-with-groups';
