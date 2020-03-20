@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { BrowserModule } from '@angular/platform-browser';
@@ -14,6 +14,7 @@ import { MessageBoxModule } from './others/message-box/message-box.module';
 import { NavbarModule } from './others/navbar/navbar.module';
 import { SharedModule } from './shared/shared.module';
 import { MyErrorStateMatcher } from './shared/utils/my-error-state-matcher';
+import { CustomErrorHandler } from './shared/exceptions/error.handler';
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,7 +31,7 @@ import { MyErrorStateMatcher } from './shared/utils/my-error-state-matcher';
   ],
   providers: [
     { provide: ErrorStateMatcher, useClass: MyErrorStateMatcher },
-    // { provide: ErrorHandler, useClass: CustomErrorHandler },
+    { provide: ErrorHandler, useClass: CustomErrorHandler },
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: true } }
   ],
   bootstrap: [AppComponent]
