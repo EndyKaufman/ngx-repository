@@ -6,10 +6,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomePageComponent {
-  readme = require('!!raw-loader!../../../../../../README.md').default.replace(
-    '<h1 id="ngx-repository">ngx-repository</h1>',
-    ''
-  );
+  readme = require('!!raw-loader!../../../../../../README.md').default.replace('# ngx-repository', '');
 
   source = {
     html: require('!!raw-loader!./home-page.component.html.txt').default,
