@@ -86,7 +86,7 @@
     "ngx-dynamic-form-builder": "^1.3.0",
     "ngx-markdown": "^9.0.0",
     "prismjs": "^1.19.0",
-    "rxjs": "^6.5.4",
+    "rxjs": "^6.5.5",
     "url-parse": "^1.4.7",
     "zone.js": "^0.10.3"
   },
